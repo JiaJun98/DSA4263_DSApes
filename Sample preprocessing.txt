@@ -1,0 +1,11 @@
+# Load the regular expression library
+import re
+
+# Remove punctuation
+papers['paper_text_processed'] = papers['paper_text'].map(lambda x: re.sub('[,\.!?]', '', x))
+
+# Convert the titles to lowercase
+papers['paper_text_processed'] = papers['paper_text_processed'].map(lambda x: x.lower())
+
+# Print out the first rows of papers
+papers['paper_text_processed'].head()
