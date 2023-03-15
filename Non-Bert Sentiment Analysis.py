@@ -4,10 +4,21 @@
 # ## **Logistic Regression Model**
 
 # In[ ]:
+<<<<<<< Updated upstream
 
 
 #Logistic Regression Model
 logreg = LogisticRegression(random_state = 562, multi_class = 'multinomial', solver = 'saga', max_iter = 2000)
+=======
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier, VotingClassifier
+from xgboost import XGBClassifier, plot_importance
+from sklearn.metrics import roc_auc_score, f1_score, accuracy_score, precision_score, recall_score, confusion_matrix, mean_squared_error, auc, roc_curve
+
+#Logistic Regression Model
+logreg = LogisticRegression(random_state = 4263, multi_class = 'multinomial', solver = 'saga', max_iter = 2000)
+>>>>>>> Stashed changes
 logreg.fit(X_train, y_train)
 lr_pred = logreg.predict(X_test)
 lr_pred_prob = logreg.predict_proba(X_test)
