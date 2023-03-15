@@ -2,15 +2,18 @@ name: voc_project
 channels:
   - conda-forge
 dependencies:
-  - flask
-  - flask8
-  - gensim
-  - numpy
-  - nltk=3.7
-  - matplotlib
   - python=3.8
+  - numpy
   - pandas
-  - tqdm
-  - transformers=4.26.1
-  - sklearn
-  - scikit-learn
+  - matplotlib
+  - pip
+  - pip:
+    - flask
+    - flake8
+    - gensim
+    - numpy
+    - nltk==3.7
+    - tqdm
+    - transformers==4.26.1
+    - sklearn
+    - scikit-learn
