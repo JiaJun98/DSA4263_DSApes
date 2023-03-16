@@ -30,15 +30,19 @@ def parse_config(config_file):
         config = yaml.safe_load(f)
     return config
 
+def custom_print(*msg):
+    """Prints a message and uses a global variable, logger, to save the message
 
-def custom_print(*msg, logger):    
+    :param msg: can be a list of words or a word
+    :returns: nothing
+    """
     for i in range(0, len(msg)):
         if i == len(msg) - 1:
             print(msg[i])
             logger.write(str(msg[i]) + '\n')
         else:
             print(msg[i], ' ', end='')
-            logger.write(str(msg[i]))  
+            logger.write(str(msg[i]))
 
 
 def seed_everything(seed=42):
@@ -52,4 +56,6 @@ def seed_everything(seed=42):
     torch.cuda.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.deterministic = True
+
+
 
