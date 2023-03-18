@@ -32,7 +32,7 @@ class Dataset:
         """
         self.sentiments = dataset['Sentiment']
         self.date = pd.to_datetime(dataset['Time'])
-        self.text = dataset['Text'].apply(lambda x: sub("<[^>]+>", " ", x).lower().strip())
+        self.text = dataset['Text'].apply(lambda x: sub("<[^>]+>", " ", x).strip())
         self.tokenized_words = None
         self.tokenized_no_stop_words = None
         self.tokenized_sentence = None
