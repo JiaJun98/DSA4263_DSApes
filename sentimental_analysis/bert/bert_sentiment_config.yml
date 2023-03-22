@@ -8,8 +8,7 @@ model:
   epsilon: 1e-8
   #num_warmup_steps: 0
   #train_on_full_data: True
-  data_path: data
-  train_file: reviews.csv
+  data_folder: data/reviews.csv
   #dev_file: test.csv
   # for_pred_path: for_pred_cd.csv
   # pred_path: pred_cd.csv
