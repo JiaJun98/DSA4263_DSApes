@@ -23,6 +23,7 @@ dependencies: #Remember to add pytest
     - scikit-learn
     - seaborn==0.12.0
     - sklearn
+    - syspend
     - transformers==4.26.1
     - tqdm
     - torch

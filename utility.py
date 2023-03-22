@@ -30,7 +30,7 @@ def parse_config(config_file):
         config = yaml.safe_load(f)
     return config
 
-def custom_print(*msg):
+def custom_print(*msg, logger):
     """Prints a message and uses a global variable, logger, to save the message
 
     :param msg: can be a list of words or a word
