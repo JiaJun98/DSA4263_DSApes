@@ -1,5 +1,9 @@
+#!/usr/bin/env python
+# coding: utf-8
+
 
 # pip install gensim
+
 
 import pandas as pd
 import numpy as np
@@ -13,6 +17,7 @@ import gensim
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 from gensim.models.word2vec import Word2Vec
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS, CountVectorizer, TfidfVectorizer #sklearn have larger list
+
 
 nltk.download('punkt')
 nltk.download("wordnet")
@@ -41,7 +46,7 @@ class Dataset:
         self.stop_words_list = list(ENGLISH_STOP_WORDS).copy()
         self.stop_words_list.remove("no")
         self.stop_words_list.remove("not")
-        self.bow = None #overwrite if want to include bigrams or trigrams
+        self.bag_of_words = None #overwrite if want to include bigrams or trigrams
         self.tfidf = None
         self.doc2vec = None
         self.word2vec = None
@@ -65,13 +70,11 @@ class Dataset:
         May specify whether to remove stop words before carrying out stemming
         """
         if remove_stop_words:
-            if self.tokenized_no_stop_words is None:
+            if self.tokenized_no_stop_words == None:
                 self.remove_stop_words()
             words_to_stem = self.tokenized_no_stop_words
         
         else:
-            if self.tokenized_words is None:
-                self.word_tokenizer()
             words_to_stem = self.tokenized_words
 
         ps = PorterStemmer()
@@ -83,7 +86,7 @@ class Dataset:
         May specify whether to remove stop words before carrying out stemming.
         """
         if remove_stop_words:
-            if self.tokenized_no_stop_words is None:
+            if self.tokenized_no_stop_words == None:
                 self.remove_stop_words()
             words_to_lemmatize = self.tokenized_no_stop_words
         
@@ -97,11 +100,11 @@ class Dataset:
         """
         Check through the lower casing of tokenized words to see if they exist in the list of stop words
         """
-        if self.tokenized_words is None:
+        if self.tokenized_words == None:
             self.word_tokenizer()
-        self.tokenized_no_stop_words = self.tokenized_words.apply(lambda x: [word for word in x if word.lower() not in self.stop_words_list])
+        self.tokenized_no_stop_words = self.tokenized_words.apply([lambda x: [word for word in x if word.lower() not in self.stop_words_list]])
 
-    def create_bow(self, root_words = None, stop_words = False, ngrams = (1,1), max_doc = 0.95, min_doc = 0.05):
+    def word_bagging(self, root_words = None, stop_words = False, ngrams = (1,1), max_doc = 0.95, min_doc = 0.05):
         """
         This is to create the bag of words based on the ngrams specified
         root_words: select a method to preprocess the words, namely stem and lemmatize
@@ -113,8 +116,6 @@ class Dataset:
                     the word is not considered in the bag of words
         max_doc:    usually in the range [0,1]. if word/phrase appear in more than max_doc % of documents,
                     the word is not considered in the bag of words.
-        To get list of bag of words, use self.bow[0].get_feature_names_out()
-        To get the array version to input into models, use self.bow[1].toarray()
         """
         if root_words == "stem":
             self.stemming(remove_stop_words = stop_words)
@@ -124,35 +125,22 @@ class Dataset:
             self.lemmatization(remove_stop_words=stop_words)
             final_text = self.lemmatize
 
-        elif root_words is None:
+        elif root_words == None:
             if stop_words:
-                if self.tokenized_no_stop_words is None:
+                if self.tokenized_no_stop_words == None:
                     self.remove_stop_words()
                 final_text = self.tokenized_no_stop_words
             else:
-                if self.tokenized_words is None:
-                    self.word_tokenizer()
+                if self.tokenized_words == None:
+                    self.word_tokenizer
                 final_text = self.tokenized_words
-        else:
-            return "invalid root word"
-        vectorizer = CountVectorizer(lowercase=False, ngram_range = ngrams, min_df = min_doc, max_df = max_doc) #upper case words throughout the feedback may mean the customer is angry, hence negative
-        bow_output = vectorizer.fit_transform(final_text.apply(lambda x: " ".join(x)))
-        self.bow = [vectorizer, bow_output]
+
+        vectorizer = CountVectorizer(lowercase=False) #upper case words throughout the feedback may mean the customer is angry, hence negative
+        self.bag_of_words = vectorizer.fit_transform(final_text, ngram_range = ngrams, min_df = min_doc, max_df = max_doc)
 
     def create_tfidf(self, root_words = None, stop_words = False, ngrams = (1,1), max_doc = 0.95, min_doc = 0.05):
         """
         Possible feature extraction to be included in modelling for Sentiment analysis and Topic modelling
-        root_words: select a method to preprocess the words, namely stem and lemmatize
-        stop_words: specify if stop words should be removed before using other preprocessing methods
-                    like lemmatizing and stemming
-        ngrams:     specify if the user wants unigram, bigram, trigrams or even mixture
-                    (1,1) means only unigram, (1,2) means unigram and bigram
-        min_doc:    usually in the range [0,1]. if word/phrase appear in less than min_doc % of documents, 
-                    the word is not considered in the bag of words
-        max_doc:    usually in the range [0,1]. if word/phrase appear in more than max_doc % of documents,
-                    the word is not considered in the bag of words.
-        To get list of tfidf, use self.tfidf[0].get_feature_names_out()
-        To get the array version to input into models, use self.tfidf[1].toarray()
         """
         if root_words == "stem":
             self.stemming(remove_stop_words = stop_words)
@@ -162,22 +150,18 @@ class Dataset:
             self.lemmatization(remove_stop_words=stop_words)
             final_text = self.lemmatize
 
-        elif root_words is None:
+        elif root_words == None:
             if stop_words:
-                if self.tokenized_no_stop_words is None:
+                if self.tokenized_no_stop_words == None:
                     self.remove_stop_words()
                 final_text = self.tokenized_no_stop_words
             else:
-                if self.tokenized_words is None:
-                    self.word_tokenizer()
+                if self.tokenized_words == None:
+                    self.word_tokenizer
                 final_text = self.tokenized_words
         
-        else:
-            return "Invalid root word"
-        
-        vectorizer = TfidfVectorizer(lowercase=False, ngram_range = ngrams, min_df = min_doc, max_df = max_doc) #upper case words throughout the feedback may mean the customer is angry, hence negative
-        tfidf_output = vectorizer.fit_transform(final_text.apply(lambda x: " ".join(x)))
-        self.tfidf = [vectorizer, tfidf_output]
+        vectorizer = TfidfVectorizer(lowercase=False) #upper case words throughout the feedback may mean the customer is angry, hence negative
+        self.tfidf = vectorizer.fit_transform(final_text, ngram_range = ngrams, min_df = min_doc, max_df = max_doc)
 
     def create_doc2vec(self, root_words = None, stop_words = False):
         """
@@ -196,18 +180,15 @@ class Dataset:
             self.lemmatization(remove_stop_words=stop_words)
             final_text = self.lemmatize
 
-        elif root_words is None:
+        elif root_words == None:
             if stop_words:
-                if self.tokenized_no_stop_words is None:
+                if self.tokenized_no_stop_words == None:
                     self.remove_stop_words()
                 final_text = self.tokenized_no_stop_words
             else:
-                if self.tokenized_words is None:
+                if self.tokenized_words == None:
                     self.word_tokenizer()
                 final_text = self.tokenized_words
-        
-        else:
-            return "invalid root word"
                 
 
         tagged_docs = [TaggedDocument(doc, [i]) for i, doc in enumerate(final_text)]
@@ -238,22 +219,19 @@ class Dataset:
             self.lemmatization(remove_stop_words=stop_words)
             final_text = self.lemmatize
 
-        elif root_words is None:
+        elif root_words == None:
             if stop_words:
-                if self.tokenized_no_stop_words is None:
+                if self.tokenized_no_stop_words == None:
                     self.remove_stop_words()
                 final_text = self.tokenized_no_stop_words
             else:
-                if self.tokenized_words is None:
+                if self.tokenized_words == None:
                     self.word_tokenizer()
                 final_text = self.tokenized_words
-        
-        else:
-            return "invalid root word"
-        model = Word2Vec(final_text, vector_size=100, window=5, min_count=1, workers=4, sg=0, epochs=100)
+        model = Word2Vec(final_text, vector_size= 100, window=5, min_count=1, workers=4, sg=0, epochs=100)
 
-        self.create_bow(root_words, stop_words)
-        vectorizer = self.bow[0]
+        vectorizer = CountVectorizer(stop_words='english')
+        preprocessed_corpus = vectorizer.fit_transform(final_text.apply(lambda x: " ".join(x)))
 
         word2vec_mapping = {}
         for word in vectorizer.get_feature_names_out():
@@ -263,19 +241,10 @@ class Dataset:
         self.word2vec = word2vec_mapping
     
 
-        
 
-#use this function to create datasets so that all models are using the same training and testing dataset
-def create_datasets(df):
+df = pd.read_csv('reviews.csv')
 
-    train, test = train_test_split(df, test_size = 0.2, random_state = 4263, stratify = df['Sentiment'])
+train, test = train_test_split(df, test_size = 0.2, random_state = 4263, stratify = df['Sentiment'])
 
-    train_dataset = Dataset(train)
-    test_dataset = Dataset(test)
-
-    return [train_dataset, test_dataset]
-
-
-# Starting line import and split train and test data
-# df = pd.read_csv('reviews.csv')
-# train_data, test_data = create_datasets(df)
+train_dataset = Dataset(train)
+test_dataset = Dataset(test)
