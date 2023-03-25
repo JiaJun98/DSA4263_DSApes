@@ -13,5 +13,5 @@ model:
   # for_pred_path: for_pred_cd.csv
   # pred_path: pred_cd.csv
   model_path: models/sentimental_classifier.pt
-  log_path: logs/bert_sentimental_non_trainer.log
+  log_path: logs/bert_sentimental_non_trainer_latest.log #Change back
   trainer: False
