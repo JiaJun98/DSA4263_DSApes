@@ -5,13 +5,10 @@
 
 
 import torch
+import numpy as np
 from sklearn.model_selection import train_test_split
 from torch.utils.data import TensorDataset, Dataset,DataLoader, RandomSampler, SequentialSampler
 from transformers import AutoTokenizer
-
-
-# In[2]:
-
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -95,7 +92,7 @@ def preprocessing_for_bert(data,tokenizer_name,max_len):
 # In[4]:
 
 
-def create_data_loader(tokenizer_name, batch_size,max_len, sentences,targets=None, predict_only=False):
+def create_data_loader(tokenizer_name, batch_size,max_len, data_df, predict_only=False):
     """Facilitate loading of data
 
     @param tokenizer_name: Name of tokenizer, usually the name of the model being used
@@ -107,9 +104,14 @@ def create_data_loader(tokenizer_name, batch_size,max_len, sentences,targets=Non
     @predict_only: Boolean to check if the any targets should be used to load the dataset
     @return: DataLoader object that generates data for input into model
     """
-    inputs, masks = preprocessing_for_bert(sentences,tokenizer_name,max_len)
+    data_df["Sentiment"] = data_df["Sentiment"].apply(lambda x: 0 if x == "positive" else 1 )
+    X = data_df.Text.values
+    y = data_df.Sentiment.values
+    X_preprocessed = np.array([text for text in X])
+    y_labels = torch.tensor(y)
+    inputs, masks = preprocessing_for_bert(X_preprocessed,tokenizer_name,max_len)
     if not predict_only:
-        labels = torch.tensor(targets)
+        labels = torch.tensor(y_labels)
         data = TensorDataset(inputs, masks, labels)
     else:
         data = TensorDataset(inputs, masks)
@@ -120,13 +122,19 @@ def create_data_loader(tokenizer_name, batch_size,max_len, sentences,targets=Non
 # In[5]:
 
 
-def full_create_data_loader(tokenizer_name, batch_size,max_len, X_train,y_train, X_val,y_val):
+def full_create_data_loader(tokenizer_name, batch_size,max_len,train_df):
     """Facilitate loading of full data; Overloaded function
 
     """
-    train_inputs, train_masks = preprocessing_for_bert(X_train,tokenizer_name,max_len)
+    train_df["Sentiment"] = train_df["Sentiment"].apply(lambda x: 0 if x == "positive" else 1 )
+    X = train_df.Text.values
+    y = train_df.Sentiment.values
+    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.1, random_state=2020)
+    X_train_preprocessed = np.array([text for text in X_train])
+    X_val_preprocessed = np.array([text for text in X_val])
+    train_inputs, train_masks = preprocessing_for_bert(X_train_preprocessed,tokenizer_name,max_len)
     train_labels = torch.tensor(y_train)
-    val_inputs, val_masks = preprocessing_for_bert(X_val,tokenizer_name,max_len)
+    val_inputs, val_masks = preprocessing_for_bert(X_val_preprocessed,tokenizer_name,max_len)
     val_labels = torch.tensor(y_val)
     train_data = TensorDataset(train_inputs, train_masks, train_labels)
     val_data = TensorDataset(val_inputs, val_masks, val_labels)
@@ -134,6 +142,4 @@ def full_create_data_loader(tokenizer_name, batch_size,max_len, X_train,y_train,
     full_train_sampler = RandomSampler(full_train_data)
     return DataLoader(full_train_data, sampler=full_train_sampler, batch_size=batch_size)
 
-
-# In[1]:
 
