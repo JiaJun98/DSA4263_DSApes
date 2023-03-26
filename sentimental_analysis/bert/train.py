@@ -160,18 +160,18 @@ class BertClassifier(BaseModel): #BaseModel,
 
             # Calculate the average loss over the entire training data
             avg_train_loss = total_loss / len(train_dataloader)
-            train_accuracy = (preds == b_labels).cpu().numpy().mean() * 100
-            train_accuracy = np.mean(train_accuracy)
-            custom_print(f"Current Training accuracy{train_accuracy}", logger = logger)
+            #train_accuracy = (preds == b_labels).cpu().numpy().mean() * 100
+            #train_accuracy = np.mean(train_accuracy)
+            #custom_print(f"Current Training accuracy{train_accuracy}", logger = logger)
 
             all_logits = torch.cat(all_logits, dim=0)
             all_labels = torch.cat(all_labels, dim=0)
-            print(all_logits)
+            #print(all_logits)
             probs = F.softmax(all_logits, dim=1).detach().cpu().numpy()
-            print(probs)
-            threshold = 0.9
+            #print(probs)
+            threshold = 0.5
             y_preds = np.where(probs[:, 1] > threshold, 1, 0)
-            print(y_preds)
+            #print(y_preds)
             churn_eval_metrics(all_labels, y_preds, logger)
 
             custom_print("-"*70,logger = logger)
@@ -235,12 +235,12 @@ class BertClassifier(BaseModel): #BaseModel,
         #Finding validation metrics    
         all_logits = torch.cat(all_logits, dim=0)
         all_labels = torch.cat(all_labels, dim=0)
-        print(all_logits)
+        #print(all_logits)
         probs = F.softmax(all_logits, dim=1).detach().cpu().numpy()
-        print(probs)
-        threshold = 0.9
+        #print(probs)
+        threshold = 0.5
         y_preds = np.where(probs[:, 1] > threshold, 1, 0)
-        print(y_preds)
+        #print(y_preds)
         churn_eval_metrics(all_labels, y_preds, logger)
 
 
