@@ -1,0 +1,7 @@
+model:
+  model_name: 'non-bert'
+  model_type: 'XGBoost'
+  data_path: data
+  data_file: reviews.csv
+  model_path: models
+  log_path: logs\non_bert_sentiment.log
