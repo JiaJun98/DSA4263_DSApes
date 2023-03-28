@@ -8,26 +8,14 @@ dependencies: #Remember to add pytest
   - matplotlib
   - pip
   - pip:
-    - datasets
-    - flask
-    - flake8
     - gensim
     - ipykernel==6.16.0
     - joblib==1.2.0
     - jupyter
     - nltk==3.7
-    - pickle5
-    - pickleshare==0.7.5
-    - pillow==9.2.0
     - regex==2022.9.13
     - scikit-learn
-    - seaborn==0.12.0
     - sklearn
-    - syspend
-    - transformers==4.26.1
     - tqdm
-    - torch
-    - torchaudio
-    - torchvision
-    - xgboost
-    - scikit-learn
+    - bertopic
+    - matplotlib
