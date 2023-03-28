@@ -72,5 +72,5 @@ def churn_eval_metrics(Y_pred, Y_test, logger):
     custom_print("model_precision:",model_prec, logger = logger)
     custom_print("model_auc:", model_auc, logger = logger)
     custom_print("model_f1score:",model_f1score, logger = logger)
-    custom_print("sensitivity", sensitivity, logger = logger)
-    custom_print("specificity", specificity, logger = logger)
+    custom_print("sensitivity:", sensitivity, logger = logger)
+    custom_print("specificity:", specificity, logger = logger)
