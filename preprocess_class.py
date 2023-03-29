@@ -172,7 +172,7 @@ class Dataset:
         
         self.word2vec = word2vec_mapping
 
-    def input_text(self, root_word_option, remove_stop_words, lower_case, word_form):
+    def input_text(self, root_word_option = 0, remove_stop_words = True, lower_case = True, word_form = None):
         """
         Helper function to generate the required tokenised words to input for feature extraction / preprocessing
         @param  root_word_option:   0 - None, 1 - stem, 2 - lemmatize (based on self.root_words_options)
@@ -226,7 +226,7 @@ class Dataset:
         Update self.tokenized_words attribute with lists of tokenized words for each text. 
         Tokens such as numbers and punctuations are not considered as words, hence removed.
         @param  lower_case: True if should apply lower case to all words before creating BOW, False otherwise
-        @params word_form: To specify in a list format if only words of certain word forms are included for model building
+        @param word_form: To specify in a list format if only words of certain word forms are included for model building
                            Word forms include ["noun", "adverb", "adjective", "preposition", "verb"]
         """
         def extract_relevant_tokens(text, lower_case):
@@ -279,12 +279,12 @@ class Dataset:
         """
         Update self.tokenized_no_stop_words to remove any tokens in self.tokenized_words that exist in the list of stop words
         @param  lower_case: True if should apply lower case to all words before creating BOW, False otherwise
-        @params word_form: To specify in a list format if only words of certain word forms are included for model building
+        @param word_form: To specify in a list format if only words of certain word forms are included for model building
                            Word forms include ["noun", "adverb", "adjective", "preposition", "verb"]
         """
         self.word_tokenizer(lower_case, word_form)
 
-        self.tokenized_no_stop_words = self.tokenized_words.apply(lambda x: [word for word in x if word not in self.stop_words_list])
+        self.tokenized_no_stop_words = self.tokenized_words.apply(lambda x: [word for word in x if word.lower() not in self.stop_words_list])
  
 
     def stemming(self, remove_stop_words = True, lower_case = True, word_form = None):
@@ -292,7 +292,7 @@ class Dataset:
         Update self.stem after stemming all the tokens as specified
         @param  remove_stop_words:  True if stop words should not be included, False otherwise
         @param  lower_case: True if should apply lower case to all words before creating BOW, False otherwise
-        @params word_form: To specify in a list format if only words of certain word forms are included for model building
+        @param word_form: To specify in a list format if only words of certain word forms are included for model building
                            Word forms include ["noun", "adverb", "adjective", "preposition", "verb"]
         """
         words_to_stem = self.input_text(0, remove_stop_words, lower_case, word_form)
@@ -305,7 +305,7 @@ class Dataset:
         Update self.lemmatize after lemmatizing all the tokens as specified
         @param  remove_stop_words:  True if stop words should not be included, False otherwise
         @param  lower_case: True if should apply lower case to all words before creating BOW, False otherwise
-        @params word_form: To specify in a list format if only words of certain word forms are included for model building
+        @param word_form: To specify in a list format if only words of certain word forms are included for model building
                            Word forms include ["noun", "adverb", "adjective", "preposition", "verb"]
         """
         words_to_lemmatize = self.input_text(0, remove_stop_words, lower_case, word_form)

@@ -1,0 +1,17 @@
+model:
+  model_name: 'bert-base-uncased'
+  n_classes: 2
+  max_len: 64 #512 need to use GPU
+  batch_size: 32
+  epochs: 1
+  learning_rate: 1e-5
+  epsilon: 1e-8
+  #num_warmup_steps: 0
+  #train_on_full_data: True
+  data_path: data
+  train_file: reviews.csv
+  #dev_file: test.csv
+  # for_pred_path: for_pred_cd.csv
+  # pred_path: pred_cd.csv
+  model_path: models
+  log_path: logs/bert_sentimental.log
