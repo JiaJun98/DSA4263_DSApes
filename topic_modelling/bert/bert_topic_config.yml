@@ -1,0 +1,12 @@
+model:
+  model_name: 'sentence-transformers' # 'bert-base-uncased'
+  embedding_model: SentenceTransformer('all-MiniLM-L12-v2')
+  dim_reduction_model: None
+  clustering_model: None
+  vectorizer_params: {'min_df': 1, 'max_df': 1.0, "ngram_range":'(1,2)'}
+  ctfidf_params: {"bm25_weighting": True, "reduce_frequent_words": True}
+  representation_model: KeyBERTInspired()
+  min_topic_size: 30
+  data_folder: data/reviews.csv
+  image_folder: image/
+  log_path: logs/sentence_transformers.log 

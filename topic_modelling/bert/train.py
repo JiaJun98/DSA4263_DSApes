@@ -1,20 +1,25 @@
 from bertopic import BERTopic
 import pandas as pd
 import numpy as np
+import syspend
 from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.model_selection import train_test_split
 from gensim.models.coherencemodel import CoherenceModel
 import gensim.corpora as corpora
 import matplotlib.pyplot as plt
 from bertopic.vectorizers import ClassTfidfTransformer
-from bertopic.representation import MaximalMarginalRelevance
 import sys
 sys.path.append("../..")
+import os
 from utility import parse_config, seed_everything, custom_print
 from preprocess_class import create_datasets
 from model_base_class import BaseModel
 from umap import UMAP
 from hdbscan import HDBSCAN
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+from transformers.pipelines import pipeline
+from sentence_transformers import SentenceTransformer
+from bertopic.representation import KeyBERTInspired, MaximalMarginalRelevance
 
 class BERTopic_model(BaseModel):
     """
@@ -42,16 +47,6 @@ class BERTopic_model(BaseModel):
                         nr_topics= 'auto',
                         calculate_probabilities=False, verbose=True)
         self.topic_model.fit_transform(dataset.text)
-
-    def evaluate(self,dataset):
-        """
-        Evaluate performance of model using coherence_score. As it is a unsupervised method, we need to manually check if the topics make sense as well
-        """
-        c_score = get_coherence_score(dataset, self.topic_model)
-        return c_score
-    
-    def predict(self, dataset):
-        return self.topic_model.transform(dataset.text)
 
     def get_coherence_score(dataset, topic_model):
         """
@@ -82,70 +77,66 @@ class BERTopic_model(BaseModel):
                                         coherence='c_npmi', #'u_mass', 'c_v', 'c_uci', 'c_npmi'
                                         topn=5)
         return cm.get_coherence()
+    def evaluate(self,dataset):
+        """
+        Evaluate performance of model using coherence_score. As it is a unsupervised method, we need to manually check if the topics make sense as well
+        """
+        c_score = get_coherence_score(dataset, self.topic_model)
+        return c_score
+    
+    def predict(self, dataset):
+        return self.topic_model.transform(dataset.text)
+
 
 ###### Driver class
-# if __name__ == "__main__":
-#     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-#     curr_dir = os.getcwd()
-#     config_path = os.path.join(curr_dir, 'bert_sentiment_config.yml')
-#     config_file = parse_config(config_path)
-#     model_name = config_file['model']['model_name']
-#     n_classes = int(config_file['model']['n_classes'])
-#     max_len = int(config_file['model']['max_len'])
-#     batch_size = int(config_file['model']['batch_size'])
-#     epochs = int(config_file['model']['epochs'])
-#     learning_rate = float(config_file['model']['learning_rate'])
-#     epsilon = float(config_file['model']['epsilon'])
-#     train_on_full_data = eval(str(config_file['model']['train_on_full_data']))
-#     train_file = config_file['model']['data_folder']
-#     isTrainer = config_file['model']['trainer']
-#     home_folder = os.path.abspath(os.path.join(os.getcwd(),'../..'))
-#     model_path = os.path.join(curr_dir, config_file['model']['model_path'])
-#     logging_path = os.path.join(curr_dir,config_file['model']['log_path'])
-        
-#     data_df = pd.read_csv(os.path.join(home_folder,train_file))
-#     logger = open(os.path.join(curr_dir, logging_path), 'w')
-#     custom_print(f'Device availiable: {device}', logger = logger)
-#     train_df, test_df = train_test_split(data_df, test_size = 0.2, random_state = 4263) #Trainer Arguments
-#     train_dataset, val_dataset = full_bert_data_loader(model_name,max_len, batch_size, True, train_df) #Trainer Arguments
-#     custom_print("Train_val dataset loaded",logger = logger)
-#     custom_print('Training model',logger = logger)
-#     seed_everything()
-#     custom_print('---------------------------------\n',logger = logger)
-
-#     custom_print("Hyperparameters:",logger = logger)
-#     custom_print(f"model name: {model_name}",logger = logger)
-#     custom_print(f"Number of epochs: {epochs}",logger = logger)
-#     custom_print(f"number of classes: {n_classes}",logger = logger)
-#     custom_print(f"max length: {max_len}",logger = logger)
-#     custom_print(f"batch size: {batch_size}",logger = logger)
-#     custom_print(f"learning rate: {learning_rate}",logger = logger)
+if __name__ == "__main__":
+    curr_dir = os.getcwd()
+    config_path = os.path.join(curr_dir, 'bert_topic_config.yml')
+    config_file = parse_config(config_path)
+    model_name = config_file['model']['model_name']
+    embedding_model = eval(config_file['model']['embedding_model'])
+    dim_reduction = eval(config_file['model']['dim_reduction'])
+    clustering_model = eval(config_file['model']['clustering_model'])
+    vectorizer_params = eval(config_file['model']['vectorizer_params'])    
+    ctfidf_params = eval(config_file['model']['ctfidf_params'])
+    representation_model = eval(config_file['model']['representation_model'])
+    min_topic_size = int(config_file['model']['min_topic_size'])
+    data_file = config_file['model']['data_folder']
+    home_folder = os.path.abspath(os.path.join(os.getcwd(),'../..'))
+    data_df = pd.read_csv(os.path.join(home_folder,data_file))
+    # model_path = os.path.join(curr_dir, config_file['model']['model_path'])
+    logging_path = os.path.join(curr_dir,config_file['model']['log_path'])
+    image_path = os.path.join(curr_dir,config_file['model']['image_folder'])
+    train, test = create_datasets(data_df)
+    vectorizer_model = CountVectorizer(stop_words=train.stop_words_list, min_df = vectorizer_params['min_df'], max_df = vectorizer_params['min_df'],\
+                                   ngram_range=vectorizer_params['ngram_range'])
+    ctfidf_model = ClassTfidfTransformer(bm25_weighting= ctfidf_params["bm25_weighting"], reduce_frequent_words= ctfidf_params["reduce_frequent_words"])        
+    logger = open(os.path.join(curr_dir, logging_path), 'w')
+    # custom_print(f'Device availiable: {device}', logger = logger)
+    custom_print('Training model',logger = logger)
+    # seed_everything()
+    custom_print('---------------------------------\n',logger = logger)
+    # custom_print("Hyperparameters:",logger = logger)
+    custom_print(f"model name: {model_name}",logger = logger)
+    # custom_print(f"Number of vectorizer_params: {vectorizer_params}",logger = logger)
+    # custom_print(f"number of classes: {n_classes}",logger = logger)
+    # custom_print(f"max length: {dim_reduction}",logger = logger)
+    # custom_print(f"batch size: {clustering_model}",logger = logger)
+    # custom_print(f"learning rate: {ctfidf_params}",logger = logger)
+    model = BERTopic_model(embedding_model = embedding_model,
+                        dim_reduction_model=dim_reduction_model,
+                        clustering_model = clustering_model,
+                        vectorizer_model=vectorizer_model, 
+                        ctfidf_model=ctfidf_model, 
+                        representation_model=representation_model,
+                        min_topic_size = min_topic_size)
+    model.train(train)
+    custom_print(f'Coherence score: {model.evaluate(train)}', logger=logger)
+    custom_print(f'{model.topic_model.get_topic_info()}', logger=logger)
     
-#     if isTrainer:
-#         trainer = train(model_name, train_dataset, val_dataset)
-#         custom_print('Training complete!',logger = logger)
-#         custom_print('Showing Training and Evaluation metrics....',logger = logger)
-#         #https://stackoverflow.com/questions/68806265/huggingface-trainer-logging-train-data
-#         for obj in trainer.state.log_history:
-#             for key,value in obj.items():
-#                 custom_print(f'{key}: {value}', logger = logger)
-#     else:
-#         custom_print('Loading data.....',logger = logger)
-#         sentimental_classifier = BertClassifier(model_name, n_classes)
-#         sentimental_classifier.model.to(device)
-#         custom_print('Model initialised!', logger = logger)
-#         if not train_on_full_data:
-#             train, test = train_test_split(data_df, test_size = 0.2, random_state = 4263)
-#             custom_print(f"train size: {len(train)}",logger = logger)
-#             custom_print(f"dev size: {len(test)}",logger = logger)
-#             train_dataloader = create_data_loader(model_name, batch_size,max_len, train)
-#             custom_print('Train data loaded!', logger = logger)
-#             val_dataloader = create_data_loader(model_name, batch_size,max_len, test, predict_only=False)
-#             sentimental_classifier.train(learning_rate, epsilon,train_dataloader, val_dataloader,epochs =1, evaluation=True, logger = logger)
-#         else:
-#             full_train_data = full_create_data_loader(model_name, batch_size,max_len, data_df)
-#             custom_print('Full Data loaded!',logger = logger)
-#             sentimental_classifier.train(learning_rate, epsilon,full_train_data, epochs =1, logger = logger)
-#         custom_print('Saving model ...', logger = logger)
-#         torch.save({'model_state_dict':sentimental_classifier.model.state_dict()}, model_path)
-#     logger.close()
+    for i in range(len(model.topic_model.topic_labels_)-1):
+        custom_print(f'Words and score of topic {i}:\n {model.topic_model.get_topic(i)}',
+                     logger=logger)
+    fig = model.topic_model.visualize_documents(train.text)
+    fig.write_html(f"{image_path}doc_viz.html")
+    logger.close()

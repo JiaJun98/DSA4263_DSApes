@@ -19,3 +19,4 @@ dependencies: #Remember to add pytest
     - tqdm
     - bertopic
     - matplotlib
+    - syspend

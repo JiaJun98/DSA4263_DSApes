@@ -1,0 +1,40 @@
+Training model
+---------------------------------
+
+model name: sentence-transformers
+Coherence score: -0.2643042078520306
+Topics:     Topic  Count                                               Name
+0      -1   1365  -1_similac organic_raw cacao_organic raw_organ...
+1       0   2192     0_quality tea_tasting tea_loose tea_tea really
+2       1    211              1_food cat_cats eat_cat eat_pet foods
+3       2    182  2_deal product_price stores_item purchased_pri...
+4       3     86  3_keurig coffee_different coffees_keurig nice_...
+5       4     54  4_salt delicious_regular salt_salt tastes_salt...
+6       5     51  5_protein vanilla_protein powders_protein mixe...
+7       6     50  6_flavor popcorn_tasting popcorn_popcorn taste...
+8       7     46  7_drinking coconut_purchase coconut_pure cocon...
+9       8     43   8_olive oils_coconut oils_walnut oil_avocado oil
+10      9     38  9_tasting water_trivedi water_water tastes_pur...
+11     10     37  10_recommend soup_soup tastes_love soup_said soup
+Words and score of topic 0:
+ [('quality tea', 0.54296124), ('tasting tea', 0.48414576), ('loose tea', 0.4765631), ('tea really', 0.46171343), ('white tea', 0.45806384), ('ice tea', 0.43269998), ('tea just', 0.43006706), ('tea bags', 0.4158401), ('like tea', 0.40844586), ('tea drink', 0.40116715)]
+Words and score of topic 1:
+ [('food cat', 0.6820843), ('cats eat', 0.6768208), ('cat eat', 0.65398633), ('pet foods', 0.6215422), ('cats treats', 0.61027884), ('canned cat', 0.4939801), ('food feed', 0.4724797), ('dog treats', 0.43523023), ('feed dog', 0.41263807), ('kitten', 0.40959364)]
+Words and score of topic 2:
+ [('deal product', 0.42626607), ('price stores', 0.41941586), ('item purchased', 0.399622), ('price absurd', 0.38939652), ('price limeted', 0.37327844), ('price problems', 0.3725164), ('price stupid', 0.35471904), ('price gouging', 0.35460883), ('pack grocery', 0.3531139), ('fresh produce', 0.35294956)]
+Words and score of topic 3:
+ [('keurig coffee', 0.7483106), ('different coffees', 0.6288421), ('keurig nice', 0.6154854), ('keurig brewers', 0.60367644), ('pack keurig', 0.5812886), ('keurig machine', 0.5812491), ('fit keurig', 0.5744786), ('quality cups', 0.5541276), ('owned keurig', 0.5210166), ('mouth coffee', 0.5087564)]
+Words and score of topic 4:
+ [('salt delicious', 0.71894175), ('regular salt', 0.70883083), ('salt tastes', 0.6940358), ('salt different', 0.69049275), ('salt diet', 0.6683181), ('eat salty', 0.6611918), ('salt nuanced', 0.6604428), ('salt varies', 0.6518159), ('salt special', 0.6409816), ('salt related', 0.63878983)]
+Words and score of topic 5:
+ [('protein vanilla', 0.6146332), ('protein powders', 0.60560167), ('protein mixed', 0.6036401), ('protein good', 0.5845067), ('protein morning', 0.5486922), ('protein better', 0.54250103), ('protein satisfying', 0.5287895), ('protein nutiva', 0.5249232), ('protein used', 0.52250314), ('protein tablespoons', 0.5213928)]
+Words and score of topic 6:
+ [('flavor popcorn', 0.78731436), ('tasting popcorn', 0.7740473), ('popcorn taste', 0.76575744), ('love popcorn', 0.7393596), ('popcorn lovers', 0.738328), ('corn popcorn', 0.7375735), ('popcorn use', 0.73532027), ('best popcorn', 0.73054945), ('popcorn product', 0.7164172), ('popper popcorn', 0.7142937)]
+Words and score of topic 7:
+ [('drinking coconut', 0.67747056), ('purchase coconut', 0.64696705), ('pure coconut', 0.63784194), ('fresh coconut', 0.6319699), ('taste coconut', 0.63108504), ('enjoy coconut', 0.6164856), ('coconut make', 0.604773), ('tried coconut', 0.58978343), ('best coconut', 0.5817468), ('love coconut', 0.5738716)]
+Words and score of topic 8:
+ [('olive oils', 0.59979075), ('coconut oils', 0.52945256), ('walnut oil', 0.52582216), ('avocado oil', 0.5255479), ('olive juice', 0.47760457), ('recommend oil', 0.46553022), ('quality oil', 0.46111357), ('use olive', 0.447834), ('quality olive', 0.43937433), ('great oil', 0.43386573)]
+Words and score of topic 9:
+ [('tasting water', 0.588632), ('trivedi water', 0.57276845), ('water tastes', 0.56535256), ('purest water', 0.51674277), ('purchase water', 0.502329), ('pure water', 0.49921507), ('love water', 0.49460232), ('water different', 0.49341518), ('good water', 0.48245406), ('refreshing water', 0.4681975)]
+Words and score of topic 10:
+ [('recommend soup', 0.71083176), ('soup tastes', 0.63673425), ('love soup', 0.6120508), ('said soup', 0.60826206), ('amys soups', 0.6021815), ('canned soups', 0.5918774), ('soup mix', 0.59015614), ('bowl soup', 0.57014436), ('soup received', 0.5294658), ('saw soup', 0.5148647)]
