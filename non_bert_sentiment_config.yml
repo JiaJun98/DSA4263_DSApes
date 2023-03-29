@@ -1,7 +1,18 @@
 model:
-  model_name: 'non-bert'
-  model_type: 'XGBoost'
+  model_name: 'Non-Bert Sentiment Analysis'
+  model_type: 'RandomForest'
+  model_save_loc: 'models\rf_model.sav'
+  is_train: True
+  save_model: False
   data_path: data
   data_file: reviews.csv
-  model_path: models
+  output_path: 'data\non_bert_sa_prediction.csv'
   log_path: logs\non_bert_sentiment.log
+  rf_n_est: [400, 1001, 50]
+  rf_max_d: [4, 7, 1]
+  xgb_eta: [0.1, 0.21, 0.02]
+  xgb_max_d: [3, 6, 1]
+  xgb_min_weight: [10, 21, 3]
+  xgb_n_est: [200, 501, 50]
+  xgb_sample: [0.78, 0.87, 0.04]
+
