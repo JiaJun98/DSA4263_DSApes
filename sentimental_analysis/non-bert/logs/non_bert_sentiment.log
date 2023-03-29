@@ -1,0 +1,19 @@
+Training dataset has been loaded successfully
+
+---------------------------------
+LogisticRegression model succesfully trained
+
+---------------------------------
+
+model_accuracy:0.761248852157943
+model_precision:0.9002932551319648
+model_auc:0.7607519574919552
+model_f1score:0.825268817204301
+sensitivity0.7617866004962779
+specificity0.7597173144876325
+
+
+LogisticRegression model succesfully saved
+
+---------------------------------
+

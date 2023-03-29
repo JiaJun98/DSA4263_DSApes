@@ -1,12 +1,12 @@
 model:
   model_name: 'Non-Bert Sentiment Analysis'
-  model_type: 'RandomForest'
-  model_save_loc: 'models\rf_model.sav'
+  model_type: 'LogisticRegression'
+  model_save_loc: models\lr_model.sav
   is_train: True
   save_model: False
   data_path: data
   data_file: reviews.csv
-  output_path: 'data\non_bert_sa_prediction.csv'
+  output_path: data\non_bert_sa_prediction.csv
   log_path: logs\non_bert_sentiment.log
   rf_n_est: [400, 1001, 50]
   rf_max_d: [4, 7, 1]
