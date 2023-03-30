@@ -228,6 +228,10 @@ class BertClassifier(BaseModel): #BaseModel,
                 custom_print("-"*70, logger = logger)
             custom_print("\n", logger = logger)
         
+        hours, seconds = divmod(time_elapsed, 3600)
+        minutes, seconds = divmod(seconds, 60)
+        custom_print(f"Total Training Time:",logger = logger)
+        custom_print("{:02d}:{:02d}:{:06.3f}".format(int(hours), int(minutes), seconds))
         custom_print("Training complete!",logger = logger)
 
 
