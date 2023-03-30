@@ -1,0 +1,7 @@
+Testing churn_eval_metrics
+model_accuracy:1.0
+model_precision:1.0
+model_auc:1.0
+model_f1score:1.0
+sensitivity:1.0
+specificity:1.0
