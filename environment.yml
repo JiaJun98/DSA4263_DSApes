@@ -19,6 +19,7 @@ dependencies: #Remember to add pytest
     - pickle5
     - pickleshare==0.7.5
     - pillow==9.2.0
+    - pytest
     - regex==2022.9.13
     - scikit-learn
     - seaborn==0.12.0
@@ -30,4 +31,3 @@ dependencies: #Remember to add pytest
     - torchaudio
     - torchvision
     - xgboost
-    - scikit-learn
