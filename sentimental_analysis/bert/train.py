@@ -28,10 +28,9 @@ from preprocess_class import create_datasets
 from dataset import full_bert_data_loader,preprocessing_for_bert, create_data_loader, full_create_data_loader
 
 from model_base_class import BaseModel
-# ##### DONE: Finish BERT class framework(with Trainer Arguments so can customise other BERT models(BERT small, medium large or OTHERS))
-# ##### PENDING: Remove some other data(like links)
-# ##### PENDING: predictions
-# ##### PENDING: See results or plot graph when adjusting threshold
+#TODO: Finish BERT class framework(with Trainer Arguments so can customise other BERT models(BERT small, medium large or OTHERS))
+#TODO: predictions
+#TODO: See results or plot graph when adjusting threshold
 
 # In[14]:
 
@@ -39,13 +38,37 @@ import torch.nn.functional as F
 
 #Creating BERTClassifier class
 class BertClassifier(BaseModel): #BaseModel,
-    """Bert Model for Classification Tasks.
+    """
+    Bert-base Model for sentimental analysis
+
+    ...
+
+    Attributes
+    ----------
+    model_name : str
+        BERT model type
+    num_classes : int
+        number of output class
+    freeze_bert : bool
+         Set `False` to fine-tune the BERT model
+
+    Methods
+    -------
+    info(additional=""):
+        Prints the person's name and age.
     """
     def __init__(self, model_name, num_classes,freeze_bert=False):
         """
-        @param    bert: a BertModel object
-        @param    classifier: a torch.nn.Module classifier
-        @param    freeze_bert (bool): Set `False` to fine-tune the BERT model
+        Constructs all the necessary attributes for the BertClassifier object.
+
+        Parameters
+        ----------
+            model_name : str
+                BERT model type
+            num_classes : int
+                number of output class
+            freeze_bert : bool
+                Set `False` to fine-tune the BERT model
         """
         #super(BertClassifier, self).__init__()
         self.model = AutoModelForSequenceClassification.from_pretrained(model_name,num_labels = num_classes)
@@ -58,12 +81,14 @@ class BertClassifier(BaseModel): #BaseModel,
     def forward(self, input_ids, attention_mask):
         """
         Feed input to BERT and the classifier to compute logits.
-        @param    input_ids (torch.Tensor): an input tensor with shape (batch_size,
-                      max_length)
-        @param    attention_mask (torch.Tensor): a tensor that hold attention mask
-                      information with shape (batch_size, max_length)
-        @return   logits (torch.Tensor): an output tensor with shape (batch_size,
-                      num_labels)
+        Parameters
+        ----------
+            input_ids : torch.Tensor
+                an input tensor with shape (batch_size,max_length)
+            attention_mask : torch.Tensor
+                a tensor that hold attention mask information with shape (batch_size, max_length)
+            logits : torch.Tensor
+                an output tensor with shape (batch_size,num_labels)
         """
         outputs = self.model(input_ids=input_ids,
                             attention_mask=attention_mask)
@@ -71,19 +96,32 @@ class BertClassifier(BaseModel): #BaseModel,
         return outputs
 
 
-    def train(self,learning_rate, epsilon,train_dataloader, val_dataloader=None, epochs=2, evaluation=False, logger = None):
+    def train(self,learning_rate, epsilon,train_dataloader, val_dataloader = None, epochs = 2, evaluation=False, logger = None):
         """Train the BertClassifier model.
+         Parameters
+        ----------
+            learning_rate : float
+                learning rate for BERTClassifier Model
+            epsilon : float
+                epsilon value for BERTClassifier Model
+            train_dataloader : torch.utils.data.DataLoader
+                DataLoader containing training dataset
+            val_dataloader : torch.utils.data.DataLoader, optional
+                DataLoader containing validation dataset (default is None)
+            epochs : int
+                number of epochs to train the model (default is 2)
+            evaluation : bool
+                Set `True` to evaluate the model after each epoch (default is False)
+            logger : _io.TextIOWrapper
+                logger file to write the training process (default is None)
         """
         # TODO: Create the differrent optimisers
-        # Create the optimizer 
         optimizer = AdamW(self.model.parameters(),
-                        lr=learning_rate,    # Default learning rate
-                        eps=epsilon    # Default epsilon value
+                        lr=learning_rate,    
+                        eps=epsilon    
                         )
-
         # Total number of training steps
         total_steps = len(train_dataloader) * epochs
-
         # Set up the learning rate scheduler
         scheduler = get_linear_schedule_with_warmup(optimizer,
                                                     num_warmup_steps=0, # Default value
@@ -196,6 +234,12 @@ class BertClassifier(BaseModel): #BaseModel,
     def evaluate(self,model, val_dataloader):
         """After the completion of each training epoch, measure the model's performance
         on our validation set.
+         Parameters
+        ----------
+            model : transformers.models.bert.modeling_bert.BertForSequenceClassification
+                BERT-based model
+            val_dataloader : torch.utils.data.DataLoader
+                DataLoader containing validation dataset
         """
         # Put the model into the evaluation mode. The dropout layers are disabled during
         # the test time.
@@ -253,7 +297,7 @@ class BertClassifier(BaseModel): #BaseModel,
     def predict(self):
         pass
 
-#Trainer arguments
+#Trainer arguments - Removing soon
 def train(model_name, train_dataset, eval_dataset):
     # Load the model
     model = AutoModelForSequenceClassification.from_pretrained(model_name)
@@ -296,7 +340,7 @@ def train(model_name, train_dataset, eval_dataset):
 
     return trainer
 
-#Trainer utility functions
+#Trainer utility functions- Removing soon
 def compute_metrics(eval_pred):
     logits, labels = eval_pred
     predictions = logits.argmax(axis=-1)
@@ -362,7 +406,6 @@ if __name__ == "__main__":
         custom_print('Model initialised!', logger = logger)
         if not train_on_full_data:
             train, test = train_test_split(data_df, test_size = 0.2, random_state = 4263)
-            custom_print(f"train size: {len(train)}",logger = logger)
             custom_print(f"dev size: {len(test)}",logger = logger)
             train_dataloader = create_data_loader(model_name, batch_size,max_len, train)
             custom_print('Train data loaded!', logger = logger)
