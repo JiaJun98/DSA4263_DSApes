@@ -74,3 +74,14 @@ def churn_eval_metrics(Y_pred, Y_test, logger):
     custom_print("model_f1score:",model_f1score, logger = logger)
     custom_print("sensitivity:", sensitivity, logger = logger)
     custom_print("specificity:", specificity, logger = logger)
+
+def plot_roc_curve(Y_pred, Y_test,plotting_dir):
+    fpr, tpr, thresholds = roc_curve(Y_test, Y_pred, pos_label = 1)
+    plt.plot(fpr, tpr)
+    plt.plot([0, 1], [0, 1], 'k--')
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('ROC Curve')
+    for i, threshold in enumerate(thresholds):
+        plt.annotate(f"{threshold:.2f}", (fpr[i], tpr[i]), textcoords='offset points', xytext=(0,-10), ha='center')
+    plt.savefig(plotting_dir)

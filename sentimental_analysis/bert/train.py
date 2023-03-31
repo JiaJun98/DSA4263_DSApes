@@ -23,7 +23,7 @@ from transformers import BertModel
 from transformers import AdamW, get_linear_schedule_with_warmup
 from transformers import AutoModelForSequenceClassification, TrainingArguments, Trainer
 
-from utility import parse_config, seed_everything, custom_print,churn_eval_metrics
+from utility import parse_config, seed_everything, custom_print,churn_eval_metrics, plot_roc_curve
 from preprocess_class import create_datasets
 from dataset import full_bert_data_loader,preprocessing_for_bert, create_data_loader, full_create_data_loader
 
@@ -96,7 +96,7 @@ class BertClassifier(BaseModel): #BaseModel,
         return outputs
 
 
-    def train(self,learning_rate, epsilon,train_dataloader, val_dataloader = None, epochs = 2, evaluation=False, logger = None):
+    def train(self,learning_rate, epsilon,train_dataloader, plot_path, val_dataloader = None, epochs = 2, evaluation=False, logger = None):
         """Train the BertClassifier model.
          Parameters
         ----------
@@ -215,7 +215,7 @@ class BertClassifier(BaseModel): #BaseModel,
             if evaluation == True:
                 # After the completion of each training epoch, measure the model's performance
                 # on our validation set.
-                val_loss, val_accuracy = self.evaluate(self.model, val_dataloader)
+                val_loss, val_accuracy = self.evaluate(self.model, val_dataloader,plot_path)
 
                 # Print performance over the entire training data
                 time_elapsed = time.time() - t0_epoch
@@ -231,7 +231,7 @@ class BertClassifier(BaseModel): #BaseModel,
         custom_print("Training complete!",logger = logger)
 
 
-    def evaluate(self,model, val_dataloader):
+    def evaluate(self,model, val_dataloader, plotting_dir):
         """After the completion of each training epoch, measure the model's performance
         on our validation set.
          Parameters
@@ -289,6 +289,7 @@ class BertClassifier(BaseModel): #BaseModel,
         y_preds = y_preds.tolist()
         churn_eval_metrics(all_labels, y_preds, logger)
 
+        plot_roc_curve(all_labels, y_preds,plotting_dir)
 
         # Compute the average accuracy and loss over the validation set.
         val_loss = np.mean(val_loss)
@@ -374,7 +375,7 @@ if __name__ == "__main__":
     home_folder = os.path.abspath(os.path.join(os.getcwd(),'../..'))
     model_path = os.path.join(curr_dir, config_file['model']['model_path'])
     logging_path = os.path.join(curr_dir,config_file['model']['log_path'])
-        
+    plot_path =  os.path.join(curr_dir,config_file['model']['plot_path'])
     data_df = pd.read_csv(os.path.join(home_folder,train_file))
     logger = open(os.path.join(curr_dir, logging_path), 'w')
     custom_print(f'Device availiable: {device}', logger = logger)
@@ -412,11 +413,11 @@ if __name__ == "__main__":
             train_dataloader = create_data_loader(model_name, batch_size,max_len, train)
             custom_print('Train data loaded!', logger = logger)
             val_dataloader = create_data_loader(model_name, batch_size,max_len, test, predict_only=False)
-            sentimental_classifier.train(learning_rate, epsilon,train_dataloader, val_dataloader,epochs =1, evaluation=True, logger = logger)
+            sentimental_classifier.train(learning_rate, epsilon,train_dataloader,plot_path, val_dataloader = val_dataloader,epochs =1, evaluation=True, logger = logger)
         else:
             full_train_data = full_create_data_loader(model_name, batch_size,max_len, data_df)
             custom_print('Full Data loaded!',logger = logger)
-            sentimental_classifier.train(learning_rate, epsilon,full_train_data, epochs =1, logger = logger)
+            sentimental_classifier.train(learning_rate, epsilon,full_train_data, plot_path, epochs =1, logger = logger)
         custom_print('Saving model ...', logger = logger)
         torch.save({'model_state_dict':sentimental_classifier.model.state_dict()}, model_path)
     logger.close()
