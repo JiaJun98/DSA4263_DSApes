@@ -1,0 +1,64 @@
+Training model
+---------------------------------
+
+model name: sentence-transformers-key-bigram-v2
+Coherence score: -0.2635062414708347
+    Topic  Count                                               Name
+0      -1    902  -1_pork rinds_microwave pork_vanilla beans_raw...
+1       0   1406  0_tangerine flavor_tangerine orange_orange tan...
+2       1    624  1_quality tea_quality coffee_recommend tea_tea...
+3       2    167  2_dog foods_dog treats_products dogs_dogs chicken
+4       3    163  3_sauce tasty_ranchero sauce_fajita sauce_spic...
+5       4    156  4_bisquick pancakes_cake mixes_pancake mixes_b...
+6       5    111  5_diet bars_tasting bars_ingredients bars_tast...
+7       6    110  6_chips flavor_chips tasty_tasting chips_love ...
+8       7    100  7_keurig coffee_kona coffee_keurig nice_keurig...
+9       8     91  8_healthy cereals_cereal tasty_cereal snack_ta...
+10      9     75  9_noodles delicious_noodles tasty_prepare nood...
+11     10     74  10_sardines_like sardines_recommended tuna_bes...
+12     11     57  11_crackers tasty_crackers delicious_crackers ...
+13     12     57            12_cats eat_cat eat_cat healthy_cat ate
+14     13     50  13_coconut drinks_drinking coconut_fresh cocon...
+15     14     49  14_popcorn lovers_flavor popcorn_best popcorn_...
+16     15     46  15_olive oils_coconut oils_walnut oil_avocado oil
+17     16     41  16_recommend soup_soup tastes_love soup_amys s...
+18     17     40  17_protein vanilla_protein powders_protein mix...
+19     18     36  18_crunchy peanut_regular peanut_peanuts nuttz...
+Words and score of topic 0:
+ [('tangerine flavor', 0.66996455), ('tangerine orange', 0.6349499), ('orange tangerine', 0.6306037), ('flavor orange', 0.61871886), ('grape tangerine', 0.613178), ('taste orange', 0.5948142), ('strawberry flavor', 0.58973527), ('fruit flavored', 0.5896803), ('tangerine', 0.58460414), ('juice drinks', 0.5610422)]
+Words and score of topic 1:
+ [('quality tea', 0.684212), ('quality coffee', 0.6314671), ('recommend tea', 0.6310068), ('tea good', 0.6145617), ('black tea', 0.607764), ('strong tea', 0.6067798), ('tasting tea', 0.60369325), ('recommend coffee', 0.59053695), ('flavor tea', 0.5902498), ('tea great', 0.58857495)]
+Words and score of topic 2:
+ [('dog foods', 0.66562855), ('dog treats', 0.601207), ('products dogs', 0.51260996), ('dogs chicken', 0.50501657), ('feed dog', 0.49415076), ('chicken jerky', 0.4671213), ('treats caused', 0.46402425), ('animal health', 0.44510436), ('jerky products', 0.44028926), ('dog owners', 0.4229043)]
+Words and score of topic 3:
+ [('sauce tasty', 0.6493299), ('ranchero sauce', 0.6347103), ('fajita sauce', 0.5702103), ('spicy ranchero', 0.5649698), ('barbecue sauce', 0.55212456), ('chimichurri sauce', 0.53260976), ('sauce used', 0.52657497), ('love sauce', 0.51824325), ('sauce good', 0.509352), ('tried sauce', 0.5081451)]
+Words and score of topic 4:
+ [('bisquick pancakes', 0.6645221), ('cake mixes', 0.6249317), ('pancake mixes', 0.618095), ('biscuit recipe', 0.604813), ('pancake mix', 0.59977686), ('baking mixes', 0.5956812), ('cake mixed', 0.5420117), ('cakes great', 0.5391773), ('waffle mix', 0.53609407), ('gf bisquick', 0.5331989)]
+Words and score of topic 5:
+ [('diet bars', 0.6621085), ('tasting bars', 0.6286739), ('ingredients bars', 0.62335813), ('taste bars', 0.612031), ('bar snack', 0.6115134), ('bars taste', 0.60239995), ('bars tasty', 0.60113275), ('cereal bars', 0.59657633), ('bars tasted', 0.5880964), ('bars tastes', 0.581573)]
+Words and score of topic 6:
+ [('chips flavor', 0.76724255), ('chips tasty', 0.72909564), ('tasting chips', 0.72482115), ('love chips', 0.7063418), ('chips favorites', 0.6843743), ('chips subtle', 0.6726266), ('chips tasted', 0.6720997), ('chips love', 0.6672967), ('loves chips', 0.66540825), ('good chips', 0.6650156)]
+Words and score of topic 7:
+ [('keurig coffee', 0.7308432), ('kona coffee', 0.6258216), ('keurig nice', 0.6240344), ('keurig brewers', 0.605098), ('keurig machine', 0.59232116), ('pack keurig', 0.5744939), ('fit keurig', 0.5706055), ('different coffees', 0.5653242), ('quality cups', 0.5431422), ('owned keurig', 0.53631616)]
+Words and score of topic 8:
+ [('healthy cereals', 0.8099022), ('cereal tasty', 0.7529633), ('cereal snack', 0.7340586), ('tasty cereal', 0.7287457), ('sugary cereals', 0.7096309), ('eat cereal', 0.7051376), ('regular cereal', 0.6945988), ('granola cereal', 0.68990135), ('cereal great', 0.68223894), ('cereal tastes', 0.6742027)]
+Words and score of topic 9:
+ [('noodles delicious', 0.7037858), ('noodles tasty', 0.6882379), ('prepare noodles', 0.67898965), ('miracle noodles', 0.6673193), ('pasta noodles', 0.6449697), ('noodles taste', 0.6412391), ('rice noodles', 0.63960296), ('noodles better', 0.63649535), ('noodles just', 0.636479), ('soba noodles', 0.6175509)]
+Words and score of topic 10:
+ [('sardines', 0.7031733), ('like sardines', 0.6401495), ('recommended tuna', 0.5388601), ('best tuna', 0.51026297), ('herring', 0.41177422), ('regular salt', 0.40931886), ('salt great', 0.40500036), ('eaten salty', 0.40363228), ('salt good', 0.40045658), ('natural sea', 0.39423588)]
+Words and score of topic 11:
+ [('crackers tasty', 0.6388991), ('crackers delicious', 0.6188978), ('crackers taste', 0.61432827), ('crackers good', 0.60855556), ('good crackers', 0.60644674), ('nice crackers', 0.6006743), ('crackers definitely', 0.5701213), ('crackers especially', 0.56476206), ('plain crackers', 0.5609453), ('crackers like', 0.550635)]
+Words and score of topic 12:
+ [('cats eat', 0.69679254), ('cat eat', 0.67837644), ('cat healthy', 0.64106137), ('cat ate', 0.6198147), ('cats treats', 0.596444), ('canned cat', 0.5173423), ('formula cats', 0.51235104), ('cat kitten', 0.50156176), ('good cats', 0.46234417), ('best kitty', 0.44644964)]
+Words and score of topic 13:
+ [('coconut drinks', 0.6905991), ('drinking coconut', 0.66815907), ('fresh coconut', 0.62155014), ('pure coconut', 0.5991924), ('enjoy coconut', 0.5989894), ('taste coconut', 0.5928967), ('coconut make', 0.58219916), ('tried coconut', 0.5726397), ('pineapple coconut', 0.5645381), ('best coconut', 0.5523799)]
+Words and score of topic 14:
+ [('popcorn lovers', 0.75689816), ('flavor popcorn', 0.752852), ('best popcorn', 0.7519616), ('popper popcorn', 0.7498174), ('popcorn product', 0.7414422), ('popcorn use', 0.73992), ('love popcorn', 0.7389238), ('tasting popcorn', 0.73019135), ('corn popcorn', 0.7276648), ('popcorn taste', 0.7198493)]
+Words and score of topic 15:
+ [('olive oils', 0.5997908), ('coconut oils', 0.5294526), ('walnut oil', 0.5258222), ('avocado oil', 0.525548), ('olive juice', 0.4776047), ('recommend oil', 0.46553022), ('quality oil', 0.46111363), ('use olive', 0.44783407), ('quality olive', 0.43937427), ('great oil', 0.4338657)]
+Words and score of topic 16:
+ [('recommend soup', 0.7108316), ('soup tastes', 0.63673425), ('love soup', 0.61205065), ('amys soups', 0.6021815), ('canned soups', 0.5918773), ('soup mix', 0.59015614), ('bowl soup', 0.5701444), ('price soup', 0.54820895), ('soup received', 0.5294658), ('case soup', 0.5126269)]
+Words and score of topic 17:
+ [('protein vanilla', 0.6251888), ('protein powders', 0.5999004), ('protein mixed', 0.59940565), ('protein good', 0.5918672), ('protein better', 0.55861086), ('protein morning', 0.55037993), ('protein satisfying', 0.53920704), ('protein used', 0.535038), ('protein tablespoons', 0.52964914), ('protein products', 0.51353514)]
+Words and score of topic 18:
+ [('crunchy peanut', 0.64208746), ('regular peanut', 0.57763904), ('peanuts nuttzo', 0.5744894), ('peanuts peanut', 0.5683165), ('replace peanut', 0.55473995), ('place peanut', 0.54537356), ('good peanut', 0.5305798), ('regular butter', 0.51461256), ('problem peanut', 0.5053643), ('peanuts just', 0.5036853)]

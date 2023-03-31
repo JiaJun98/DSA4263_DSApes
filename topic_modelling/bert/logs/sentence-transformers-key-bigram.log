@@ -1,0 +1,52 @@
+Training model
+---------------------------------
+
+model name: sentence-transformers-key-bigram
+Coherence score: -0.27179847667775825
+    Topic  Count                                               Name
+0      -1   1316  -1_using stevia_similac organic_herbal essence...
+1       0   1384  0_tasty cereal_cereal great_love pasta_snack good
+2       1    469  1_keurig coffee_brand coffee_recommend coffee_...
+3       2    281   2_quality tea_best tea_tasting tea_recommend tea
+4       3    163  3_chips flavor_tasting chips_love chips_chips ...
+5       4    155    4_dog foods_ingredients dog_dog treats_feed dog
+6       5     84  5_plastic food_improperly sealed_sealed lid_pr...
+7       6     82  6_package purchase_paying shipping_package oz_...
+8       7     77  7_salt delicious_regular sardines_salt differe...
+9       8     58          8_cat foods_cats eat_cat healthy_food cat
+10      9     55  9_tasting water_trivedi water_water tastes_pur...
+11     10     50  10_flavor popcorn_tasting popcorn_popcorn tast...
+12     11     48  11_coconut drinks_drinking coconut_purchase co...
+13     12     46  12_protein vanilla_protein powders_protein mix...
+14     13     44  13_olive oils_coconut oils_walnut oil_avocado oil
+15     14     43  14_recommend soup_soup tastes_love soup_amys s...
+Words and score of topic 0:
+ [('tasty cereal', 0.45736808), ('cereal great', 0.4561225), ('love pasta', 0.4446007), ('snack good', 0.4443655), ('oatmeal raisin', 0.43479455), ('breakfast cereal', 0.43365228), ('ramen noodles', 0.4252564), ('lettuce', 0.41443253), ('oatmeal cookie', 0.41291082), ('afternoon snack', 0.40429753)]
+Words and score of topic 1:
+ [('keurig coffee', 0.6733515), ('brand coffee', 0.63846207), ('recommend coffee', 0.6265955), ('regular coffee', 0.61871207), ('coffee coffee', 0.61672634), ('coffee rich', 0.60481536), ('coffee favorite', 0.60049695), ('blend coffee', 0.5993639), ('great coffee', 0.59400463), ('community coffee', 0.5861279)]
+Words and score of topic 2:
+ [('quality tea', 0.6886601), ('best tea', 0.66466105), ('tasting tea', 0.65481824), ('recommend tea', 0.64651644), ('strong tea', 0.6452495), ('tea good', 0.6435186), ('white teas', 0.6365104), ('white tea', 0.62506723), ('loose tea', 0.60466826), ('flavor tea', 0.60308754)]
+Words and score of topic 3:
+ [('chips flavor', 0.6765193), ('tasting chips', 0.66538674), ('love chips', 0.6461847), ('chips excellent', 0.6377659), ('brand chips', 0.63702345), ('pop chips', 0.6325829), ('chips favorites', 0.6298828), ('chips subtle', 0.62077), ('chips great', 0.61780643), ('chips really', 0.60535747)]
+Words and score of topic 4:
+ [('dog foods', 0.68615997), ('ingredients dog', 0.60420656), ('dog treats', 0.58539116), ('feed dog', 0.53569597), ('treats dogs', 0.5158467), ('dogs chicken', 0.51045084), ('animal health', 0.47058713), ('illness dogs', 0.46456644), ('dog owners', 0.4500931), ('chicken jerky', 0.42780662)]
+Words and score of topic 5:
+ [('plastic food', 0.45859268), ('improperly sealed', 0.45355874), ('sealed lid', 0.4280628), ('properly sealed', 0.42441165), ('food manufacturer', 0.4001288), ('food manufacturers', 0.39351252), ('flat food', 0.37857282), ('jars bpa', 0.37242132), ('jar lids', 0.37195373), ('scary feeding', 0.3556435)]
+Words and score of topic 6:
+ [('package purchase', 0.46675894), ('paying shipping', 0.39723128), ('package oz', 0.38714603), ('purchases boxes', 0.38203034), ('pack grocery', 0.36296228), ('package free', 0.35505736), ('packages received', 0.34650248), ('package crazy', 0.34374106), ('purchase disappointed', 0.34084916), ('00 price', 0.3327458)]
+Words and score of topic 7:
+ [('salt delicious', 0.6121715), ('regular sardines', 0.6037537), ('salt different', 0.59915817), ('regular salt', 0.58650166), ('regular saltine', 0.5724032), ('salt good', 0.55475646), ('eat salty', 0.54880846), ('salt great', 0.54365224), ('salt diet', 0.5433253), ('salt favorite', 0.5387802)]
+Words and score of topic 8:
+ [('cat foods', 0.7428642), ('cats eat', 0.693998), ('cat healthy', 0.67685646), ('food cat', 0.67332876), ('cat eat', 0.6709701), ('cat ate', 0.6162074), ('cats treats', 0.5971223), ('treat cat', 0.5737751), ('cat canned', 0.5358887), ('formula cats', 0.51799136)]
+Words and score of topic 9:
+ [('tasting water', 0.588632), ('trivedi water', 0.5727684), ('water tastes', 0.56535256), ('purest water', 0.5167428), ('purchase water', 0.5023291), ('pure water', 0.49921513), ('love water', 0.49460232), ('picky water', 0.49364167), ('water different', 0.49341527), ('plain water', 0.48914418)]
+Words and score of topic 10:
+ [('flavor popcorn', 0.7873143), ('tasting popcorn', 0.7740474), ('popcorn taste', 0.7657574), ('love popcorn', 0.7393596), ('popcorn lovers', 0.7383282), ('corn popcorn', 0.7375735), ('popcorn use', 0.7353203), ('best popcorn', 0.7305495), ('popcorn product', 0.7164173), ('popper popcorn', 0.7142937)]
+Words and score of topic 11:
+ [('coconut drinks', 0.6939723), ('drinking coconut', 0.68578404), ('purchase coconut', 0.6511245), ('taste coconut', 0.64994794), ('enjoy coconut', 0.6301305), ('fresh coconut', 0.6216292), ('pure coconut', 0.61235595), ('tried coconut', 0.6097566), ('coconut make', 0.5884711), ('love coconut', 0.5864979)]
+Words and score of topic 12:
+ [('protein vanilla', 0.6230226), ('protein powders', 0.60735786), ('protein mixed', 0.604447), ('protein good', 0.59086), ('protein morning', 0.56407213), ('protein satisfying', 0.5399077), ('protein better', 0.5387703), ('protein used', 0.5337616), ('protein tablespoons', 0.52863884), ('protein nutiva', 0.51656914)]
+Words and score of topic 13:
+ [('olive oils', 0.59979075), ('coconut oils', 0.52945256), ('walnut oil', 0.5258222), ('avocado oil', 0.5255478), ('olive juice', 0.47760463), ('recommend oil', 0.46553022), ('quality oil', 0.46111345), ('use olive', 0.44783413), ('quality olive', 0.4393742), ('great oil', 0.4338658)]
+Words and score of topic 14:
+ [('recommend soup', 0.71083176), ('soup tastes', 0.63673425), ('love soup', 0.6120508), ('amys soups', 0.60218143), ('canned soups', 0.5918773), ('soup mix', 0.5901562), ('bowl soup', 0.57014436), ('saying soup', 0.5673691), ('price soup', 0.54820895), ('soup received', 0.52946573)]
