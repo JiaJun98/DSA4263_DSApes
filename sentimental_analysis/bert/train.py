@@ -198,18 +198,14 @@ class BertClassifier(BaseModel): #BaseModel,
 
             # Calculate the average loss over the entire training data
             avg_train_loss = total_loss / len(train_dataloader)
-            #train_accuracy = (preds == b_labels).cpu().numpy().mean() * 100
-            #train_accuracy = np.mean(train_accuracy)
-            #custom_print(f"Current Training accuracy{train_accuracy}", logger = logger)
 
             all_logits = torch.cat(all_logits, dim=0)
             all_labels = torch.cat(all_labels, dim=0)
-            #print(all_logits)
             probs = F.softmax(all_logits, dim=1).detach().cpu().numpy()
-            #print(probs)
             threshold = 0.5
             y_preds = np.where(probs[:, 1] > threshold, 1, 0)
-            #print(y_preds)
+            all_labels = [tensor.cpu().tolist() for tensor in all_labels]
+            y_preds = y_preds.tolist()
             churn_eval_metrics(all_labels, y_preds, logger)
 
             custom_print("-"*70,logger = logger)
@@ -223,15 +219,15 @@ class BertClassifier(BaseModel): #BaseModel,
 
                 # Print performance over the entire training data
                 time_elapsed = time.time() - t0_epoch
-                
+
                 custom_print(f"{epoch_i + 1:^7} | {'-':^7} | {avg_train_loss:^12.6f} | {val_loss:^10.6f} | {val_accuracy:^9.2f} | {time_elapsed:^9.2f}",logger = logger)
                 custom_print("-"*70, logger = logger)
             custom_print("\n", logger = logger)
-        
+
         hours, seconds = divmod(time_elapsed, 3600)
         minutes, seconds = divmod(seconds, 60)
         custom_print(f"Total Training Time:",logger = logger)
-        custom_print("{:02d}:{:02d}:{:06.3f}".format(int(hours), int(minutes), seconds))
+        custom_print("{:02d}:{:02d}:{:06.2f}".format(int(hours), int(minutes), seconds), logger = logger)
         custom_print("Training complete!",logger = logger)
 
 
@@ -289,6 +285,8 @@ class BertClassifier(BaseModel): #BaseModel,
         threshold = 0.5
         y_preds = np.where(probs[:, 1] > threshold, 1, 0)
         #print(y_preds)
+        all_labels = [tensor.cpu().tolist() for tensor in all_labels]
+        y_preds = y_preds.tolist()
         churn_eval_metrics(all_labels, y_preds, logger)
 
 
