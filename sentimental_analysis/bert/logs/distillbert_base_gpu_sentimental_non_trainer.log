@@ -1,0 +1,48 @@
+Device availiable: cuda:0
+Train_val dataset loaded
+Training model
+---------------------------------
+
+Hyperparameters:
+model name: distilbert-base-uncased
+Number of epochs: 1
+number of classes: 2
+max length: 64
+batch size: 32
+learning rate: 1e-05
+Loading data.....
+Model initialised!
+dev size: 1089
+Train data loaded!
+Start training...
+
+ Epoch  |  Batch  |  Train Loss  |  Val Loss  |  Val Acc  |  Elapsed
+----------------------------------------------------------------------
+   1    |   20    |   0.598693   |     -      |     -     |   3.77
+   1    |   40    |   0.536486   |     -      |     -     |   3.01
+   1    |   60    |   0.465000   |     -      |     -     |   3.03
+   1    |   80    |   0.402991   |     -      |     -     |   3.03
+   1    |   100   |   0.334845   |     -      |     -     |   3.02
+   1    |   120   |   0.340356   |     -      |     -     |   3.02
+   1    |   136   |   0.331352   |     -      |     -     |   2.31
+model_accuracy:0.800918484500574
+model_precision:0.31620903454384414
+model_auc:0.7960132210530133
+model_f1score:0.45161290322580644
+sensitivity:0.7898230088495575
+specificity:0.8022034332564694
+----------------------------------------------------------------------
+model_accuracy:0.8751147842056933
+model_precision:0.7228070175438597
+model_auc:0.8438141577440411
+model_f1score:0.7518248175182483
+sensitivity:0.7832699619771863
+specificity:0.9043583535108959
+   1    |    -    |   0.434071   |  0.330775  |   85.09   |   22.97
+----------------------------------------------------------------------
+
+
+Total Training Time:
+00:00:022.97
+Training complete!
+Saving model ...
