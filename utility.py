@@ -77,11 +77,26 @@ def churn_eval_metrics(Y_pred, Y_test, logger):
 
 def plot_roc_curve(Y_pred, Y_test,plotting_dir):
     fpr, tpr, thresholds = roc_curve(Y_test, Y_pred, pos_label = 1)
+    f1_scores = [f1_score(Y_test, Y_pred >= t) for t in thresholds]
+    accuracy_scores = [accuracy_score(Y_test, Y_pred >= t) for t in thresholds]
+    precision_scores = [precision_score(Y_test, Y_pred >= t) for t in thresholds]
+
+    # Find the threshold values that maximize F1, accuracy, and precision
+    best_f1_threshold = thresholds[np.argmax(f1_scores)]
+    best_acc_threshold = thresholds[np.argmax(accuracy_scores)]
+    best_precision_threshold = thresholds[np.argmax(precision_scores)]
+
+    # Plot the ROC curve
     plt.plot(fpr, tpr)
-    plt.plot([0, 1], [0, 1], 'k--')
+
+    # Label the points for the best F1, best accuracy, and best precision
+    plt.plot(fpr[np.argmax(f1_scores)], tpr[np.argmax(f1_scores)], 'o', label=f'Best F1 ({best_f1_threshold:.2f})')
+    plt.plot(fpr[np.argmax(accuracy_scores)], tpr[np.argmax(accuracy_scores)], 'o', label=f'Best Accuracy ({best_acc_threshold:.2f})')
+    plt.plot(fpr[np.argmax(precision_scores)], tpr[np.argmax(precision_scores)], 'o', label=f'Best Precision ({best_precision_threshold:.2f})')
+
+    # Add labels and legend
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
     plt.title('ROC Curve')
-    for i, threshold in enumerate(thresholds):
-        plt.annotate(f"{threshold:.2f}", (fpr[i], tpr[i]), textcoords='offset points', xytext=(0,-10), ha='center')
+    plt.legend()
     plt.savefig(plotting_dir)
