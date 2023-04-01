@@ -281,6 +281,7 @@ class BertClassifier(BaseModel): #BaseModel,
         all_labels = torch.cat(all_labels, dim=0)
         #print(all_logits)
         probs = F.softmax(all_logits, dim=1).detach().cpu().numpy()
+        
         #print(probs)
         threshold = 0.5
         y_preds = np.where(probs[:, 1] > threshold, 1, 0)
@@ -288,8 +289,9 @@ class BertClassifier(BaseModel): #BaseModel,
         all_labels = [tensor.cpu().tolist() for tensor in all_labels]
         y_preds = y_preds.tolist()
         churn_eval_metrics(all_labels, y_preds, logger)
-
-        plot_roc_curve(all_labels, y_preds,plotting_dir)
+        #print(probs[:, 1].tolist())
+        plot_roc_curve(probs[:, 1].tolist(),all_labels,plotting_dir)
+        
 
         # Compute the average accuracy and loss over the validation set.
         val_loss = np.mean(val_loss)
