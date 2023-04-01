@@ -1,0 +1,26 @@
+model:
+  model_name: 'LDA-base'
+  num_of_topics: 6
+  num_top_words: 10
+  num_top_documents: 5
+  export_topics: True
+  coherence_measure: 'c_v'
+  replace_stop_words_list: 
+  include_words: ['taste', 'tasty', 'flavor', 'flavour', 'amazon', 'minute', 'time', 'year', 'day']
+  exclude_words: []
+  root_word_option: 2
+  remove_stop_words: True
+  lower_case: True
+  word_form: ['noun', 'adjective']
+  ngrams_start: 1
+  ngrams_end: 2
+  max_doc: 0.95
+  min_doc: 5
+  data_folder: data/reviews.csv 
+  train_output_path: train_output/topic_6
+  test_output_path: test_output/topic_6
+  log_path: logs/topic_4.log
+  train: True
+  test: True
+  pickled_model: 
+  topic_label: 

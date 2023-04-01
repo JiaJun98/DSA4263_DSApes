@@ -61,6 +61,7 @@ class Dataset:
         @param  max_doc:    in the range [0,1): if token appear in more than max_doc % of documents,
                             the word is not considered in the bag of words.
                             for any integer n >= 1: the token can only appear in at most n documents.
+                            If min_doc > 1, max_doc must be < 1.
         @param  min_doc:    in the range [0,1): if token appear in less than min_doc % of documents, 
                             the word is not considered in the bag of words
                             for any integer n >= 1: the token must appear in at least n documents
@@ -91,6 +92,7 @@ class Dataset:
         @param  max_doc:    in the range [0,1): if token appear in more than max_doc % of documents,
                             the word is not considered in the bag of words.
                             for any integer n >= 1: the token can only appear in at most n documents.
+                            If min_doc > 1, max_doc must be < 1.
         @param  min_doc:    in the range [0,1): if token appear in less than min_doc % of documents, 
                             the word is not considered in the bag of words
                             for any integer n >= 1: the token must appear in at least n documents
@@ -121,6 +123,7 @@ class Dataset:
         @param  max_doc:    in the range [0,1): if token appear in more than max_doc % of documents,
                             the word is not considered in the bag of words.
                             for any integer n >= 1: the token can only appear in at most n documents.
+                            If min_doc > 1, max_doc must be < 1.
         @param  min_doc:    in the range [0,1): if token appear in less than min_doc % of documents, 
                             the word is not considered in the bag of words
                             for any integer n >= 1: the token must appear in at least n documents
@@ -153,6 +156,7 @@ class Dataset:
         @param  max_doc:    in the range [0,1): if token appear in more than max_doc % of documents,
                             the word is not considered in the bag of words.
                             for any integer n >= 1: the token can only appear in at most n documents.
+                            If min_doc > 1, max_doc must be < 1.
         @param  min_doc:    in the range [0,1): if token appear in less than min_doc % of documents, 
                             the word is not considered in the bag of words
                             for any integer n >= 1: the token must appear in at least n documents
@@ -215,10 +219,10 @@ class Dataset:
         """
         if replace_stop_words_list is not None:
             self.stop_words_list = replace_stop_words_list
-        
+
         for word in exclude_words:
             self.stop_words_list.remove(word)
-
+        
         self.stop_words_list.extend(include_words)        
     
     def word_tokenizer(self, lower_case = True, word_form = None):
@@ -226,7 +230,7 @@ class Dataset:
         Update self.tokenized_words attribute with lists of tokenized words for each text. 
         Tokens such as numbers and punctuations are not considered as words, hence removed.
         @param  lower_case: True if should apply lower case to all words before creating BOW, False otherwise
-        @param word_form: To specify in a list format if only words of certain word forms are included for model building
+        @param  word_form: To specify in a list format if only words of certain word forms are included for model building
                            Word forms include ["noun", "adverb", "adjective", "preposition", "verb"]
         """
         def extract_relevant_tokens(text, lower_case):
@@ -279,7 +283,7 @@ class Dataset:
         """
         Update self.tokenized_no_stop_words to remove any tokens in self.tokenized_words that exist in the list of stop words
         @param  lower_case: True if should apply lower case to all words before creating BOW, False otherwise
-        @param word_form: To specify in a list format if only words of certain word forms are included for model building
+        @param  word_form: To specify in a list format if only words of certain word forms are included for model building
                            Word forms include ["noun", "adverb", "adjective", "preposition", "verb"]
         """
         self.word_tokenizer(lower_case, word_form)
@@ -292,7 +296,7 @@ class Dataset:
         Update self.stem after stemming all the tokens as specified
         @param  remove_stop_words:  True if stop words should not be included, False otherwise
         @param  lower_case: True if should apply lower case to all words before creating BOW, False otherwise
-        @param word_form: To specify in a list format if only words of certain word forms are included for model building
+        @param  word_form: To specify in a list format if only words of certain word forms are included for model building
                            Word forms include ["noun", "adverb", "adjective", "preposition", "verb"]
         """
         words_to_stem = self.input_text(0, remove_stop_words, lower_case, word_form)
@@ -305,7 +309,7 @@ class Dataset:
         Update self.lemmatize after lemmatizing all the tokens as specified
         @param  remove_stop_words:  True if stop words should not be included, False otherwise
         @param  lower_case: True if should apply lower case to all words before creating BOW, False otherwise
-        @param word_form: To specify in a list format if only words of certain word forms are included for model building
+        @param  word_form: To specify in a list format if only words of certain word forms are included for model building
                            Word forms include ["noun", "adverb", "adjective", "preposition", "verb"]
         """
         words_to_lemmatize = self.input_text(0, remove_stop_words, lower_case, word_form)
