@@ -11,6 +11,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import torch
 import yaml
+import boto3
 
 import nltk
 from nltk.corpus import stopwords
@@ -42,6 +43,38 @@ def custom_print(*msg, logger):
         else:
             print(msg[i], ' ', end='')
             logger.write(str(msg[i]))
+
+def upload_to_S3(bucket_name, file_name, key_name,access_key, secret_key):
+    """
+        Upload file to S3
+        
+        Parameters
+        ----------
+            bucket_name : str
+                S3 bucket name
+            file_name : str
+                path of file to be uploaded to S3
+            key_name : str
+                designated name in S3 bucket
+        """
+    s3 = boto3.client('s3',aws_access_key_id=access_key, aws_secret_access_key=secret_key)
+    s3.upload_file(file_name, bucket_name, key_name)
+
+def download_from_S3(bucket_name, file_name, key_name):
+    """
+        Download file from S3
+        
+        Parameters
+        ----------
+            bucket_name : str
+                S3 bucket name
+            file_name : str
+                path of file to be downloaded from S3
+            key_name : str
+                designated name in S3 bucket
+        """
+    s3 = boto3.client('s3')
+    s3.download_file(file_name, bucket_name, key_name)
 
 
 def seed_everything(seed=42):

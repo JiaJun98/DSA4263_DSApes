@@ -8,6 +8,7 @@ dependencies: #Remember to add pytest
   - matplotlib
   - pip
   - pip:
+    - boto3
     - datasets
     - flask
     - flake8
