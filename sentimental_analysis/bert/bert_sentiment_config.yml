@@ -1,5 +1,5 @@
 model:
-  model_name: 'bert-large-uncased' # 'bert-base-uncased'
+  model_name:  'bert-large-uncased' #'bert-base-uncased' 'distilbert-large-uncased'
   n_classes: 2
   max_len: 64 #512: GPU Put list
   batch_size: 32
@@ -9,6 +9,7 @@ model:
   #num_warmup_steps: 0
   train_on_full_data: False
   data_folder: data/reviews.csv
-  model_path: models/bert_large_largesentimental_non_trainer_latest.pt
-  log_path: logs/bert_large_sentimental_non_trainer_latest.log 
+  model_path: models/distilbert_base_sentimental_non_trainer_latest_temp.pt
+  log_path: logs/distilbert_base_sentimental_non_trainer_latest_temp.log
+  plot_path: plots/distilbert_base_sentimental_non_trainer_roc_curve.png
   trainer: False
