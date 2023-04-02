@@ -11,10 +11,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import torch
 import yaml
+import boto3
 
 import nltk
 from nltk.corpus import stopwords
-from sklearn.metrics import accuracy_score, precision_score, roc_curve, auc, f1_score, confusion_matrix
+from sklearn.metrics import accuracy_score, precision_score, roc_curve, auc, f1_score, confusion_matrix, precision_recall_curve
 
 def set_seed(seed_value=42):
     """Set seed for reproducibility.
@@ -43,6 +44,38 @@ def custom_print(*msg, logger):
             print(msg[i], ' ', end='')
             logger.write(str(msg[i]))
 
+def upload_to_S3(bucket_name, file_name, key_name,access_key, secret_key):
+    """
+        Upload file to S3
+        
+        Parameters
+        ----------
+            bucket_name : str
+                S3 bucket name
+            file_name : str
+                path of file to be uploaded to S3
+            key_name : str
+                designated name in S3 bucket
+        """
+    s3 = boto3.client('s3',aws_access_key_id=access_key, aws_secret_access_key=secret_key)
+    s3.upload_file(file_name, bucket_name, key_name)
+
+def download_from_S3(bucket_name, file_name, key_name):
+    """
+        Download file from S3
+        
+        Parameters
+        ----------
+            bucket_name : str
+                S3 bucket name
+            file_name : str
+                path of file to be downloaded from S3
+            key_name : str
+                designated name in S3 bucket
+        """
+    s3 = boto3.client('s3')
+    s3.download_file(file_name, bucket_name, key_name)
+
 
 def seed_everything(seed=42):
     """"
@@ -68,9 +101,62 @@ def churn_eval_metrics(Y_pred, Y_test, logger):
     specificity = tn / (tn+fp)
     sensitivity = tp/(tp+fn)
 
-    custom_print("model_accuracy:", model_acc, logger = logger)
-    custom_print("model_precision:",model_prec, logger = logger)
-    custom_print("model_auc:", model_auc, logger = logger)
-    custom_print("model_f1score:",model_f1score, logger = logger)
-    custom_print("sensitivity", sensitivity, logger = logger)
-    custom_print("specificity", specificity, logger = logger)
+    #Change to 2 dp print("{:.2f}".format(x))
+    custom_print("model_accuracy: ", "{:.2f}".format(model_acc), logger = logger)
+    custom_print("model_precision: ","{:.2f}".format(model_prec), logger = logger)
+    custom_print("model_auc: ", "{:.2f}".format(model_auc), logger = logger)
+    custom_print("model_f1score: ", "{:.2f}".format(model_f1score), logger = logger)
+    custom_print("sensitivity: ", "{:.2f}".format(sensitivity), logger = logger)
+    custom_print("specificity: ", "{:.2f}".format(specificity), logger = logger)
+
+def plot_roc_curve(Y_pred, Y_test,plotting_dir):
+    fpr, tpr, thresholds = roc_curve(Y_test, Y_pred, pos_label = 1)
+    f1_scores = [f1_score(Y_test, Y_pred >= t) for t in thresholds]
+    accuracy_scores = [accuracy_score(Y_test, Y_pred >= t) for t in thresholds]
+    precision_scores = [precision_score(Y_test, Y_pred >= t) for t in thresholds]
+
+    # Find the threshold values that maximize F1, accuracy, and precision
+    best_f1_threshold = thresholds[np.argmax(f1_scores)]
+    best_acc_threshold = thresholds[np.argmax(accuracy_scores)]
+    best_precision_threshold = thresholds[np.argmax(precision_scores)]
+
+    # Plot the ROC curve
+    plt.plot(fpr, tpr)
+
+    # Label the points for the best F1, best accuracy, and best precision
+    plt.plot(fpr[np.argmax(f1_scores)], tpr[np.argmax(f1_scores)], 'o', label=f'Best F1 ({best_f1_threshold:.2f})')
+    plt.plot(fpr[np.argmax(accuracy_scores)], tpr[np.argmax(accuracy_scores)], 'o', label=f'Best Accuracy ({best_acc_threshold:.2f})')
+    plt.plot(fpr[np.argmax(precision_scores)], tpr[np.argmax(precision_scores)], 'o', label=f'Best Precision ({best_precision_threshold:.2f})')
+
+    # Add labels and legend
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('ROC Curve')
+    plt.legend()
+    plt.savefig(plotting_dir)
+
+def plot_pr_curve(Y_pred, Y_test, plotting_dir):
+    precision, recall, thresholds = precision_recall_curve(Y_test, Y_pred)
+    f1_scores = [f1_score(Y_test, Y_pred >= t) for t in thresholds]
+    accuracy_scores = [accuracy_score(Y_test, Y_pred >= t) for t in thresholds]
+
+    # Find the threshold values that maximize F1, accuracy
+    best_f1_threshold = thresholds[np.argmax(f1_scores)]
+    best_acc_threshold = thresholds[np.argmax(accuracy_scores)]
+
+    # Plot the Precision-Recall curve
+    plt.plot(precision, recall)
+
+    # Label the points for the best F1, accuracy
+    plt.plot(precision[np.argmax(f1_scores)], recall[np.argmax(f1_scores)], 'o', label=f'Best F1 ({best_f1_threshold:.2f})')
+    plt.plot(precision[np.argmax(accuracy_scores)], recall[np.argmax(accuracy_scores)], 'o', label=f'Best Accuracy ({best_acc_threshold:.2f})')
+
+    # Add labels and legend
+    plt.xlabel('precision')
+    plt.ylabel('recall')
+    plt.title('Precision-Recall Curve')
+    plt.legend()
+    plt.savefig(plotting_dir)
+    
+    # Returns best threshold for f1, accuracy
+    return best_f1_threshold, best_acc_threshold
