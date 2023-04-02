@@ -101,12 +101,13 @@ def churn_eval_metrics(Y_pred, Y_test, logger):
     specificity = tn / (tn+fp)
     sensitivity = tp/(tp+fn)
 
-    custom_print("model_accuracy:", model_acc, logger = logger)
-    custom_print("model_precision:",model_prec, logger = logger)
-    custom_print("model_auc:", model_auc, logger = logger)
-    custom_print("model_f1score:",model_f1score, logger = logger)
-    custom_print("sensitivity:", sensitivity, logger = logger)
-    custom_print("specificity:", specificity, logger = logger)
+    #Change to 2 dp print("{:.2f}".format(x))
+    custom_print("model_accuracy: ", "{:.2f}".format(model_acc), logger = logger)
+    custom_print("model_precision: ","{:.2f}".format(model_prec), logger = logger)
+    custom_print("model_auc: ", "{:.2f}".format(model_auc), logger = logger)
+    custom_print("model_f1score: ", "{:.2f}".format(model_f1score), logger = logger)
+    custom_print("sensitivity: ", "{:.2f}".format(sensitivity), logger = logger)
+    custom_print("specificity: ", "{:.2f}".format(specificity), logger = logger)
 
 def plot_roc_curve(Y_pred, Y_test,plotting_dir):
     fpr, tpr, thresholds = roc_curve(Y_test, Y_pred, pos_label = 1)
