@@ -1,0 +1,48 @@
+Device availiable: cpu
+Train_val dataset loaded
+Training model
+---------------------------------
+
+Hyperparameters:
+model name: bert-base-uncased
+Number of epochs: 1
+number of classes: 2
+max length: 64
+batch size: 32
+learning rate: 1e-05
+Loading data.....
+Model initialised!
+train size: 4355
+dev size: 1089
+Train data loaded!
+Start training...
+
+ Epoch  |  Batch  |  Train Loss  |  Val Loss  |  Val Acc  |  Elapsed 
+----------------------------------------------------------------------
+   1    |   20    |   0.614410   |     -      |     -     |   74.72  
+   1    |   40    |   0.530035   |     -      |     -     |   69.43  
+   1    |   60    |   0.457002   |     -      |     -     |   72.58  
+   1    |   80    |   0.393421   |     -      |     -     |   72.26  
+   1    |   100   |   0.322608   |     -      |     -     |   71.15  
+   1    |   120   |   0.304174   |     -      |     -     |   71.11  
+   1    |   136   |   0.298217   |     -      |     -     |   54.00  
+Current Training accuracy100.0
+model_accuracy: 0.7407577497129736
+model_precision: 0.0
+model_auc: nan
+model_f1score: 0.0
+sensitivity nan
+specificity 0.7407577497129736
+----------------------------------------------------------------------
+model_accuracy: 0.7382920110192838
+model_precision: 0.0
+model_auc: nan
+model_f1score: 0.0
+sensitivity nan
+specificity 0.7382920110192838
+   1    |    -    |   0.422036   |  0.286828  |   89.02   |  513.13  
+----------------------------------------------------------------------
+
+
+Training complete!
+Saving model ...

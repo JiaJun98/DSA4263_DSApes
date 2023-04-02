@@ -3,12 +3,12 @@
 
 # In[1]:
 
-
 import torch
 import numpy as np
 from sklearn.model_selection import train_test_split
 from torch.utils.data import TensorDataset, Dataset,DataLoader, RandomSampler, SequentialSampler
 from transformers import AutoTokenizer
+import syspend
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -90,6 +90,19 @@ def preprocessing_for_bert(data,tokenizer_name,max_len):
 
 
 # In[4]:
+def single_data_loader(tokenizer_name,max_len, sentences):
+     """Facilitate loading of data
+     
+    @param tokenizer_name: Name of tokenizer, usually the name of the model being used
+    @max_len: Integer maximum length of sentence allowed
+    @sentences: List of data samples X
+    @return: DataLoader object that generates data for input into model
+    """
+     inputs, masks = preprocessing_for_bert(sentences,tokenizer_name,max_len)
+     data = TensorDataset(inputs, masks)
+     sampler = SequentialSampler(data)
+     return DataLoader(data, sampler=sampler, batch_size = 1)
+
 
 
 def create_data_loader(tokenizer_name, batch_size,max_len, data_df, predict_only=False):

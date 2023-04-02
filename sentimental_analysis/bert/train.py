@@ -4,6 +4,7 @@
 import os
 import re
 import string
+import syspend
 import random
 import time
 from tqdm import tqdm
@@ -11,7 +12,7 @@ import numpy as np
 import pandas as pd
 import torch
 from torch import nn
-import syspend
+import torch.nn.functional as F
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import precision_recall_fscore_support, accuracy_score
@@ -23,18 +24,15 @@ from transformers import BertModel
 from transformers import AdamW, get_linear_schedule_with_warmup
 from transformers import AutoModelForSequenceClassification, TrainingArguments, Trainer
 
-from utility import parse_config, seed_everything, custom_print,churn_eval_metrics, plot_roc_curve
+from utility import parse_config, seed_everything, custom_print,churn_eval_metrics, plot_roc_curve, plot_precision_recall_curve
 from preprocess_class import create_datasets
-from dataset import full_bert_data_loader,preprocessing_for_bert, create_data_loader, full_create_data_loader
+from sentimental_analysis.bert.dataset import full_bert_data_loader,preprocessing_for_bert, create_data_loader, full_create_data_loader
 
 from model_base_class import BaseModel
 #TODO: Finish BERT class framework(with Trainer Arguments so can customise other BERT models(BERT small, medium large or OTHERS))
 #TODO: predictions
 #TODO: See results or plot graph when adjusting threshold
 
-# In[14]:
-
-import torch.nn.functional as F
 
 #Creating BERTClassifier class
 class BertClassifier(BaseModel): #BaseModel,
@@ -231,9 +229,10 @@ class BertClassifier(BaseModel): #BaseModel,
 
         hours, seconds = divmod(time_elapsed, 3600)
         minutes, seconds = divmod(seconds, 60)
-        custom_print(f"Total Training Time:",logger = logger)
+        custom_print(f"Current training time:",logger = logger)
         custom_print("{:02d}:{:02d}:{:06.2f}".format(int(hours), int(minutes), seconds), logger = logger)
-        custom_print("Training complete!",logger = logger)
+        return time_elapsed
+        #custom_print("Training complete!",logger = logger)
 
 
     def evaluate(self, dataloader, test = False, plotting_dir = None, logger = None):
@@ -298,6 +297,8 @@ class BertClassifier(BaseModel): #BaseModel,
         
         if test:
             plot_roc_curve(probs[:, 1].tolist(),all_labels,plotting_dir)
+            plotting_dir = "plots/roberta_large_sentimental_non_trainer_precision_recall_curve.png"
+            plot_precision_recall_curve(probs[:, 1].tolist(),all_labels,plotting_dir)
         
         # Compute the average accuracy and loss over the validation set.
         mean_loss = np.mean(total_loss)
@@ -305,8 +306,19 @@ class BertClassifier(BaseModel): #BaseModel,
 
         return mean_loss, mean_accuracy
 
-    def predict(self):
-        pass
+    def predict(self, single_dataloader,threshold):
+        self.model.eval()
+        all_logits = []
+        for batch in single_dataloader:
+            b_input_ids, b_attn_mask = tuple(t for t in batch)[:2]
+
+            # Compute logits
+            with torch.no_grad():
+                logits = self.model(b_input_ids, b_attn_mask)
+            all_logits.append(logits)
+        probs = F.softmax(logits[0], dim=1).cpu().numpy()
+        preds = np.where(probs[:, 1] > threshold, "Positive", "Negative")
+        return preds
 
 #Trainer arguments - Removing soon
 def train(model_name, train_dataset, eval_dataset):
@@ -377,8 +389,8 @@ if __name__ == "__main__":
     epochs = int(config_file['model']['epochs'])
     learning_rate = float(config_file['model']['learning_rate'])
     epsilon = float(config_file['model']['epsilon'])
-    train_size_percentage = float(config_file['model']['train_size_percentage'])
-    test_size_percentage = float(config_file['model']['test_size_percentage'])
+    train_val_percentage = float(config_file['model']['train_val_percentage'])
+    #test_size_percentage = float(config_file['model']['test_size_percentage'])
     train_on_full_data = eval(str(config_file['model']['train_on_full_data']))
     train_file = config_file['model']['data_folder']
     isTrainer = config_file['model']['trainer']
@@ -420,25 +432,33 @@ if __name__ == "__main__":
         custom_print('Model initialised!', logger = logger)
         if not train_on_full_data:
             if noOfKFolds: #Temporary use this
-                custom_print(f"\n{noOfKFolds} Folds cross validation...",logger = logger)
+                totalTime = 0
                 kf = KFold(n_splits=noOfKFolds, random_state=4263, shuffle=True)
-                for fold, (train_index, val_index) in enumerate(kf.split(data_df)):
-                    train = data_df.iloc[train_index]
-                    rem = data_df.iloc[val_index]
-                    val, test = train_test_split(rem, test_size = test_size_percentage, random_state = 4263)
-                    train_dataloader = create_data_loader(model_name, batch_size,max_len, train)
+                train, test = train_test_split(data_df, train_size = train_val_percentage, random_state = 4263)
+                test_dataloader = create_data_loader(model_name, batch_size,max_len, test, predict_only=False)
+                custom_print(f"\nTest size: {len(test)}",logger = logger)
+                custom_print('Test data loaded!', logger = logger)
+                for fold, (train_index, val_index) in enumerate(kf.split(train)):
+                    custom_print(f"\n Current folds cross validation: {fold}", logger = logger)
+                    train_df = train.iloc[train_index]
+                    val_df = train.iloc[val_index]
+                    #val, test = train_test_split(rem, test_size = test_size_percentage, random_state = 4263)
+                    train_dataloader = create_data_loader(model_name, batch_size,max_len, train_df)
                     custom_print(f"\nTrain size: {len(train)}",logger = logger)
                     custom_print('Train data loaded!', logger = logger)
-                    val_dataloader = create_data_loader(model_name, batch_size,max_len, val, predict_only=False)
-                    custom_print(f"\nVal size: {len(val)}",logger = logger)
+                    val_dataloader = create_data_loader(model_name, batch_size,max_len, val_df, predict_only=False)
+                    custom_print(f"\nVal size: {len(val_df)}",logger = logger)
                     custom_print('Val data loaded!', logger = logger)
-                    test_dataloader = create_data_loader(model_name, batch_size,max_len, test, predict_only=False)
-                    custom_print(f"\nTest size: {len(test)}",logger = logger)
-                    custom_print('Test data loaded!', logger = logger)
-                    sentimental_classifier.train(learning_rate, epsilon,train_dataloader,plot_path, val_dataloader = val_dataloader,epochs =1, evaluation=True, logger = logger)
-                    custom_print(f"\nTesting (Holdout) metrics", logger = logger)
-                    sentimental_classifier.evaluate(test_dataloader,test = True, plotting_dir = plot_path, logger = logger)  
-            else:
+                    totalTime += sentimental_classifier.train(learning_rate, epsilon,train_dataloader,plot_path, val_dataloader = val_dataloader,epochs =1, evaluation=True, logger = logger)
+                    #custom_print("Training complete!",logger = logger)
+                custom_print(f"\nTesting (Holdout) metrics", logger = logger)
+                sentimental_classifier.evaluate(test_dataloader,test = True, plotting_dir = plot_path, logger = logger)
+                hours, seconds = divmod(totalTime, 3600)
+                minutes, seconds = divmod(seconds, 60)
+                custom_print(f"Total Training Time:",logger = logger)
+                custom_print("{:02d}:{:02d}:{:06.2f}".format(int(hours), int(minutes), seconds), logger = logger)
+            #else:
+                """
                 train, rem = train_test_split(data_df, train_size = train_size_percentage, random_state = 4263)
                 val, test = train_test_split(rem, test_size = test_size_percentage, random_state = 4263)
                 train_dataloader = create_data_loader(model_name, batch_size,max_len, train)
@@ -452,7 +472,8 @@ if __name__ == "__main__":
                 custom_print('Test data loaded!', logger = logger)
                 sentimental_classifier.train(learning_rate, epsilon,train_dataloader,plot_path, val_dataloader = val_dataloader,epochs =1, evaluation=True, logger = logger)
                 custom_print(f"\nTesting (Holdout) metrics", logger = logger)
-                sentimental_classifier.evaluate(test_dataloader,test = True, plotting_dir = plot_path, logger = logger)      
+                sentimental_classifier.evaluate(test_dataloader,test = True, plotting_dir = plot_path, logger = logger)
+                """           
         else:
             full_train_data = full_create_data_loader(model_name, batch_size,max_len, data_df)
             custom_print('Full Data loaded!',logger = logger)
