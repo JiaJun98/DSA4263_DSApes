@@ -1,11 +1,13 @@
 model:
-  model_name:  'bert-large-uncased' #'bert-base-uncased' 'distilbert-large-uncased'
+  model_name: 'distilbert-base-uncased' #'bert-large-uncased' #'bert-base-uncased' #'distilbert-large-uncased'
   n_classes: 2
   max_len: 64 #512: GPU Put list
   batch_size: 32
   epochs: 1
   learning_rate: 1e-5
   epsilon: 1e-8
+  train_size_percentage: 0.8 #80%
+  test_size_percentage : 0.5 #50%
   #num_warmup_steps: 0
   train_on_full_data: False
   data_folder: data/reviews.csv
@@ -13,3 +15,4 @@ model:
   log_path: logs/distilbert_base_sentimental_non_trainer_latest_temp.log
   plot_path: plots/distilbert_base_sentimental_non_trainer_roc_curve.png
   trainer: False
+  KFold: 5

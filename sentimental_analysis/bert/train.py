@@ -81,6 +81,7 @@ class BertClassifier(BaseModel): #BaseModel,
     def forward(self, input_ids, attention_mask):
         """
         Feed input to BERT and the classifier to compute logits.
+        
         Parameters
         ----------
             input_ids : torch.Tensor
@@ -206,6 +207,7 @@ class BertClassifier(BaseModel): #BaseModel,
             y_preds = np.where(probs[:, 1] > threshold, 1, 0)
             all_labels = [tensor.cpu().tolist() for tensor in all_labels]
             y_preds = y_preds.tolist()
+            custom_print(f"Training metrics\n", logger = logger)
             churn_eval_metrics(all_labels, y_preds, logger)
 
             custom_print("-"*70,logger = logger)
@@ -215,11 +217,14 @@ class BertClassifier(BaseModel): #BaseModel,
             if evaluation == True:
                 # After the completion of each training epoch, measure the model's performance
                 # on our validation set.
-                val_loss, val_accuracy = self.evaluate(self.model, val_dataloader,plot_path)
+                
+                custom_print(f"Validation metrics\n", logger = logger)
+                val_loss, val_accuracy = self.evaluate(val_dataloader, logger = logger)
 
                 # Print performance over the entire training data
                 time_elapsed = time.time() - t0_epoch
 
+                custom_print(f"\n{'Epoch':^7} | {'Batch':^7} | {'Avg Train Loss':^12} | {'Val Loss':^10} | {'Val Acc':^9} | {'Elapsed':^9}",logger = logger)
                 custom_print(f"{epoch_i + 1:^7} | {'-':^7} | {avg_train_loss:^12.6f} | {val_loss:^10.6f} | {val_accuracy:^9.2f} | {time_elapsed:^9.2f}",logger = logger)
                 custom_print("-"*70, logger = logger)
             custom_print("\n", logger = logger)
@@ -231,15 +236,15 @@ class BertClassifier(BaseModel): #BaseModel,
         custom_print("Training complete!",logger = logger)
 
 
-    def evaluate(self,model, val_dataloader, plotting_dir):
+    def evaluate(self, dataloader, test = False, plotting_dir = None, logger = None):
         """After the completion of each training epoch, measure the model's performance
         on our validation set.
          Parameters
         ----------
             model : transformers.models.bert.modeling_bert.BertForSequenceClassification
                 BERT-based model
-            val_dataloader : torch.utils.data.DataLoader
-                DataLoader containing validation dataset
+            dataloader : torch.utils.data.DataLoader
+                DataLoader containing validation or test dataset
         """
         # Put the model into the evaluation mode. The dropout layers are disabled during
         # the test time.
@@ -247,26 +252,26 @@ class BertClassifier(BaseModel): #BaseModel,
         self.model.eval()
 
         # Tracking variables
-        val_accuracy = []
-        val_loss = []
-
+        total_loss = []
+        total_accuracy = []
+       
         all_logits = []
         all_labels = []
 
-        # For each batch in our validation set...
-        for batch in tqdm(val_dataloader, 'Validation'):
+        # For each batch in our validation/holdout set...
+        for batch in tqdm(dataloader, 'Validation' if not test else 'Testing'):
             # Load batch to GPU
             b_input_ids, b_attn_mask, b_labels = tuple(t.to(device) for t in batch)
 
             # Compute logits
             with torch.no_grad():
-                logits = model(b_input_ids, b_attn_mask)
+                logits = self.model(b_input_ids, b_attn_mask)
             all_logits.append(logits[0])
             all_labels.append(b_labels)
 
             # Compute loss
             loss = loss_fn(logits[0], b_labels)
-            val_loss.append(loss.item())
+            total_loss.append(loss.item())
 
             # Get the predictions
             _, preds = torch.max(logits[0], dim=1)
@@ -274,7 +279,7 @@ class BertClassifier(BaseModel): #BaseModel,
 
             # Calculate the accuracy rate
             accuracy = (preds == b_labels).cpu().numpy().mean() * 100
-            val_accuracy.append(accuracy)
+            total_accuracy.append(accuracy)
         
         #Finding validation metrics    
         all_logits = torch.cat(all_logits, dim=0)
@@ -290,14 +295,15 @@ class BertClassifier(BaseModel): #BaseModel,
         y_preds = y_preds.tolist()
         churn_eval_metrics(all_labels, y_preds, logger)
         #print(probs[:, 1].tolist())
-        plot_roc_curve(probs[:, 1].tolist(),all_labels,plotting_dir)
         
-
+        if test:
+            plot_roc_curve(probs[:, 1].tolist(),all_labels,plotting_dir)
+        
         # Compute the average accuracy and loss over the validation set.
-        val_loss = np.mean(val_loss)
-        val_accuracy = np.mean(val_accuracy)
+        mean_loss = np.mean(total_loss)
+        mean_accuracy = np.mean(total_accuracy)
 
-        return val_loss, val_accuracy
+        return mean_loss, mean_accuracy
 
     def predict(self):
         pass
@@ -371,6 +377,8 @@ if __name__ == "__main__":
     epochs = int(config_file['model']['epochs'])
     learning_rate = float(config_file['model']['learning_rate'])
     epsilon = float(config_file['model']['epsilon'])
+    train_size_percentage = float(config_file['model']['train_size_percentage'])
+    test_size_percentage = float(config_file['model']['test_size_percentage'])
     train_on_full_data = eval(str(config_file['model']['train_on_full_data']))
     train_file = config_file['model']['data_folder']
     isTrainer = config_file['model']['trainer']
@@ -396,7 +404,7 @@ if __name__ == "__main__":
     custom_print(f"batch size: {batch_size}",logger = logger)
     custom_print(f"learning rate: {learning_rate}",logger = logger)
     
-    if isTrainer:
+    if isTrainer: #Start to deprecate...
         trainer = train(model_name, train_dataset, val_dataset)
         custom_print('Training complete!',logger = logger)
         custom_print('Showing Training and Evaluation metrics....',logger = logger)
@@ -405,17 +413,25 @@ if __name__ == "__main__":
             for key,value in obj.items():
                 custom_print(f'{key}: {value}', logger = logger)
     else:
-        custom_print('Loading data.....',logger = logger)
+        custom_print('\nLoading data.....',logger = logger)
         sentimental_classifier = BertClassifier(model_name, n_classes)
         sentimental_classifier.model.to(device)
         custom_print('Model initialised!', logger = logger)
         if not train_on_full_data:
-            train, test = train_test_split(data_df, test_size = 0.2, random_state = 4263)
-            custom_print(f"dev size: {len(test)}",logger = logger)
+            train, rem = train_test_split(data_df, train_size = train_size_percentage, random_state = 4263)
+            val, test = train_test_split(rem, test_size = test_size_percentage, random_state = 4263)
             train_dataloader = create_data_loader(model_name, batch_size,max_len, train)
+            custom_print(f"\nTrain size: {len(train)}",logger = logger)
             custom_print('Train data loaded!', logger = logger)
-            val_dataloader = create_data_loader(model_name, batch_size,max_len, test, predict_only=False)
+            val_dataloader = create_data_loader(model_name, batch_size,max_len, val, predict_only=False)
+            custom_print(f"\nVal size: {len(val)}",logger = logger)
+            custom_print('Val data loaded!', logger = logger)
+            test_dataloader = create_data_loader(model_name, batch_size,max_len, test, predict_only=False)
+            custom_print(f"\nTest size: {len(test)}",logger = logger)
+            custom_print('Test data loaded!', logger = logger)
             sentimental_classifier.train(learning_rate, epsilon,train_dataloader,plot_path, val_dataloader = val_dataloader,epochs =1, evaluation=True, logger = logger)
+            custom_print(f"\nTesting (Holdout) metrics", logger = logger)
+            sentimental_classifier.evaluate(test_dataloader,test = True, plotting_dir = plot_path, logger = logger)
         else:
             full_train_data = full_create_data_loader(model_name, batch_size,max_len, data_df)
             custom_print('Full Data loaded!',logger = logger)
@@ -423,3 +439,5 @@ if __name__ == "__main__":
         custom_print('Saving model ...', logger = logger)
         torch.save({'model_state_dict':sentimental_classifier.model.state_dict()}, model_path)
     logger.close()
+
+# %%
