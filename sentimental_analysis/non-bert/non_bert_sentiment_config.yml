@@ -1,0 +1,19 @@
+model:
+  model_name: 'Non-Bert Sentiment Analysis'
+  model_type: 'LogisticRegression'
+  model_save_loc: models\lr_model.sav
+  is_train: True
+  save_model: False
+  data_path: data
+  data_file: reviews.csv
+  output_path: data\non_bert_sa_prediction.csv
+  log_path: logs\non_bert_sentiment.log
+  plot_path: plots\
+  rf_n_est: [400, 1001, 50]
+  rf_max_d: [4, 7, 1]
+  xgb_eta: [0.05, 0.21, 0.03]
+  xgb_max_d: [3, 6, 1]
+  xgb_min_weight: [10, 21, 3]
+  xgb_n_est: [300, 601, 100]
+  xgb_sample: [0.78, 0.87, 0.04]
+  threshold: 0.3000759

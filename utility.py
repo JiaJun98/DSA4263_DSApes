@@ -15,7 +15,7 @@ import boto3
 
 import nltk
 from nltk.corpus import stopwords
-from sklearn.metrics import accuracy_score, precision_score, roc_curve, auc, f1_score, confusion_matrix
+from sklearn.metrics import accuracy_score, precision_score, roc_curve, auc, f1_score, confusion_matrix, precision_recall_curve
 
 def set_seed(seed_value=42):
     """Set seed for reproducibility.
@@ -134,3 +134,30 @@ def plot_roc_curve(Y_pred, Y_test,plotting_dir):
     plt.title('ROC Curve')
     plt.legend()
     plt.savefig(plotting_dir)
+
+def plot_pr_curve(Y_pred, Y_test, plotting_dir):
+    precision, recall, thresholds = precision_recall_curve(Y_test, Y_pred)
+    accuracy_scores = [accuracy_score(Y_test, Y_pred >= t) for t in thresholds]
+    f1_scores = [f1_score(Y_test, Y_pred >= t) for t in thresholds]
+
+    # Find the threshold values that maximize F1, accuracy
+    best_acc_threshold = thresholds[np.argmax(accuracy_scores)]
+    best_f1_threshold = thresholds[np.argmax(f1_scores)]
+
+    # Plot the Precision-Recall curve
+    plt.plot(precision, recall)
+
+    # Label the points for the best F1, accuracy
+    plt.plot(precision[np.argmax(accuracy_scores)], recall[np.argmax(accuracy_scores)], 'o', label=f'Best Accuracy ({best_acc_threshold:.4f})')
+    plt.plot(precision[np.argmax(f1_scores)], recall[np.argmax(f1_scores)], 'o', label=f'Best F1 ({best_f1_threshold:.4f})')
+
+
+    # Add labels and legend
+    plt.xlabel('precision')
+    plt.ylabel('recall')
+    plt.title('Precision-Recall Curve')
+    plt.legend()
+    plt.savefig(os.path.join(plotting_dir, 'pr_curve'))
+    
+    # Returns best threshold for f1, accuracy
+    return best_acc_threshold, max(accuracy_scores)
