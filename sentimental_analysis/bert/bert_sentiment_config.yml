@@ -15,4 +15,4 @@ model:
   log_path: logs/distilbert_base_sentimental_non_trainer_latest_temp.log
   plot_path: plots/distilbert_base_sentimental_non_trainer_roc_curve.png
   trainer: False
-  KFold: 5
+  noOfKFolds: 5

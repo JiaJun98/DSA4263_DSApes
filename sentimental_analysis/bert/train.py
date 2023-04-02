@@ -15,7 +15,7 @@ import syspend
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import precision_recall_fscore_support, accuracy_score
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split,KFold
 
 import matplotlib.pyplot as plt
 from transformers import BertTokenizer
@@ -382,6 +382,7 @@ if __name__ == "__main__":
     train_on_full_data = eval(str(config_file['model']['train_on_full_data']))
     train_file = config_file['model']['data_folder']
     isTrainer = config_file['model']['trainer']
+    noOfKFolds = config_file['model']['noOfKFolds']
     home_folder = os.path.abspath(os.path.join(os.getcwd(),'../..'))
     model_path = os.path.join(curr_dir, config_file['model']['model_path'])
     logging_path = os.path.join(curr_dir,config_file['model']['log_path'])
@@ -418,20 +419,40 @@ if __name__ == "__main__":
         sentimental_classifier.model.to(device)
         custom_print('Model initialised!', logger = logger)
         if not train_on_full_data:
-            train, rem = train_test_split(data_df, train_size = train_size_percentage, random_state = 4263)
-            val, test = train_test_split(rem, test_size = test_size_percentage, random_state = 4263)
-            train_dataloader = create_data_loader(model_name, batch_size,max_len, train)
-            custom_print(f"\nTrain size: {len(train)}",logger = logger)
-            custom_print('Train data loaded!', logger = logger)
-            val_dataloader = create_data_loader(model_name, batch_size,max_len, val, predict_only=False)
-            custom_print(f"\nVal size: {len(val)}",logger = logger)
-            custom_print('Val data loaded!', logger = logger)
-            test_dataloader = create_data_loader(model_name, batch_size,max_len, test, predict_only=False)
-            custom_print(f"\nTest size: {len(test)}",logger = logger)
-            custom_print('Test data loaded!', logger = logger)
-            sentimental_classifier.train(learning_rate, epsilon,train_dataloader,plot_path, val_dataloader = val_dataloader,epochs =1, evaluation=True, logger = logger)
-            custom_print(f"\nTesting (Holdout) metrics", logger = logger)
-            sentimental_classifier.evaluate(test_dataloader,test = True, plotting_dir = plot_path, logger = logger)
+            if noOfKFolds: #Temporary use this
+                custom_print(f"\n{noOfKFolds} Folds cross validation...",logger = logger)
+                kf = KFold(n_splits=noOfKFolds, random_state=4263, shuffle=True)
+                for fold, (train_index, val_index) in enumerate(kf.split(data_df)):
+                    train = data_df.iloc[train_index]
+                    rem = data_df.iloc[val_index]
+                    val, test = train_test_split(rem, test_size = test_size_percentage, random_state = 4263)
+                    train_dataloader = create_data_loader(model_name, batch_size,max_len, train)
+                    custom_print(f"\nTrain size: {len(train)}",logger = logger)
+                    custom_print('Train data loaded!', logger = logger)
+                    val_dataloader = create_data_loader(model_name, batch_size,max_len, val, predict_only=False)
+                    custom_print(f"\nVal size: {len(val)}",logger = logger)
+                    custom_print('Val data loaded!', logger = logger)
+                    test_dataloader = create_data_loader(model_name, batch_size,max_len, test, predict_only=False)
+                    custom_print(f"\nTest size: {len(test)}",logger = logger)
+                    custom_print('Test data loaded!', logger = logger)
+                    sentimental_classifier.train(learning_rate, epsilon,train_dataloader,plot_path, val_dataloader = val_dataloader,epochs =1, evaluation=True, logger = logger)
+                    custom_print(f"\nTesting (Holdout) metrics", logger = logger)
+                    sentimental_classifier.evaluate(test_dataloader,test = True, plotting_dir = plot_path, logger = logger)  
+            else:
+                train, rem = train_test_split(data_df, train_size = train_size_percentage, random_state = 4263)
+                val, test = train_test_split(rem, test_size = test_size_percentage, random_state = 4263)
+                train_dataloader = create_data_loader(model_name, batch_size,max_len, train)
+                custom_print(f"\nTrain size: {len(train)}",logger = logger)
+                custom_print('Train data loaded!', logger = logger)
+                val_dataloader = create_data_loader(model_name, batch_size,max_len, val, predict_only=False)
+                custom_print(f"\nVal size: {len(val)}",logger = logger)
+                custom_print('Val data loaded!', logger = logger)
+                test_dataloader = create_data_loader(model_name, batch_size,max_len, test, predict_only=False)
+                custom_print(f"\nTest size: {len(test)}",logger = logger)
+                custom_print('Test data loaded!', logger = logger)
+                sentimental_classifier.train(learning_rate, epsilon,train_dataloader,plot_path, val_dataloader = val_dataloader,epochs =1, evaluation=True, logger = logger)
+                custom_print(f"\nTesting (Holdout) metrics", logger = logger)
+                sentimental_classifier.evaluate(test_dataloader,test = True, plotting_dir = plot_path, logger = logger)      
         else:
             full_train_data = full_create_data_loader(model_name, batch_size,max_len, data_df)
             custom_print('Full Data loaded!',logger = logger)
