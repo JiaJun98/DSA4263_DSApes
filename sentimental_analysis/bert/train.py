@@ -4,6 +4,7 @@
 import os
 import re
 import string
+import syspend
 import random
 import time
 from tqdm import tqdm
@@ -11,7 +12,7 @@ import numpy as np
 import pandas as pd
 import torch
 from torch import nn
-import syspend
+import torch.nn.functional as F
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import precision_recall_fscore_support, accuracy_score
@@ -25,16 +26,13 @@ from transformers import AutoModelForSequenceClassification, TrainingArguments, 
 
 from utility import parse_config, seed_everything, custom_print,churn_eval_metrics, plot_roc_curve, plot_precision_recall_curve
 from preprocess_class import create_datasets
-from dataset import full_bert_data_loader,preprocessing_for_bert, create_data_loader, full_create_data_loader
+from sentimental_analysis.bert.dataset import full_bert_data_loader,preprocessing_for_bert, create_data_loader, full_create_data_loader
 
 from model_base_class import BaseModel
 #TODO: Finish BERT class framework(with Trainer Arguments so can customise other BERT models(BERT small, medium large or OTHERS))
 #TODO: predictions
 #TODO: See results or plot graph when adjusting threshold
 
-# In[14]:
-
-import torch.nn.functional as F
 
 #Creating BERTClassifier class
 class BertClassifier(BaseModel): #BaseModel,
@@ -312,19 +310,14 @@ class BertClassifier(BaseModel): #BaseModel,
         self.model.eval()
         all_logits = []
         for batch in single_dataloader:
-            # Load batch to GPU
-            b_input_ids, b_attn_mask = tuple(t.to(device) for t in batch)[:2]
+            b_input_ids, b_attn_mask = tuple(t for t in batch)[:2]
 
             # Compute logits
             with torch.no_grad():
-                logits = model(b_input_ids, b_attn_mask)
-                #print(logits)
+                logits = self.model(b_input_ids, b_attn_mask)
             all_logits.append(logits)
-
-        probs = F.softmax(logits, dim=1).cpu().numpy()
-        print(probs)
-        preds = np.where(probs[:, 1] > threshold, 1, 0)
-        preds = y_preds.tolist()
+        probs = F.softmax(logits[0], dim=1).cpu().numpy()
+        preds = np.where(probs[:, 1] > threshold, "Positive", "Negative")
         return preds
 
 #Trainer arguments - Removing soon
