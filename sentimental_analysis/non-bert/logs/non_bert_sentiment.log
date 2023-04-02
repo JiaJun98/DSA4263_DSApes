@@ -5,15 +5,20 @@ LogisticRegression model succesfully trained
 
 ---------------------------------
 
-model_accuracy:0.761248852157943
-model_precision:0.9002932551319648
-model_auc:0.7607519574919552
-model_f1score:0.825268817204301
-sensitivity0.7617866004962779
-specificity0.7597173144876325
+model_accuracy: 0.77
+model_precision: 0.89
+model_auc: 0.75
+model_f1score: 0.83
+sensitivity: 0.79
+specificity: 0.72
 
+---------------------------------
 
-LogisticRegression model succesfully saved
+Threshold parameter tuning
+
+Best threshold for accuracy: 0.2010836237471163
+Accuracy score at best threshold: 0.8172635445362718
+Warning: LogisticRegression model has NOT been saved
 
 ---------------------------------
 

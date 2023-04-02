@@ -6,9 +6,9 @@ import utility
 import os
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier, VotingClassifier
-from xgboost import XGBClassifier, plot_importance
-from sklearn.metrics import roc_auc_score, f1_score, accuracy_score, precision_score, recall_score, confusion_matrix, mean_squared_error, auc, roc_curve
+from sklearn.ensemble import RandomForestClassifier
+from xgboost import XGBClassifier
+from sklearn.metrics import roc_auc_score
 import pickle
 import torch
 from imblearn.over_sampling import SMOTE
@@ -16,32 +16,61 @@ from imblearn.over_sampling import SMOTE
 def ttsplit(df):
     '''
     Returns a 80-20 train and test set for the given dataset. 
-    @param df: List, numpy array, scipy-sparse matrix or pandas dataframe to operate the train-test split on
+    
+    Parameters
+    -----------
+        df: list, np.array, pd.DataFrame
+            List, numpy array or pandas dataframe to operate the train-test split on
     '''
     train, test = train_test_split(df, test_size = 0.2, random_state = 4263, stratify = df['Sentiment'])
     return [train, test]
 
 
-def predict_data(model_type, x_test):
+def predict_data(model_type, x_test, threshold):
     '''
     Predicts the given input data using the specified model_type and outputs the predictions (containing 0's or 1's) into a csv file.
-        Parameters:
-            model_type (str): A choice of 3 models are available. 'LogisticRegression', 'RandomForest' and 'XGBoost'
-            x_test (pd.DataFrame, np.array): Input data to be predicted on
+    
+    Parameters
+    -----------
+        model_type: str
+            A choice of 3 models are available. 'LogisticRegression', 'RandomForest' and 'XGBoost'
+        x_test : pd.DataFrame, np.array
+            Input data to be predicted on
     '''
     if model_type == 'LogisticRegression':
         logreg = pickle.load(open(model_save_loc, 'rb'))
-        lr_pred = pd.DataFrame({'Sentiment Prediction': logreg.predict(x_test)})
+        sentiment_proba = logreg.predict_proba(x_test)[:,1]
+        sentiment = []
+        for i in sentiment_proba:
+            if i >= threshold:
+                sentiment.append(1)
+            else:
+                sentiment.append(0)
+        lr_pred = pd.DataFrame({'Sentiment Prediction': sentiment, 'Sentiment Probability': sentiment_proba})
         lr_pred.to_csv(output_path)
     
     if model_type == 'RandomForest':
         rf = pickle.load(open(model_save_loc, 'rb'))
-        rf_pred = pd.DataFrame({'Sentiment Prediction': rf.predict(x_test)})
+        sentiment_proba = rf.predict_proba(x_test)[:,1]
+        sentiment = []
+        for i in sentiment_proba:
+            if i >= threshold:
+                sentiment.append(1)
+            else:
+                sentiment.append(0)
+        rf_pred = pd.DataFrame({'Sentiment Prediction': sentiment, 'Sentiment Probability': sentiment_proba})
         rf_pred.to_csv(output_path)
     
     if model_type == 'XGBoost':
         xgb = pickle.load(open(model_save_loc, 'rb'))
-        xgb_pred = pd.DataFrame({'Sentiment Prediction': xgb.predict(x_test)})
+        sentiment_proba = xgb.predict_proba(x_test)[:,1]
+        sentiment = []
+        for i in sentiment_proba:
+            if i >= threshold:
+                sentiment.append(1)
+            else:
+                sentiment.append(0)
+        xgb_pred = pd.DataFrame({'Sentiment Prediction': sentiment, 'Sentiment Probability': sentiment_proba})
         xgb_pred.to_csv(output_path)
     utility.custom_print(str(model_type) + ' has been succesfully predicted\n', logger = logger)
 
@@ -49,12 +78,19 @@ def predict_data(model_type, x_test):
 def train_model(model_type, x_train, y_train, x_test, y_test):
     '''
     Trains the chosen model using the respective data given
-        Parameters:
-            model_type (str): A choice of 3 models are available. 'LogisticRegression', 'RandomForest' and 'XGBoost'
-            x_train (pd.DataFrame): Training data containing all variables to be used in training of the model
-            y_train (np.array): An array of actual sentiment data for the train set to be validated on during the training of the model
-            x_test (pd.DataFrame): Test data containing the same variables as x_train to be predicted on
-            y_test (np.array): An array of actual sentiment data for the test set to validate the sentiment predictions and obtain test metrics
+    
+    Parameters
+    -----------
+        model_type : str
+            A choice of 3 models are available. 'LogisticRegression', 'RandomForest' and 'XGBoost'
+        x_train : pd.DataFrame
+            Training data containing all variables to be used in training of the model
+        y_train : np.array
+            An array of actual sentiment data for the train set to be validated on during the training of the model
+        x_test : pd.DataFrame
+            Test data containing the same variables as x_train to be predicted on
+        y_test : np.array
+            An array of actual sentiment data for the test set to validate the sentiment predictions and obtain test metrics
     '''
     if model_type == 'LogisticRegression':
         logreg(x_train, y_train, x_test,  y_test)
@@ -69,19 +105,30 @@ def train_model(model_type, x_train, y_train, x_test, y_test):
 def logreg(x_train, y_train, x_test, y_test):
     '''
     When 'LogisticRegression' is chosen for parameter model_type in the train_model function, this function will be called to train a Logistic Regression model
-        Parameters:
-            x_train (pd.DataFrame): Training data containing all variables to be used in training of the model
-            y_train (np.array): An array of actual sentiment data for the train set to be validated on during the training of the model
-            x_test (pd.DataFrame): Test data containing the same variables as x_train to be predicted on
-            y_test (np.array): An array of actual sentiment data for the test set to validate the sentiment predictions and obtain test metrics
+    
+    Parameters:
+    -----------    
+        x_train : pd.DataFrame
+            Training data containing all variables to be used in training of the model
+        y_train : np.array
+            An array of actual sentiment data for the train set to be validated on during the training of the model
+        x_test : pd.DataFrame
+            Test data containing the same variables as x_train to be predicted on
+        y_test : np.array
+            An array of actual sentiment data for the test set to validate the sentiment predictions and obtain test metrics
     '''
     logreg = LogisticRegression(random_state = 4263, multi_class = 'multinomial', solver = 'saga', max_iter = 2000)
     logreg.fit(x_train, y_train)
     lr_pred = logreg.predict(x_test)
+    lr_proba = logreg.predict_proba(x_test)[:,1]
     utility.custom_print('LogisticRegression model succesfully trained\n', logger = logger)
     utility.custom_print('---------------------------------\n',logger = logger)
     utility.churn_eval_metrics(lr_pred, y_test, logger)
-    utility.custom_print('\n',logger = logger)
+    utility.custom_print('\n---------------------------------\n',logger = logger)
+    utility.custom_print('Threshold parameter tuning\n', logger = logger)
+    threshold, accuracy = utility.plot_pr_curve(lr_proba, y_test, plot_path)
+    utility.custom_print('Best threshold for accuracy: ' + str(threshold), logger = logger)
+    utility.custom_print('Accuracy score at best threshold: ' + str(accuracy), logger = logger)
     if save_model:
         pickle.dump(logreg, open(model_save_loc, 'wb')) 
         utility.custom_print('LogisticRegression model succesfully saved', logger = logger)
@@ -95,11 +142,17 @@ def rf(x_train, y_train, x_test, y_test):
     via a grid search for the range of grid specified in the non_bert_sentiment_config.yml file.
 
     The available parameters to train are n_estimators and max_depth
-        Parameters:
-            x_train (pd.DataFrame): Training data containing all variables to be used in training of the model
-            y_train (np.array): An array of actual sentiment data for the train set to be validated on during the training of the model
-            x_test (pd.DataFrame): Test data containing the same variables as x_train to be predicted on
-            y_test (np.array): An array of actual sentiment data for the test set to validate the sentiment predictions and obtain test metrics
+        
+    Parameters
+    -----------
+        x_train : pd.DataFrame
+            Training data containing all variables to be used in training of the model
+        y_train : np.array
+            An array of actual sentiment data for the train set to be validated on during the training of the model
+        x_test : pd.DataFrame
+            Test data containing the same variables as x_train to be predicted on
+        y_test : np.array
+            An array of actual sentiment data for the test set to validate the sentiment predictions and obtain test metrics
     '''
     #Load training parameter range
     n_est_range = config_file['model']['rf_n_est']
@@ -115,13 +168,16 @@ def rf(x_train, y_train, x_test, y_test):
     rf = RandomForestClassifier(n_estimators = rf_para.get('n_estimators'), max_depth = rf_para.get('max_depth'), criterion = 'entropy', random_state = 4263)
     rf.fit(x_train, y_train)
     rf_pred = rf.predict(x_test)
-    utility.custom_print(rf_gscv.best_params_, logger = logger)    
-    rf.fit(x_train, y_train)
-    rf_pred = rf.predict(x_test)
+    rf_proba = rf.predict_proba(x_test)[:,1]
+    utility.custom_print(rf_gscv.best_params_, logger = logger)
     utility.custom_print('RandomForest model succesfully trained\n', logger = logger)
     utility.custom_print('---------------------------------\n',logger = logger)
     utility.churn_eval_metrics(rf_pred, y_test, logger)
-    utility.custom_print('\n',logger = logger)
+    utility.custom_print('\n---------------------------------\n',logger = logger)
+    utility.custom_print('Threshold parameter tuning\n', logger = logger)
+    threshold, accuracy = utility.plot_pr_curve(rf_proba, y_test, plot_path)
+    utility.custom_print('Best threshold for accuracy: ' + str(threshold), logger = logger)
+    utility.custom_print('Accuracy score at best threshold: ' + str(accuracy), logger = logger)
     if save_model:
         pickle.dump(rf, open(model_save_loc, 'wb'))
         utility.custom_print('RandomForest model succesfully saved', logger = logger)
@@ -136,11 +192,16 @@ def xgboost(x_train, y_train, x_test, y_test):
     via a grid search for the range of grid specified in the non_bert_sentiment_config.yml file.
     The available parameters to train are eta, max_depth, min_child_weight, n_estimators and colsample_bytree
 
-        Parameters:
-            x_train (pd.DataFrame): Training data containing all variables to be used in training of the model
-            y_train (np.array): An array of actual sentiment data for the train set to be validated on during the training of the model
-            x_test (pd.DataFrame): Test data containing the same variables as x_train to be predicted on
-            y_test (np.array): An array of actual sentiment data for the test set to validate the sentiment predictions and obtain test metrics
+    Parameters
+    -----------
+        x_train : pd.DataFrame
+            Training data containing all variables to be used in training of the model
+        y_train : np.array
+            An array of actual sentiment data for the train set to be validated on during the training of the model
+        x_test : pd.DataFrame
+            Test data containing the same variables as x_train to be predicted on
+        y_test : np.array
+            An array of actual sentiment data for the test set to validate the sentiment predictions and obtain test metrics
     '''
     #Loading training parameter range
     eta_range = config_file['model']['xgb_eta']
@@ -163,11 +224,16 @@ def xgboost(x_train, y_train, x_test, y_test):
                     colsample_bytree = xgb_para.get('colsample_bytree'), n_estimators = xgb_para.get('n_estimators'), random_state = 4263, eval_metric = roc_auc_score)
     xgb.fit(x_train, y_train)
     xgb_pred = xgb.predict(x_test)
+    xgb_proba = xgb.predict_proba(x_test)[:,1]
     utility.custom_print('XGBoost model succesfully trained\n', logger = logger)
     utility.custom_print(xgb_para, logger = logger)
-    utility.custom_print('---------------------------------\n',logger = logger)
+    utility.custom_print('\n---------------------------------\n',logger = logger)
     utility.churn_eval_metrics(xgb_pred, y_test, logger)
-    utility.custom_print('\n',logger = logger)
+    utility.custom_print('\n---------------------------------\n',logger = logger)
+    utility.custom_print('Threshold parameter tuning\n', logger = logger)
+    threshold, accuracy = utility.plot_pr_curve(xgb_proba, y_test, plot_path)
+    utility.custom_print('Best threshold for accuracy: ' + str(threshold), logger = logger)
+    utility.custom_print('Accuracy score at best threshold: ' + str(accuracy), logger = logger)
     if save_model:
         pickle.dump(xgb, open(model_save_loc, 'wb'))
         utility.custom_print('XGBoost model succesfully saved', logger = logger)
@@ -178,7 +244,8 @@ def xgboost(x_train, y_train, x_test, y_test):
 if __name__ == "__main__":
     torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     curr_dir = os.getcwd()
-    config_path = os.path.join(curr_dir, 'non_bert_sentiment_config.yml') #change when done
+    home_folder = os.path.abspath(os.path.join(curr_dir,'../..'))
+    config_path = os.path.join(curr_dir, 'non_bert_sentiment_config.yml')
     config_file = utility.parse_config(config_path)
     log_path = config_file['model']['log_path']
     model_name = config_file['model']['model_name']
@@ -186,31 +253,35 @@ if __name__ == "__main__":
     model_save_loc = os.path.join(curr_dir, config_file['model']['model_save_loc'])
     data_path = config_file['model']['data_path']
     data_file = config_file['model']['data_file']
+    threshold = config_file['model']['threshold']
     is_train = config_file['model']['is_train']
     save_model = config_file['model']['save_model']
-    output_path = os.path.join(curr_dir, config_file['model']['output_path'])
-    home_folder = os.path.abspath(os.path.join(curr_dir,'../..')) #change when done
+    plot_path = config_file['model']['plot_path']
+    output_path = os.path.join(home_folder, config_file['model']['output_path'])
     data_df = pd.read_csv(os.path.join(home_folder, data_path, data_file))
+    plot_path = os.path.join(curr_dir, plot_path)
     logger = open(os.path.join(curr_dir, log_path), 'w')
+    
     df = pre.Dataset(data_df)
-    df.create_tfidf(root_words_option = 2, remove_stop_words = True, lower_case = True, ngrams = (1,2), min_doc = 0.05, max_doc = 0.95)
-    tfidf = pd.DataFrame(df.tfidf[1].toarray())
-    tfidf['Time'] = df.date
-    tfidf['Sentiment'] = df.sentiments
-    tfidf = tfidf.replace({'positive': 1, 'negative':0})
+    df.create_bow(root_words_option = 2, remove_stop_words = True, lower_case = True, ngrams = (1,2), min_doc = 0.05, max_doc = 0.95)
+    bow = pd.DataFrame(df.bow[1].toarray())
+    bow['Time'] = df.date
+    bow['Sentiment'] = df.sentiments
+    bow = bow.replace({'positive': 1, 'negative':0})
+    
+    train, test = ttsplit(bow)
+    x_train = train.drop(['Time', 'Sentiment'], axis = 1)
+    y_train = train['Sentiment'].to_numpy()
+    x_test = test.drop(['Time', 'Sentiment'], axis = 1)
+    y_test = test['Sentiment'].to_numpy()
+    oversample = SMOTE(random_state = 4263)
+    x_train, y_train = oversample.fit_resample(x_train, y_train)
+    utility.custom_print("Training dataset has been loaded successfully\n",logger = logger)
+    utility.custom_print('---------------------------------',logger = logger)
     if is_train:
-        train, test = ttsplit(tfidf)
-        x_train = train.drop(['Time', 'Sentiment'], axis = 1)
-        y_train = train['Sentiment'].to_numpy()
-        x_test = test.drop(['Time', 'Sentiment'], axis = 1)
-        y_test = test['Sentiment'].to_numpy()
-        oversample = SMOTE(random_state = 4263)
-        x_train, y_train = oversample.fit_resample(x_train, y_train)
-        utility.custom_print("Training dataset has been loaded successfully\n",logger = logger)
-        utility.custom_print('---------------------------------',logger = logger)  
         train_model(model_type, x_train, y_train, x_test, y_test)
         utility.custom_print('\n---------------------------------\n',logger = logger)
     else:
         utility.custom_print("Data to be predicted has been loaded successfully",logger = logger)
-        predict_data(model_type, tfidf)
+        predict_data(model_type, x_test, threshold)
 
