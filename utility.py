@@ -11,11 +11,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import torch
 import yaml
-import boto3
+#import boto3
 
 import nltk
 from nltk.corpus import stopwords
-from sklearn.metrics import accuracy_score, precision_score, roc_curve, auc, f1_score, confusion_matrix
+from sklearn.metrics import accuracy_score, precision_score, roc_curve, auc, f1_score, confusion_matrix, precision_recall_curve
 
 def set_seed(seed_value=42):
     """Set seed for reproducibility.
@@ -108,6 +108,38 @@ def churn_eval_metrics(Y_pred, Y_test, logger):
     custom_print("model_f1score: ", "{:.2f}".format(model_f1score), logger = logger)
     custom_print("sensitivity: ", "{:.2f}".format(sensitivity), logger = logger)
     custom_print("specificity: ", "{:.2f}".format(specificity), logger = logger)
+
+
+def plot_precision_recall_curve(Y_pred, Y_test,plotting_dir):
+    precision, recall, thresholds = precision_recall_curve(Y_test, Y_pred)
+    accuracy_scores = [accuracy_score(Y_test, Y_pred >= t) for t in thresholds]
+    # compute F1 scores for each threshold
+    f1_scores = 2 * (precision * recall) / (precision + recall)
+
+    best_f1_threshold = thresholds[np.argmax(f1_scores)]
+    best_acc_threshold = thresholds[np.argmax(accuracy_scores)]
+    best_precision_threshold = thresholds[np.argmax(precision)]
+    best_recall_threshold = thresholds[np.argmax(recall)]    
+
+    # plot the precision-recall curve
+    plt.plot(recall, precision)
+
+    # plot the threshold for the best accuracy
+    plt.scatter(best_acc_threshold, precision[np.argmax((Y_pred >= best_acc_threshold) == Y_test)])
+
+    # plot the threshold for the best recall
+    plt.scatter(best_recall_threshold, best_recall_threshold)
+
+    # plot the threshold for the best F1 score
+    plt.scatter(best_f1_threshold, precision[f1_scores.argmax()])
+
+    # add legend and axis labels
+    plt.legend(["Precision-Recall Curve", f"Best Accuracy ({best_acc_threshold:.2f})", f"Best Recall ({best_recall_threshold:.2f})", f"Best F1 ({best_f1_threshold:.2f})"])
+    plt.xlabel("Recall")
+    plt.ylabel("Precision")
+
+    plt.savefig(plotting_dir)
+    
 
 def plot_roc_curve(Y_pred, Y_test,plotting_dir):
     fpr, tpr, thresholds = roc_curve(Y_test, Y_pred, pos_label = 1)
