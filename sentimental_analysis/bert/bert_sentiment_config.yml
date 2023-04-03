@@ -11,8 +11,8 @@ model:
   #num_warmup_steps: 0
   train_on_full_data: False
   data_folder: data/reviews.csv
-  model_path: models/bert_large_sentimental_non_trainer_latest_temp.pt
-  log_path: logs/bert_large_sentimental_non_trainer_latest_temp.log
-  plot_path: plots/bert_large_sentimental_non_trainer_roc_curve.png
+  model_path: models/distilbert_base_sentimental_non_trainer_latest_temp.pt
+  log_path: logs/distilbert_base__sentimental_non_trainer_latest_temp.log
+  plot_path: plots/distilbert_base__sentimental_non_trainer
   trainer: False
   noOfKFolds: 5

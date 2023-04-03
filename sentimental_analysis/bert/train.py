@@ -24,7 +24,7 @@ from transformers import BertModel
 from transformers import AdamW, get_linear_schedule_with_warmup
 from transformers import AutoModelForSequenceClassification, TrainingArguments, Trainer
 
-from utility import parse_config, seed_everything, custom_print,churn_eval_metrics, plot_roc_curve, plot_precision_recall_curve
+from utility import parse_config, seed_everything, custom_print,churn_eval_metrics, plot_roc_curve, plot_pr_curve
 from preprocess_class import create_datasets
 from sentimental_analysis.bert.dataset import full_bert_data_loader,preprocessing_for_bert, create_data_loader, full_create_data_loader
 
@@ -285,7 +285,6 @@ class BertClassifier(BaseModel): #BaseModel,
         all_labels = torch.cat(all_labels, dim=0)
         #print(all_logits)
         probs = F.softmax(all_logits, dim=1).detach().cpu().numpy()
-        
         #print(probs)
         threshold = 0.5
         y_preds = np.where(probs[:, 1] > threshold, 1, 0)
@@ -296,9 +295,9 @@ class BertClassifier(BaseModel): #BaseModel,
         #print(probs[:, 1].tolist())
         
         if test:
+            #plotting_dir = "plots/roberta_large_sentimental_non_trainer"
             plot_roc_curve(probs[:, 1].tolist(),all_labels,plotting_dir)
-            plotting_dir = "plots/roberta_large_sentimental_non_trainer_precision_recall_curve.png"
-            plot_precision_recall_curve(probs[:, 1].tolist(),all_labels,plotting_dir)
+            plot_pr_curve(probs[:, 1].tolist(),all_labels,plotting_dir)
         
         # Compute the average accuracy and loss over the validation set.
         mean_loss = np.mean(total_loss)
@@ -317,6 +316,7 @@ class BertClassifier(BaseModel): #BaseModel,
                 logits = self.model(b_input_ids, b_attn_mask)
             all_logits.append(logits)
         probs = F.softmax(logits[0], dim=1).cpu().numpy()
+        print(probs)
         preds = np.where(probs[:, 1] > threshold, "Positive", "Negative")
         return preds
 
@@ -449,7 +449,7 @@ if __name__ == "__main__":
                     val_dataloader = create_data_loader(model_name, batch_size,max_len, val_df, predict_only=False)
                     custom_print(f"\nVal size: {len(val_df)}",logger = logger)
                     custom_print('Val data loaded!', logger = logger)
-                    totalTime += sentimental_classifier.train(learning_rate, epsilon,train_dataloader,plot_path, val_dataloader = val_dataloader,epochs =1, evaluation=True, logger = logger)
+                    #totalTime += sentimental_classifier.train(learning_rate, epsilon,train_dataloader,plot_path, val_dataloader = val_dataloader,epochs =1, evaluation=True, logger = logger)
                     #custom_print("Training complete!",logger = logger)
                 custom_print(f"\nTesting (Holdout) metrics", logger = logger)
                 sentimental_classifier.evaluate(test_dataloader,test = True, plotting_dir = plot_path, logger = logger)
@@ -457,6 +457,7 @@ if __name__ == "__main__":
                 minutes, seconds = divmod(seconds, 60)
                 custom_print(f"Total Training Time:",logger = logger)
                 custom_print("{:02d}:{:02d}:{:06.2f}".format(int(hours), int(minutes), seconds), logger = logger)
+                print(f"Testing data: {test}")
             #else:
                 """
                 train, rem = train_test_split(data_df, train_size = train_size_percentage, random_state = 4263)
