@@ -1,7 +1,7 @@
 flask:
   model_type: BERT #NON-BERT
-  model_name : roberta_large
+  model_name : roberta-large
   num_classes : 2
   model_path : sentimental_analysis/bert/models/roberta_large_gpu_sentimental_non_trainer_latest.pt
   max_len : 64
-  THRESHOLD : 0.5
+  THRESHOLD : 0.6148 #From PR curve
