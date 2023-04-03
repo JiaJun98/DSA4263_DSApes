@@ -133,7 +133,8 @@ def plot_roc_curve(Y_pred, Y_test,plotting_dir):
     plt.ylabel('True Positive Rate')
     plt.title('ROC Curve')
     plt.legend()
-    plt.savefig(plotting_dir)
+    plt.savefig(plotting_dir + '_roc_curve')
+    plt.close()
 
 def plot_pr_curve(Y_pred, Y_test, plotting_dir):
     precision, recall, thresholds = precision_recall_curve(Y_test, Y_pred)
@@ -157,7 +158,8 @@ def plot_pr_curve(Y_pred, Y_test, plotting_dir):
     plt.ylabel('recall')
     plt.title('Precision-Recall Curve')
     plt.legend()
-    plt.savefig(os.path.join(plotting_dir, 'pr_curve'))
+    plt.savefig(os.path.join(plotting_dir+ '_pr_curve'))
+    plt.close()
     
     # Returns best threshold for f1, accuracy
     return best_acc_threshold, max(accuracy_scores)
