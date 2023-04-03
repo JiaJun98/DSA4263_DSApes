@@ -1,7 +1,0 @@
-flask:
-  model_name : bert-base-uncased
-  num_classes : 2
-  model_path : sentimental_analysis/bert/models/bert_base_gpu_sentimental_non_trainer_latest.pt
-  max_len : 64
-  THRESHOLD : 0.5
-  

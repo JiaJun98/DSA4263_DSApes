@@ -9,10 +9,11 @@ model:
   train_val_percentage: 0.9 #80%
   #test_size_percentage : 0.5 #50%
   #num_warmup_steps: 0
-  train_on_full_data: False
-  data_folder: data/reviews.csv
-  model_path: models/bert_large_sentimental_non_trainer_latest_temp.pt
-  log_path: logs/bert_large_sentimental_non_trainer_latest_temp.log
-  plot_path: plots/bert_large_sentimental_non_trainer_roc_curve.png
-  trainer: False
-  noOfKFolds: 5
+  #train_on_full_data: True
+  data_path: data
+  train_file: reviews.csv
+  #dev_file: test.csv
+  # for_pred_path: for_pred_cd.csv
+  # pred_path: pred_cd.csv
+  model_path: models
+  log_path: logs/bert_sentimental.log
