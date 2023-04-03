@@ -75,8 +75,9 @@ class Dataset:
         final_text = self.input_text(root_words_option, remove_stop_words, lower_case, word_form)
 
         vectorizer = CountVectorizer(lowercase=lower_case, ngram_range = ngrams, max_df = max_doc, min_df = min_doc) 
-        bow_matrix = vectorizer.fit_transform(final_text.apply(lambda x: " ".join(x)))
-        self.bow = [vectorizer, bow_matrix]
+        fitted_vectorizer = vectorizer.fit(final_text.apply(lambda x: " ".join(x)))
+        bow_matrix = fitted_vectorizer.fit_transform(final_text.apply(lambda x: " ".join(x)))
+        self.bow = [vectorizer, fitted_vectorizer, bow_matrix]
 
     def create_tfidf(self, root_words_option = 0, remove_stop_words = True, lower_case = True, word_form = None, ngrams = (1,1), max_doc = 1, min_doc = 1):
         """
@@ -105,9 +106,10 @@ class Dataset:
         """
         final_text = self.input_text(root_words_option, remove_stop_words, lower_case, word_form)
         
-        vectorizer = TfidfVectorizer(lowercase=False, ngram_range = ngrams, max_df = max_doc, min_df = min_doc) #upper case words throughout the feedback may mean the customer is angry, hence negative
-        tfidf_output = vectorizer.fit_transform(final_text.apply(lambda x: " ".join(x)))
-        self.tfidf = [vectorizer, tfidf_output]
+        vectorizer = TfidfVectorizer(lowercase=False, ngram_range = ngrams, max_df = max_doc, min_df = min_doc)
+        fitted_vectorizer = vectorizer.fit(final_text.apply(lambda x: " ".join(x)))
+        tfidf_output = fitted_vectorizer.transform(final_text.apply(lambda x: " ".join(x)))
+        self.tfidf = [vectorizer, fitted_vectorizer, tfidf_output]
 
     def create_doc2vec(self, root_words_option = 0, remove_stop_words = True, lower_case = True, word_form = None):
         """
@@ -221,9 +223,10 @@ class Dataset:
             self.stop_words_list = replace_stop_words_list
 
         for word in exclude_words:
-            self.stop_words_list.remove(word)
+            if word in self.stop_words_list:
+                self.stop_words_list.remove(word)
         
-        self.stop_words_list.extend(include_words)        
+        self.stop_words_list.extend(include_words)     
     
     def word_tokenizer(self, lower_case = True, word_form = None):
         """
@@ -244,7 +247,7 @@ class Dataset:
                 if token == "n't":
                     output.append("not")
                 
-                elif token.isalpha():
+                elif token.find("-") > 0 or token.isalpha():
                     if lower_case:
                         output.append(token.lower())
                     

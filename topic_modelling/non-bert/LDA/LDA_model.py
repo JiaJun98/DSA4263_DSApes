@@ -21,7 +21,7 @@ class LDAmodel(BaseModel):
     def __init__(self, train_dataset = None, test_dataset = None, pickled_model = None, topic_label = None):
         self.train_dataset = train_dataset
         self.test_dataset = test_dataset
-        self.text = None
+        self.training_tokens = None
         self.model = None
         self.num_of_topics = None
         self.topic_label = pd.DataFrame(topic_label, columns = ['Topic_no', 'Topic_label']) if topic_label is not None else pd.DataFrame(columns = ['Topic_no', "Topic_label"])
@@ -30,9 +30,10 @@ class LDAmodel(BaseModel):
     def train(self, num_of_topics, num_top_words, num_top_documents, train_output_path, coherence_measure = 'c_v'):
         self.num_of_topics = num_of_topics
         custom_print("------ Training LDA model --------\n", logger = logger)
-        lda = LatentDirichletAllocation(n_components= num_of_topics, random_state = 4263)
-        training_lda = lda.fit_transform(self.train_dataset.bow[1])
-        self.model = lda
+        lda = LatentDirichletAllocation(n_components= num_of_topics, doc_topic_prior=0.5, topic_word_prior=0.5, random_state = 4263)
+        fitted_lda = lda.fit(self.train_dataset.bow[2])
+        training_lda = fitted_lda.transform(self.train_dataset.bow[2])
+        self.model = fitted_lda
 
         doc_topic_labels = pd.DataFrame(training_lda).idxmax(axis = 1)
         num_of_doc_per_topic = doc_topic_labels.value_counts().sort_index()
@@ -41,10 +42,12 @@ class LDAmodel(BaseModel):
         for i in range(len(num_of_doc_per_topic)):
             custom_print("Topic {}: {}".format(i, num_of_doc_per_topic[i]),logger = logger)
 
+        custom_print("------{} documents trained------".format(str(num_of_doc_per_topic.sum())), logger = logger)
+
         topic_key_words = self.display_topics(lda.components_, training_lda, self.train_dataset.bow[0].get_feature_names_out(), 
                                                          self.train_dataset.text, num_top_words, num_top_documents, train_output_path)
         
-        labelled_train_topics = pd.DataFrame({"Text": self.train_dataset.text, "Labelled_topic": doc_topic_labels})
+        labelled_train_topics = pd.DataFrame({"Text": self.train_dataset.text, "Tokens": self.training_tokens, "Labelled_topic": doc_topic_labels})
         custom_print("------ Generating key words and sample documents for each topic ------------\n", logger = logger)
 
         for i in range(self.num_of_topics):
@@ -53,10 +56,10 @@ class LDAmodel(BaseModel):
             custom_print(curr_topic_key_words, logger = logger)
 
             curr_topic_doc = labelled_train_topics.loc[labelled_train_topics['Labelled_topic'] == i, :]
-            topic_samples = curr_topic_doc["Text"].sample(n = num_top_documents, random_state=4263)
+            topic_samples = curr_topic_doc["Tokens"].sample(n = num_top_documents, random_state=4263)
             
             for text in topic_samples:
-                custom_print("\n" + text, logger = logger)
+                custom_print("\n" + ", ".join(text), logger = logger)
 
             self.set_topic_labels(i)
             full_topic_path = os.path.join(train_output_path, "full_doc_{}.csv".format(self.topic_label.loc[i, "Topic_label"]))
@@ -69,14 +72,16 @@ class LDAmodel(BaseModel):
         topic_key_words_path = os.path.join(train_output_path, "topic_key_words.csv")
         topic_key_words_df.to_csv(topic_key_words_path)
 
-        coherence = self.get_coherence(topic_key_words, self.text, coherence_measure)
-        custom_print("Overall training coherence score: {}".format(coherence), logger = logger)
+        # coherence = self.get_coherence(topic_key_words, self.training_tokens, coherence_measure)
+        # custom_print("Overall training coherence score: {}".format(coherence), logger = logger)
         custom_print("-------- End of training for {} topics ----------".format(num_of_topics), logger = logger)
 
-    def predict(self, test_output_path, num_top_documents):
+    def predict(self, test_output_path, root_word_option, num_top_documents):
         if self.model is not None:
-            testing_lda = self.model.fit_transform(self.test_dataset.bow[1])
-        elif self.pickled_model is not None:
+            test_input = self.get_input_text(self.test_dataset, root_word_option)
+            test_data_fitted = self.train_dataset.bow[1].transform(test_input.apply(lambda x: " ".join(x)))
+            testing_lda = self.model.transform(test_data_fitted)
+        elif self.pickled_model is not None: #check whether the pickled model works on test dataset
             testing_lda = self.pickled_model.fit_transform(self.test_dataset.bow[1])
         assigned_topic = pd.DataFrame(testing_lda).idxmax(axis = 1)
         num_of_doc_per_topic = assigned_topic.value_counts().sort_index()
@@ -86,35 +91,10 @@ class LDAmodel(BaseModel):
         
         custom_print("-------- Exporting labelled topics ----------", logger = logger)
         labelled_test = pd.DataFrame({"Text": self.test_dataset.text, "Topic_no": assigned_topic})
-        labelled_test.merge(self.topic_label, how = "left", on = "Topic_no") 
-
-        topic_accuracy = []
-        for i in range(self.topic_label.shape[0]):
-            curr_topic = labelled_test.loc[labelled_test['Topic_no']== i, "Text"]
-            curr_topic_samples = curr_topic.sample(n=num_top_documents, random_state=4263)
-            custom_print("Current topic: {}".format(self.topic_label.loc[i, "Topic_label"]), logger = logger)
-
-            for sample in curr_topic_samples:
-                custom_print("\n" + sample, logger = logger)
-
-            correctly_labelled = input("Number of correct labels: ")
-            try:
-                correctly_labelled = int(correctly_labelled)
-            
-            except:
-                raise ValueError
-            
-            if correctly_labelled < 0 or correctly_labelled > num_top_documents:
-                raise Exception("Number of correct labels cannot exceed number of samples!")
-            accuracy = int(correctly_labelled) / num_top_documents
-            topic_accuracy.append(accuracy)
-            custom_print("{} topic testing accuracy: {}".format(self.topic_label.loc[i, "Topic_label"], str(accuracy)), logger = logger)
-        
-        average_topic_accuracy = sum(topic_accuracy) / len(topic_accuracy)
-        custom_print("-------- Average topic accuracy: {} --------".format(str(average_topic_accuracy)), logger = logger)
-        custom_print("-------- Exporting labelled topics ----------", logger = logger)
+        labelled_test = labelled_test.merge(self.topic_label, how = "left", on = "Topic_no") 
         labelled_test_output_path = os.path.join(test_output_path, "full_labelled_test_dataset.csv")
         labelled_test.to_csv(labelled_test_output_path, index = False)
+        self.churn_eval_metrics(labelled_test)     
         custom_print("-------- End of predicting for {} topics ----------".format(num_of_topics), logger = logger)
 
     def preprocess_dataset(self, replace_stop_words_list = None, include_words = ['taste', 'flavor', 'amazon', 'price', 'minute', 'time', 'year'],
@@ -125,23 +105,10 @@ class LDAmodel(BaseModel):
             self.train_dataset.modify_stop_words_list(replace_stop_words_list, include_words, exclude_words)
             self.train_dataset.create_bow(root_word_option, remove_stop_words, lower_case, word_form, ngrams, max_doc, min_doc)
 
-            if root_word_option == 0:
-                if remove_stop_words:
-                    self.text = self.train_dataset.tokenized_no_stop_words
-                else:
-                    self.text = self.train_dataset.tokenized_words
-            
-            elif root_word_option == 1:
-                self.text = self.train_dataset.stem
-            
-            elif root_word_option == 2:
-                self.text = self.train_dataset.lemmatize
-            
-            else:
-                raise Exception("invalid root word option")
+            self.training_tokens = self.get_input_text(self.train_dataset, root_word_option)
         if self.test_dataset is not None:
             self.test_dataset.modify_stop_words_list(replace_stop_words_list, include_words, exclude_words)
-            self.test_dataset.create_bow(root_word_option, remove_stop_words, lower_case, word_form, ngrams, max_doc, min_doc)
+            self.test_dataset.create_bow(root_word_option, remove_stop_words, lower_case, word_form, ngrams, max_doc, min_doc)       
 
     def display_topics(self, trained_topics, list_of_words, feature_names, documents, num_top_words, num_top_documents, train_output_path):
         topic_key_words = []
@@ -151,7 +118,7 @@ class LDAmodel(BaseModel):
                             for i in topic.argsort()[:-num_top_words - 1:-1]])
 
         topic_vis_path = os.path.join(train_output_path, "topic_vis_{}.html".format(self.num_of_topics))
-        panel = pyLDAvis.sklearn.prepare(self.model, self.train_dataset.bow[1], self.train_dataset.bow[0], mds='tsne')
+        panel = pyLDAvis.sklearn.prepare(self.model, self.train_dataset.bow[2], self.train_dataset.bow[0], mds='tsne')
         pyLDAvis.save_html(panel, topic_vis_path)
         return topic_key_words
 
@@ -169,23 +136,67 @@ class LDAmodel(BaseModel):
         curr_topic_label = input("Label for Topic {}: ".format(topic_no))
         self.topic_label.loc[len(self.topic_label)] = [len(self.topic_label), curr_topic_label]
 
+    def get_input_text(self, dataset, root_word_option):
+        if root_word_option == 0:
+            if remove_stop_words:
+                return dataset.tokenized_no_stop_words
+            else:
+                return dataset.tokenized_words
+        
+        elif root_word_option == 1:
+            return dataset.stem
+        
+        elif root_word_option == 2:
+            return dataset.lemmatize
+        
+        else:
+            raise Exception("invalid root word option")
+
+    def churn_eval_metrics(self, labelled_test):
+        custom_print("-------Evaluating training sample accuracy-------", logger = logger)
+        topic_accuracy = []
+        sample_labelling = pd.DataFrame()
+        for i in range(self.topic_label.shape[0]):
+            curr_topic = labelled_test.loc[labelled_test['Topic_no']== i, "Text"]
+            curr_topic_samples = curr_topic.sample(n=num_top_documents, random_state=4263)
+            custom_print("\n--------Allocate next topic------------", logger = logger)
+            custom_print("Current topic: {}".format(self.topic_label.loc[i, "Topic_label"]), logger = logger)
+
+            correct_labels = []
+            for sample in curr_topic_samples:
+                custom_print("\n" + sample, logger = logger)
+                curr_label = int(input("Correct label (1 or 0): "))
+                correct_labels.append(curr_label)
+
+            sample_topic_labels = pd.DataFrame({"Sample text": curr_topic_samples, "Prediction": correct_labels})
+            sample_topic_labels.insert(0, 'Topic label', self.topic_label.loc[i, "Topic_label"])
+            sample_labelling = pd.concat([sample_labelling, sample_topic_labels])
+
+            accuracy = sum(correct_labels) / num_top_documents
+            topic_accuracy.append(accuracy)
+            custom_print("{} topic testing accuracy: {}".format(self.topic_label.loc[i, "Topic_label"], str(accuracy)), logger = logger)
+        
+        average_topic_accuracy = sum(topic_accuracy) / len(topic_accuracy)
+        custom_print("-------- Average topic accuracy: {} --------".format(str(average_topic_accuracy)), logger = logger) 
+
 def train_test(train_dataset, train_output_path, num_of_topics, num_top_words, num_top_documents, coherence_measure, replace_stop_words_list, include_words, 
           exclude_words, root_word_option, remove_stop_words, lower_case, word_form, ngrams, max_doc, min_doc, test_dataset = None, test_output_path = None):
     LDA_model = LDAmodel(train_dataset=train_dataset, test_dataset = test_dataset)
+    custom_print("------Preprocessing text data--------", logger = logger)
     LDA_model.preprocess_dataset(replace_stop_words_list, include_words, exclude_words, root_word_option,
                                  remove_stop_words, lower_case, word_form, ngrams, max_doc, min_doc)
     LDA_model.train(num_of_topics, num_top_words, num_top_documents, train_output_path, coherence_measure)
     LDA_model.dump_model(train_output_path)
 
     if test_dataset is not None:
-        LDA_model.predict(test_output_path, num_top_documents)
+        LDA_model.predict(test_output_path, root_word_option, num_top_documents)
 
 def test(test_dataset, pickled_model, test_output_path, topic_label, num_top_documents, replace_stop_words_list, include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
              word_form, ngrams, max_doc, min_doc):
     testLDA = LDAmodel(test_dataset=test_dataset, pickled_model=pickled_model, topic_label = topic_label)
     testLDA.preprocess_dataset(replace_stop_words_list, include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
              word_form, ngrams, max_doc, min_doc)
-    testLDA.predict(test_output_path=test_output_path, num_top_documents = num_top_documents)
+    testLDA.predict(test_output_path=test_output_path, root_word_option= root_word_option, num_top_documents = num_top_documents)
 
 if __name__ == "__main__":
     curr_dir = os.getcwd()
@@ -222,17 +233,17 @@ if __name__ == "__main__":
         test_output_path = os.path.join(curr_dir, test_output_path)
         if not os.path.exists(test_output_path):
             os.makedirs(test_output_path)
+    logging_path = config_file['model']['log_path']
+    if not os.path.exists("/".join(logging_path.split("/")[:-1])):
+        os.makedirs("/".join(logging_path.split("/")[:-1]))
     logging_path = os.path.join(curr_dir,config_file['model']['log_path'])
-    # if not os.path.exists(logging_path):
-    #     os.makedirs(logging_path)
     pickled_model = config_file['model']['pickled_model']
     if pickled_model is not None:
         pickled_model = os.path.join(curr_dir, pickled_model)
 
     data_df = pd.read_csv(os.path.join(home_folder,train_file))
-    logger = open(os.path.join(curr_dir, logging_path), 'w')
+    logger = open(logging_path, 'w')
     custom_print("Train dataset loaded",logger = logger)
-    custom_print('Training model',logger = logger)
     seed_everything()
     custom_print('---------------------------------\n',logger = logger)
 
