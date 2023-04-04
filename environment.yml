@@ -3,11 +3,10 @@ channels:
   - conda-forge
 dependencies: #Remember to add pytest
   - python=3.8
-  - numpy
-  - pandas
-  - matplotlib
   - pip
   - pip:
+    - pandas
+    - matplotlib
     - boto3
     - datasets
     - flask
@@ -17,6 +16,7 @@ dependencies: #Remember to add pytest
     - joblib==1.2.0
     - jupyter
     - nltk==3.7
+    - numpy
     - pickle5
     - pickleshare==0.7.5
     - pillow==9.2.0
