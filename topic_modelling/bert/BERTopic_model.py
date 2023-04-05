@@ -14,18 +14,51 @@ class BERTopic_model(BaseModel):
     BERTopic model for topic modelling. BERTopic is modular and the final topic model is dependent on the submodels chosen for each part of the task
     The parts of the model that an be modified is as follows: 
     1. Document embedding, 2. Dimensionality Reduction, 3. Clustering, 4. Tokenizer, 5. Weighting scheme 6. Representation Tuning (optional)
+    
+    ...
+
+    Attributes
+    ----------
+    topic_model : BERTopic
+        BERTopic model
+    embedding_model : SentenceTransformer or any model 
+        Model to transform document into matrix of embedding
+    dim_reduction_model : UMAP
+        Dimensionality reduction algorithm to use
+    clustering_model : HDBSCAN
+        Clustering algorithm to use
+    vectorizer_model : bertopic.vectorizers
+        Tokenizer to use
+    ctfidf_model : CountVectorizer
+        Weighting scheme to use
+    representation_model : bertopic.representation
+        optional model to use to finetune the representations calculated using ctfidf
     """
     def __init__(self, embedding_model = None, dim_reduction_model=None,
                  clustering_model = None, vectorizer_model=None, 
                  ctfidf_model=None,  representation_model=None,
                  min_topic_size = 10):
         """
-        @param embedding_model: Model to transform document into matrix of embedding
-        @param dim_reduction_model: Dimensionality reduction algorithm to use
-        @param clustering_model: Clustering algorithm to use
-        @param vectorizer_model: Tokenizer to use
-        @param ctfidf_model: weighting scheme to use
-        @param representation_model: optional model to use to finetune the representations calculated using ctfidf
+        Consturcts all the necessary attributes for the Bertopic_model. 
+
+        Parameters
+        ----------
+        topic_model : BERTopic
+            BERTopic model
+        embedding_model : SentenceTransformer or any model 
+            Model to transform document into matrix of embedding
+        dim_reduction_model : UMAP
+            Dimensionality reduction algorithm to use
+        clustering_model : HDBSCAN
+            Clustering algorithm to use
+        vectorizer_model : bertopic.vectorizers
+            Tokenizer to use
+        ctfidf_model : CountVectorizer
+            Weighting scheme to use
+        representation_model : bertopic.representation
+            optional model to use to finetune the representations calculated using ctfidf
+        min_topic_size : int
+            min topic size of each cluster        
         """
         self.topic_model = None
         self.embedding_model = embedding_model
@@ -39,7 +72,15 @@ class BERTopic_model(BaseModel):
     def train(self, dataset, probability = False, nr_topics = 'auto'):
         """
         fit and transform the BERTopic model to the dataset
-        @param dataset [Dataset]: Dataset for the model to be fit and transform on
+
+        Parameters
+        ----------
+        dataset : Dataset
+            Dataset for the model to be fit and transform on
+
+        Returns
+        -------
+        None                
         """
         self.topic_model = BERTopic(embedding_model=self.embedding_model, ctfidf_model=self.ctfidf_model,
                         vectorizer_model=self.vectorizer_model, 
@@ -55,7 +96,16 @@ class BERTopic_model(BaseModel):
         """
         Evaluate performance of model using coherence_score. (Using normalise pointwise mutual information, range between -1 and 1, higher score is better)
         prints out coherence score and topic freqenucy
-        @param dataset [Dataset]: Dataset to evaluate performance
+
+        Parameters
+        ----------
+        dataset : Dataset
+            Dataset to evaluate performance
+
+        Returns
+        -------
+        c_score : float
+            coherence score
         """
         c_score = self.get_coherence_score(dataset)
         return c_score
@@ -63,8 +113,16 @@ class BERTopic_model(BaseModel):
     def predict(self, dataset):
         '''
         Cluster the dataset into topics
-        @param dataset Union[str,[Dataset]]: New dataset to predict
-        @return prediction: Topic prediction for each document
+
+        Parameters
+        ----------
+        dataset : Union[str,[Dataset]]
+            New dataset to predict
+        
+        Returns
+        -------
+        prediction : [str]
+            Topic prediction for each document
         '''
         if type(dataset) == str:
             return self.topic_model.transform(dataset)
@@ -74,15 +132,31 @@ class BERTopic_model(BaseModel):
     def load_model(self, path):
         '''
         Load previously trained topic model
-        @param path [str]: path to model
+
+        Parameters
+        ----------
+        path : str
+            path to model
+        
+        Returns
+        -------
+        None  
         '''
         self.topic_model = BERTopic.load(path)
         
     def get_coherence_score(self, dataset):
         """
         Evaluation metric for model
-        @param dataset [Dataset]: Training dataset
-        @return c_score [float]: coherence score
+
+        Parameters
+        ----------
+        dataset : Dataset
+            Training dataset
+            
+        Returns
+        -------
+        c_score : float
+            coherence score
         """
         documents = pd.DataFrame({"Document": dataset.text,
                                 "ID": range(len(dataset.text)),
