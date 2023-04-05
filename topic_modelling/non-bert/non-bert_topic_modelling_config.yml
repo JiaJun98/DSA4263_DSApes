@@ -1,0 +1,55 @@
+model:
+  model_1:
+    type_of_model: "NMF"
+    num_of_topics: 10
+    num_top_words: 20
+    num_top_documents: 8
+    export_topics: True
+    coherence_measure: 'c_v'
+    replace_stop_words_list: 
+    include_words: ['quality', 'taste', 'tasty', 'nice', 'good', 'great', 'amazon', 'year', 'month', 'day', 'order', 'product']
+    exclude_words: []
+    root_word_option: 2
+    remove_stop_words: True
+    lower_case: True
+    word_form: ['noun']
+    ngrams_start: 1
+    ngrams_end: 2
+    max_doc: 0.95
+    min_doc: 5
+    data_folder: data/reviews.csv 
+    train_output_path: train_output/model_1
+    test_output_path: test_output/model_1
+    log_path: logs/model_1.log
+    train: True
+    test: True
+    pickled_model: 
+    topic_label: 
+
+  model_2:
+    type_of_model: "LDA"
+    num_of_topics: 10
+    num_top_words: 20
+    num_top_documents: 8
+    export_topics: True
+    coherence_measure: 'c_v'
+    replace_stop_words_list: 
+    include_words: ['quality', 'taste', 'tasty', 'nice', 'good', 'great', 'amazon', 'year', 'month', 'day', 'order', 'product']
+    exclude_words: []
+    root_word_option: 2
+    remove_stop_words: True
+    lower_case: True
+    word_form: ['noun']
+    ngrams_start: 1
+    ngrams_end: 2
+    max_doc: 0.95
+    min_doc: 5
+    data_folder: data/reviews.csv 
+    train_output_path: train_output/model_2
+    test_output_path: test_output/model_2
+    log_path: logs/model_2.log
+    train: True
+    test: True
+    pickled_model: 
+    topic_label: 
+model_choice: model_1
