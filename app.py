@@ -9,7 +9,6 @@ import numpy as np
 import os
 from utility import parse_config
 from sentimental_analysis.bert.train import BertClassifier
-from sentimental_analysis.non_bert.train import predict_data
 from sentimental_analysis.bert.dataset import single_data_loader
 
 
@@ -18,13 +17,12 @@ app = Flask(__name__)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 config_path = os.path.join(os.getcwd(), 'flask_app_config.yml')
 config_file = parse_config(config_path)
-model_type = config_file['flask']['model_type']
 model_name = config_file['flask']['model_name']
 n_classes = int(config_file['flask']['num_classes'])
 max_len = int(config_file['flask']['max_len'])
 model_path = config_file['flask']['model_path']
 THRESHOLD = int(config_file['flask']['THRESHOLD'])
-MODEL =  BertClassifier(model_name, n_classes) #Add non-bert also
+MODEL =  BertClassifier(model_name, n_classes)  
 MODEL.model.to(device)
 
 #Routes - Creating a simple route
