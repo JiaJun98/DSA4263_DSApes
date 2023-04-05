@@ -6,7 +6,6 @@ import utility
 import os
 import pickle
 import torch
-import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
@@ -29,21 +28,40 @@ class NonBertClassifier(BaseModel):
 
     Methods
     -----------
-    info(additional = ''):
-        Prints the person's name and age
+    ttsplit():
+        Returns a 80-20 train and test set for the given dataset. 
+
+    predict(model_type, threshold):
+        Predicts the given input data using the specified model_type and outputs the predictions (containing 0's or 1's) into a csv file.
+
+    train(model_type):
+        Trains the chosen model using the respective data given
+
+    logreg():
+        When 'LogisticRegression' is chosen for parameter model_type in the train function, this function will be called to train a Logistic Regression model
+
+    rf():
+        When 'RandomForest' is chosen for parameter model_type in the train function, this function will be called to train a Random Forest model
+        via a grid search for the range of grid specified in the non_bert_sentiment_config.yml file.
+        The available parameters to train are n_estimators and max_depth
+
+    xgboost():
+        When 'XGBoost' is chosen for parameter model_type in the train function, this function will be called to train a XGBoost model
+        via a grid search for the range of grid specified in the non_bert_sentiment_config.yml file.
+        The available parameters to train are eta, max_depth, min_child_weight, n_estimators and colsample_bytree
     '''
     def  __init__(self, data = None, model_name = None):
         self.model = model_name
         self.data = data
+        self.x_train = None
+        self.x_test = None
+        self.y_train = None
+        self.y_test = None
+
 
     def ttsplit(self):
         '''
         Returns a 80-20 train and test set for the given dataset. 
-        
-        Parameters
-        -----------
-            df: list, np.array, pd.DataFrame
-                List, numpy array or pandas dataframe to operate the train-test split on
         '''
         df = pre.Dataset(self.data)
         df.create_bow(root_words_option = 2, remove_stop_words = True, lower_case = True, ngrams = (1,2), min_doc = 0.05, max_doc = 0.95)
@@ -70,8 +88,8 @@ class NonBertClassifier(BaseModel):
         -----------
             model_type: str
                 A choice of 3 models are available. 'LogisticRegression', 'RandomForest' and 'XGBoost'
-            x_test : pd.DataFrame, np.array
-                Input data to be predicted on
+            threshold: float
+                Threshold to decide at what probability the sentiment would be considered positive
         '''
         self.data['Sentiment'] = 0
         self.data['Time'] = '1/1/1900'
@@ -125,14 +143,6 @@ class NonBertClassifier(BaseModel):
         -----------
             model_type : str
                 A choice of 3 models are available. 'LogisticRegression', 'RandomForest' and 'XGBoost'
-            x_train : pd.DataFrame
-                Training data containing all variables to be used in training of the model
-            y_train : np.array
-                An array of actual sentiment data for the train set to be validated on during the training of the model
-            x_test : pd.DataFrame
-                Test data containing the same variables as x_train to be predicted on
-            y_test : np.array
-                An array of actual sentiment data for the test set to validate the sentiment predictions and obtain test metrics
         '''
         if model_type == 'LogisticRegression':
             self.logreg()
@@ -147,17 +157,6 @@ class NonBertClassifier(BaseModel):
     def logreg(self):
         '''
         When 'LogisticRegression' is chosen for parameter model_type in the train function, this function will be called to train a Logistic Regression model
-        
-        Parameters:
-        -----------    
-            x_train : pd.DataFrame
-                Training data containing all variables to be used in training of the model
-            y_train : np.array
-                An array of actual sentiment data for the train set to be validated on during the training of the model
-            x_test : pd.DataFrame
-                Test data containing the same variables as x_train to be predicted on
-            y_test : np.array
-                An array of actual sentiment data for the test set to validate the sentiment predictions and obtain test metrics
         '''
         logreg = LogisticRegression(random_state = 4263, multi_class = 'multinomial', solver = 'saga', max_iter = 2000)
         logreg.fit(self.x_train, self.y_train)
@@ -182,19 +181,7 @@ class NonBertClassifier(BaseModel):
         '''
         When 'RandomForest' is chosen for parameter model_type in the train function, this function will be called to train a Random Forest model
         via a grid search for the range of grid specified in the non_bert_sentiment_config.yml file.
-
         The available parameters to train are n_estimators and max_depth
-            
-        Parameters
-        -----------
-            x_train : pd.DataFrame
-                Training data containing all variables to be used in training of the model
-            y_train : np.array
-                An array of actual sentiment data for the train set to be validated on during the training of the model
-            x_test : pd.DataFrame
-                Test data containing the same variables as x_train to be predicted on
-            y_test : np.array
-                An array of actual sentiment data for the test set to validate the sentiment predictions and obtain test metrics
         '''
         #Load training parameter range
         n_est_range = config_file['model']['rf_n_est']
@@ -233,17 +220,6 @@ class NonBertClassifier(BaseModel):
         When 'XGBoost' is chosen for parameter model_type in the train function, this function will be called to train a XGBoost model
         via a grid search for the range of grid specified in the non_bert_sentiment_config.yml file.
         The available parameters to train are eta, max_depth, min_child_weight, n_estimators and colsample_bytree
-
-        Parameters
-        -----------
-            x_train : pd.DataFrame
-                Training data containing all variables to be used in training of the model
-            y_train : np.array
-                An array of actual sentiment data for the train set to be validated on during the training of the model
-            x_test : pd.DataFrame
-                Test data containing the same variables as x_train to be predicted on
-            y_test : np.array
-                An array of actual sentiment data for the test set to validate the sentiment predictions and obtain test metrics
         '''
         #Loading training parameter range
         eta_range = config_file['model']['xgb_eta']
