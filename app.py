@@ -41,12 +41,12 @@ def index():
 def predict(): #Send data from front-end to backend then to front end
     if request.method == "POST":
         # Get the form data
-        tweets = request.form["review"]
-        test_dataloader = data_loader(model_name, max_len, tweets, 1)
+        texts = request.form["review"]
+        test_dataloader = data_loader(model_name, max_len, texts, 1)
         preds = MODEL.predict(test_dataloader, THRESHOLD)
         # Return the template with the form data
         topics = "Coffee" #Place holder
-        return render_template("index.html", tweets = tweets, preds = preds, topics = topics)
+        return render_template("index.html", texts = texts, preds = preds, topics = topics)
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -58,15 +58,17 @@ def upload():
     if not filename.endswith('.csv'): #Place holder. Havent set the thing yet
         print("ONLY CSV is allowed!")
     df = pd.read_csv(file, header=None)
-    csv_list =  df[0].tolist()[1:]
-    tweets = csv_list
-    X_preprocessed = np.array([text for text in csv_list])
-    test_dataloader = data_loader(model_name, max_len, X_preprocessed, len(csv_list))
+    #Place holder for him his reviews_csv have "Text" "Time" slightly hardcoded
+    texts =  df[0].tolist()[1:]
+    #time =  df[1].tolist()[1:] Real code DONT remove
+    predicted_topics = df[1].tolist()[1:]
+    X_preprocessed = np.array([text for text in texts])
+    test_dataloader = data_loader(model_name, max_len, X_preprocessed, len(texts))
     preds = MODEL.predict(test_dataloader, THRESHOLD)
     print(f"Current predictions: {preds}")
     # Do something with the uploaded file
-    topics = ["Coffee" for ele in preds ]
-    return render_template("index.html", tweets = tweets, preds = preds, topics = topics)
+    topics = [ele for ele in predicted_topics ]
+    return render_template("index.html", texts = texts, preds = preds, topics = topics)
 
 
 if __name__ == '__main__':

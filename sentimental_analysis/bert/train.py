@@ -315,9 +315,9 @@ class BertClassifier(BaseModel): #BaseModel,
             with torch.no_grad():
                 logits = self.model(b_input_ids, b_attn_mask)
             all_logits.append(logits)
-        probs = F.softmax(logits[0], dim=1).cpu().numpy()
+        probs = F.softmax(logits[0], dim=1).cpu().numpy() 
         print(probs)
-        preds = np.where(probs[:, 1] > threshold, "Positive", "Negative")
+        preds = np.where(probs[:, 0] > threshold, "Positive", "Negative") #SWITCH later
         return preds
 
 #Trainer arguments - Removing soon

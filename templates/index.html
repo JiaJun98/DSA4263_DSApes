@@ -60,10 +60,10 @@
         </tr>
       </thead>
       <tbody>
-        {% if tweets|length > 1 and preds|length > 1  %}
-          {% for i in range(tweets|length) %}
+        {% if texts|length > 1 and preds|length > 1  %}
+          {% for i in range(texts|length) %}
             <tr>
-              <td>{{ tweets[i] }}</td>
+              <td>{{ texts[i] }}</td>
               <td>{{ preds[i] }}</td>
               <!--Place holder for topic-->
               <td>{{ topics[i] }}</td>
@@ -71,7 +71,7 @@
           {% endfor %}
         {% else %}
           <tr>
-            <td>{{ tweets }}</td>
+            <td>{{ texts }}</td>
             <td>{{ preds }}</td>
             <!--Place holder for topic-->
             <td>{{ topics }}</td>
