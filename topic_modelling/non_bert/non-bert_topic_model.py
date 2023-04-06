@@ -91,8 +91,8 @@ class TopicModel(BaseModel):
         testing_labels = self.model.transform(test_data_fitted)
 
         assigned_topic = pd.DataFrame(testing_labels).idxmax(axis = 1)
-        num_of_doc_per_topic = assigned_topic.value_counts().sort_index()
-        custom_print("------ Number of documents assigned to each topic--------\n", logger = logger)
+        # num_of_doc_per_topic = assigned_topic.value_counts().sort_index()
+        # custom_print("------ Number of documents assigned to each topic--------\n", logger = logger)
         # for i in range(len(num_of_doc_per_topic)):
         #     custom_print("Topic {}: {}".format(i, num_of_doc_per_topic[i]),logger = logger)
         
@@ -100,7 +100,8 @@ class TopicModel(BaseModel):
         labelled_test = pd.DataFrame({"Text": self.test_dataset.text, "Topic_no": assigned_topic})
         indexed_topic_label = pd.DataFrame({"Topic label":self.topic_label}).reset_index()
 
-        labelled_test = labelled_test.merge(indexed_topic_label, how = "left", left_on = "Topic_no", right_on = "index") 
+        labelled_test = labelled_test.merge(indexed_topic_label, how = "left", left_on = "Topic_no", right_on = "index")
+        labelled_test = labelled_test.loc[:, ['Text', 'Topic label']]
         labelled_test_output_path = os.path.join(test_output_path, "full_labelled_test_dataset.csv")
         labelled_test.to_csv(labelled_test_output_path, index = False)
         
@@ -167,11 +168,11 @@ class TopicModel(BaseModel):
         custom_print("-------Evaluating training sample accuracy-------", logger = logger)
         topic_accuracy = []
         sample_labelling = pd.DataFrame()
-        for i in range(len(self.topic_label)):
-            curr_topic = labelled_test.loc[labelled_test['Topic_no']== i, "Text"]
+        for topic in self.topic_label:
+            curr_topic = labelled_test.loc[labelled_test['Topic label']== topic, "Text"]
             curr_topic_samples = curr_topic.sample(n=num_top_documents, random_state=4263)
             custom_print("\n--------Allocate next topic------------", logger = logger)
-            custom_print("Current topic: {}".format(self.topic_label[i]), logger = logger)
+            custom_print("Current topic: {}".format(topic), logger = logger)
 
             correct_labels = []
             for sample in curr_topic_samples:
@@ -185,15 +186,15 @@ class TopicModel(BaseModel):
                 correct_labels.append(curr_label)
 
             sample_topic_labels = pd.DataFrame({"Sample text": curr_topic_samples, "Prediction": correct_labels})
-            sample_topic_labels.insert(0, 'Topic label', self.topic_label[i])
-            sample_test_output_path = os.path.join(test_output_path, "test_{}.csv".format(self.topic_label[i]))
+            sample_topic_labels.insert(0, 'Topic label', topic)
+            sample_test_output_path = os.path.join(test_output_path, "test_{}.csv".format(topic))
 
             sample_topic_labels.to_csv(sample_test_output_path, index = False)
             sample_labelling = pd.concat([sample_labelling, sample_topic_labels])
 
             accuracy = sum(correct_labels) / num_top_documents
             topic_accuracy.append(accuracy)
-            custom_print("{} topic testing accuracy: {}".format(self.topic_label[i], str(accuracy)), logger = logger)
+            custom_print("{} topic testing accuracy: {}".format(topic, str(accuracy)), logger = logger)
         
         average_topic_accuracy = sum(topic_accuracy) / len(topic_accuracy)
         custom_print("-------- Average topic accuracy: {} --------".format(str(average_topic_accuracy)), logger = logger) 
