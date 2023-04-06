@@ -4,14 +4,13 @@ from re import sub
 from transformers import pipeline
 from nltk.tokenize import sent_tokenize
 import torch
-
 import os
 import sys
 sys.path.append("../..")
 
 from utility import parse_config, seed_everything, custom_print, churn_eval_metrics
 from model_base_class import BaseModel
-
+print(torch.cuda.is_available())
 classifier = pipeline(task="zero-shot-classification", model="facebook/bart-large-mnli",device=0)
 
 # currently downloading the pickled file for zero shot training

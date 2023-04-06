@@ -56,15 +56,17 @@
         <tr>
           <th>Text</th>
           <th>Predicted Customer Sentiment</th>
+          <th>Predicted Probabilities</th>
           <th>Predicted Topic</th>
         </tr>
       </thead>
       <tbody>
-        {% if texts|length > 1 and preds|length > 1  %}
+        {% if texts|length > 1 %}
           {% for i in range(texts|length) %}
             <tr>
               <td>{{ texts[i] }}</td>
               <td>{{ preds[i] }}</td>
+              <td>{{ probs[i] }}</td>
               <!--Place holder for topic-->
               <td>{{ topics[i] }}</td>
             </tr>
@@ -73,6 +75,7 @@
           <tr>
             <td>{{ texts }}</td>
             <td>{{ preds }}</td>
+            <td>{{ probs }}</td>
             <!--Place holder for topic-->
             <td>{{ topics }}</td>
           </tr>

@@ -318,7 +318,7 @@ class BertClassifier(BaseModel): #BaseModel,
         probs = F.softmax(logits[0], dim=1).cpu().numpy() 
         print(probs)
         preds = np.where(probs[:, 0] > threshold, "Positive", "Negative") #SWITCH later
-        return preds
+        return preds, probs[:, 0] 
 
 #Trainer arguments - Removing soon
 def train(model_name, train_dataset, eval_dataset):

@@ -284,6 +284,7 @@ if __name__ == "__main__":
     
     elif isTester:
         test_dataset = Dataset(data_df)
+        #Use this for flask....
         test(test_dataset, pickled_model, pickled_bow, test_output_path, topic_label, num_top_documents, replace_stop_words_list, include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
              word_form, ngrams, max_doc, min_doc)
         custom_print('Testing complete!',logger = logger)
