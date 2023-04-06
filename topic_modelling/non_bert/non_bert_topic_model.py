@@ -85,7 +85,7 @@ class TopicModel(BaseModel):
         # custom_print("Overall training coherence score: {}".format(coherence), logger = logger)
         custom_print("-------- End of training for {} topics ----------".format(num_of_topics), logger = logger)
 
-    def predict(self, test_output_path, root_word_option, num_top_documents):
+    def predict(self, test_output_path, root_word_option, num_top_documents, logger, num_of_topics):
         test_input = self.get_input_text(self.test_dataset, root_word_option)
         test_data_fitted = self.training_bow.transform(test_input.apply(lambda x: " ".join(x)))
         testing_labels = self.model.transform(test_data_fitted)
@@ -213,17 +213,17 @@ def train_test(train_dataset, train_output_path, training_model, num_of_topics, 
         trainModel.churn_eval_metrics(test_labels, num_top_documents, test_output_path)    
 
 def test(test_dataset, pickled_model, pickled_bow, test_output_path, topic_label, num_top_documents, replace_stop_words_list, include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
-             word_form, ngrams, max_doc, min_doc):
+             word_form, ngrams, max_doc, min_doc, logger, num_of_topics):
     #max_doc = 1 and min_doc = 1 so that not all the key words will be filtered off, esp when the input size is small.
     testModel = TopicModel(test_dataset=test_dataset, pickled_model=pickled_model, topic_label = topic_label, pickled_bow= pickled_bow)
     custom_print("-------Preprocessing test data--------", logger = logger)
     testModel.preprocess_dataset(replace_stop_words_list, include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
              word_form, ngrams, max_doc, min_doc)
-    testModel.predict(test_output_path=test_output_path, root_word_option= root_word_option, num_top_documents = num_top_documents)
+    return testModel.predict(test_output_path=test_output_path, root_word_option= root_word_option, num_top_documents = num_top_documents, num_of_topics= num_of_topics, logger = logger)
 
 if __name__ == "__main__":
     curr_dir = os.getcwd()
-    config_path = os.path.join(curr_dir, 'non-bert_topic_modelling_config.yml')
+    config_path = os.path.join(curr_dir, 'non_bert_topic_modelling_config.yml')
     config_file = parse_config(config_path)
     model_choice = config_file['model_choice']
     training_model = config_file['model'][model_choice]['type_of_model']
@@ -247,6 +247,7 @@ if __name__ == "__main__":
     max_doc = config_file['model'][model_choice]['max_doc']
     min_doc = config_file['model'][model_choice]['min_doc']
     home_folder = os.path.abspath(os.path.join(os.getcwd(),'../..'))
+    print(home_folder)
     train_output_path = config_file['model'][model_choice]['train_output_path']
     if train_output_path is not None:
         train_output_path = os.path.join(curr_dir, train_output_path)
@@ -287,7 +288,7 @@ if __name__ == "__main__":
         test_dataset = Dataset(data_df)
         #Use this for flask....
         test(test_dataset, pickled_model, pickled_bow, test_output_path, topic_label, num_top_documents, replace_stop_words_list, include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
-             word_form, ngrams, max_doc, min_doc)
+             word_form, ngrams, max_doc, min_doc, num_of_topics)
         custom_print('Testing complete!',logger = logger)
     logger.close()
 
