@@ -1,0 +1,103 @@
+Training model
+---------------------------------
+
+model name: zero-shot
+Coherence score: nan
+    Topic  Count                                               Name
+0      -1   1291                -1_rinds_pork rinds_lentils_similac
+1       0    288                                        0_drinks___
+2       1    282                                        1_drinks___
+3       2    265                                        2_snacks___
+4       3    167                                     3_household___
+5       4    146                                           4_dog___
+6       5    127                                         5_sauce___
+7       6    112           6_bars good_banana nut_bars ve_kind bars
+8       7    112                                        7_drinks___
+9       8    108  8_salt vinegar_lime flavoring_chips really_reg...
+10      9    107                                 9_carbohydrates___
+11     10    106                                10_carbohydrates___
+12     11    106                         11_healthy alternatives___
+13     12    102                                       12_drinks___
+14     13     98                                       13_drinks___
+15     14     92                                       14_snacks___
+16     15     80                         15_healthy alternatives___
+17     16     74                                16_carbohydrates___
+18     17     64  17_beer nuts_like nuts_roasted almonds_love al...
+19     18     58                                          18_cat___
+20     19     53                                19_carbohydrates___
+21     20     50  20_theater_movie theater_kettle corn_theater p...
+22     21     49                                       21_drinks___
+23     22     48                                       22_snacks___
+24     23     47                                        23_sauce___
+25     24     46                         24_healthy alternatives___
+26     25     45                                    25_household___
+27     26     44                         26_healthy alternatives___
+28     27     43  27_bought items_contact company_00 given_recei...
+29     28     41                                       28_drinks___
+30     29     37                  29_miso_miso cup_bisque_bowl soup
+31     30     35   30_skippy_allergic peanuts_skippy reduced_barney
+32     31     32                                    31_household___
+Words and score of topic 0:
+ [('drinks', 0.8129745125770569), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 1:
+ [('drinks', 0.6015759706497192), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 2:
+ [('snacks', 0.8776724338531494), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 3:
+ [('household', 0.9443082809448242), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 4:
+ [('dog', 0.869774341583252), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 5:
+ [('sauce', 0.9189000129699707), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 6:
+ [('bars good', 0.015716948306581224), ('banana nut', 0.013454257615579399), ('bars ve', 0.011106286392270697), ('kind bars', 0.011106286392270697), ('like bars', 0.011106286392270697), ('bars tasty', 0.011106286392270697), ('ingredients bars', 0.011106286392270697), ('bars taste', 0.011106286392270697), ('best bars', 0.008651775146549336), ('beach diet', 0.008651775146549336)]
+Words and score of topic 7:
+ [('drinks', 0.8098949790000916), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 8:
+ [('salt vinegar', 0.015102269240336108), ('lime flavoring', 0.01325409797756003), ('chips really', 0.011345971569910435), ('regular chips', 0.011345971569910435), ('kettle brand', 0.011345971569910435), ('bag chips', 0.011345971569910435), ('chips chips', 0.011345971569910435), ('chips great', 0.011345971569910435), ('kettle chip', 0.009365928113942976), ('eat chips', 0.009365928113942976)]
+Words and score of topic 9:
+ [('carbohydrates', 0.5228285193443298), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 10:
+ [('carbohydrates', 0.5391693115234375), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 11:
+ [('healthy alternatives', 0.8944679498672485), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 12:
+ [('drinks', 0.5258744955062866), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 13:
+ [('drinks', 0.8498060703277588), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 14:
+ [('snacks', 0.712505042552948), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 15:
+ [('healthy alternatives', 0.6669910550117493), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 16:
+ [('carbohydrates', 0.6355797052383423), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 17:
+ [('beer nuts', 0.027560581262701608), ('like nuts', 0.019475517935809514), ('roasted almonds', 0.015171389976083891), ('love almonds', 0.015171389976083891), ('extra sugar', 0.015171389976083891), ('like cashews', 0.015171389976083891), ('taste almonds', 0.015171389976083891), ('natural almonds', 0.015171389976083891), ('brazil nuts', 0.010618338241166357), ('lou', 0.010618338241166357)]
+Words and score of topic 18:
+ [('cat', 0.7534002661705017), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 19:
+ [('carbohydrates', 0.7726234793663025), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 20:
+ [('theater', 0.05609388665570513), ('movie theater', 0.03412396216475771), ('kettle corn', 0.021943451373859148), ('theater popcorn', 0.021943451373859148), ('freshly popped', 0.01535805151891342), ('flavor popcorn', 0.01535805151891342), ('salt flavoring', 0.01535805151891342), ('cob', 0.01535805151891342), ('seasoning salt', 0.01535805151891342), ('great northern', 0.01535805151891342)]
+Words and score of topic 21:
+ [('drinks', 0.727461040019989), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 22:
+ [('snacks', 0.5228753089904785), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 23:
+ [('sauce', 0.7818907499313354), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 24:
+ [('healthy alternatives', 0.7305036187171936), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 25:
+ [('household', 0.5324039459228516), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 26:
+ [('healthy alternatives', 0.6745588183403015), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 27:
+ [('bought items', 0.0373038988209397), ('contact company', 0.0373038988209397), ('00 given', 0.019996227367748774), ('receive fast', 0.019996227367748774), ('say agree', 0.019996227367748774), ('selling product', 0.019996227367748774), ('seeing equally', 0.019996227367748774), ('say boxed', 0.019996227367748774), ('replica sliders', 0.019996227367748774), ('product supposed', 0.019996227367748774)]
+Words and score of topic 28:
+ [('drinks', 0.5595107078552246), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]
+Words and score of topic 29:
+ [('miso', 0.05169408065496058), ('miso cup', 0.03883651920847271), ('bisque', 0.03205895985734365), ('bowl soup', 0.024973866360138094), ('lobster bisque', 0.024973866360138094), ('amys', 0.024973866360138094), ('chicken noodle', 0.024973866360138094), ('white wine', 0.017479015477135745), ('overcooked', 0.017479015477135745), ('prawns', 0.017479015477135745)]
+Words and score of topic 30:
+ [('skippy', 0.043264309173174954), ('allergic peanuts', 0.035714033577343), ('skippy reduced', 0.027821161563285703), ('barney', 0.027821161563285703), ('barney butter', 0.027821161563285703), ('butter decided', 0.019471815318622375), ('type box', 0.019471815318622375), ('good peanut', 0.019471815318622375), ('pbj', 0.019471815318622375), ('crunchy peanut', 0.019471815318622375)]
+Words and score of topic 31:
+ [('household', 0.5744298100471497), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0), ('', 0)]

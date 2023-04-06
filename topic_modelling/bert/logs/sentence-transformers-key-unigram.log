@@ -1,0 +1,70 @@
+Training model
+---------------------------------
+
+model name: sentence-transformers-key-unigram
+Coherence score: -0.3002880640010514
+    Topic  Count                                          Name
+0      -1   1383       -1_dispenser_glycol_lollipops_propylene
+1       0    999          0_doritos_overcooked_cadbury_kellogg
+2       1    293       1_nespresso_caffein_nescafe_frappuccino
+3       2    286          2_teakanne_teavana_darjeeling_teapot
+4       3    228             3_fizzy_tangerines_bubbly_lettuce
+5       4    114       4_bisquick_bisquit_breadcrumbs_souffles
+6       5    114            5_carnivores_kitten_catnip_kittens
+7       6    103                6_oreos_oreo_cremes_crumbiness
+8       7     98            7_toothpaste_erythritol_pints_500g
+9       8     98           8_kuerig_carafe_kilambe_competitors
+10      9     78   9_retailers_911drugstore_purchasesd_freight
+11     10     70                 10_ramen_pastas_mixers_ramyun
+12     11     69    11_seawater_saltygator_sturgeon_minerality
+13     12     62        12_labradoodle_pitbull_chewers_collies
+14     13     52  13_supplementing_superfoods_bloated_bloating
+15     14     51          14_salmonella_poisons_patties_livers
+16     15     50               15_popcorns_poplite_kale_kernal
+17     16     48         16_coconutty_coconuts_colada_hydrator
+18     17     44            17_shampoo_vitacost_salon_walnutty
+19     18     44             18_replica_solder_sliders_pirated
+20     19     37       19_ph_refrigeration_swallowing_cleanser
+21     20     34             20_expire_easters_chuckles_debris
+Words and score of topic 0:
+ [('doritos', 0.33104652), ('overcooked', 0.33098918), ('cadbury', 0.32302302), ('kellogg', 0.3100793), ('granolas', 0.28565115), ('pickles', 0.26500446), ('flatbreads', 0.26471913), ('coriander', 0.2596351), ('crispness', 0.2541115), ('munchos', 0.24738222)]
+Words and score of topic 1:
+ [('nespresso', 0.45948583), ('caffein', 0.37542504), ('nescafe', 0.33229426), ('frappuccino', 0.3314731), ('roaster', 0.2996083), ('mugs', 0.27947718), ('cofee', 0.2693625), ('noir', 0.25460786), ('ganocafe', 0.24030584), ('lavazza', 0.2395587)]
+Words and score of topic 2:
+ [('teakanne', 0.45250762), ('teavana', 0.41919065), ('darjeeling', 0.34257227), ('teapot', 0.342514), ('ceylon', 0.32590723), ('teabag', 0.3199202), ('oolong', 0.3092491), ('oolongs', 0.27931648), ('osmanthus', 0.27489293), ('potions', 0.27405277)]
+Words and score of topic 3:
+ [('fizzy', 0.44286096), ('tangerines', 0.39777672), ('bubbly', 0.36621398), ('lettuce', 0.33419305), ('orangey', 0.32518315), ('ranchero', 0.2743514), ('sparkle', 0.24484313), ('ascorbic', 0.24184221), ('clementine', 0.23979369), ('rosa', 0.23496221)]
+Words and score of topic 4:
+ [('bisquick', 0.55851734), ('bisquit', 0.45924103), ('breadcrumbs', 0.2976421), ('souffles', 0.28813285), ('crumb', 0.27985558), ('breadmaker', 0.27701408), ('ghees', 0.25809538), ('indigestion', 0.25588235), ('dextrose', 0.23536432), ('puddings', 0.22773397)]
+Words and score of topic 5:
+ [('carnivores', 0.45412433), ('kitten', 0.43034226), ('catnip', 0.40374804), ('kittens', 0.39549333), ('kibble', 0.35686952), ('peta', 0.34324557), ('puggies', 0.33620387), ('felidae', 0.28637278), ('petco', 0.24199754), ('probiotics', 0.21478659)]
+Words and score of topic 6:
+ [('oreos', 0.63995826), ('oreo', 0.57622606), ('cremes', 0.38421726), ('crumbiness', 0.2862283), ('crumby', 0.26196048), ('elmo', 0.23266481), ('migraines', 0.20401302), ('thinners', 0.18396571), ('cookbooks', 0.17939958), ('peckish', 0.1784854)]
+Words and score of topic 7:
+ [('toothpaste', 0.3512479), ('erythritol', 0.2219998), ('pints', 0.19028622), ('500g', 0.18579602), ('beere', 0.18519989), ('croix', 0.18395844), ('sorbet', 0.17742923), ('espressos', 0.175973), ('36g', 0.15907432), ('concentrations', 0.15777306)]
+Words and score of topic 8:
+ [('kuerig', 0.41636282), ('carafe', 0.41451654), ('kilambe', 0.2618649), ('competitors', 0.22746089), ('disposakups', 0.19609344), ('churning', 0.18795101), ('emeril', 0.17822212), ('cartridges', 0.16648892), ('reservoir', 0.15493624), ('tulleys', 0.15454233)]
+Words and score of topic 9:
+ [('retailers', 0.4890027), ('911drugstore', 0.31569332), ('purchasesd', 0.30561966), ('freight', 0.30239397), ('vitamuffins', 0.21611868), ('marshmallows', 0.20684087), ('economic', 0.2017917), ('greedy', 0.1883673), ('etouffee', 0.18388799), ('12pk', 0.18176307)]
+Words and score of topic 10:
+ [('ramen', 0.5106605), ('pastas', 0.47110486), ('mixers', 0.28200877), ('ramyun', 0.26254216), ('pyrex', 0.2549894), ('utensils', 0.25220662), ('nonperishable', 0.24163732), ('mmmmmm', 0.19733182), ('shirataki', 0.19702032), ('rotini', 0.19560334)]
+Words and score of topic 11:
+ [('seawater', 0.48177487), ('saltygator', 0.33825648), ('sturgeon', 0.30231565), ('minerality', 0.28368652), ('eel', 0.26166397), ('nitrites', 0.25870952), ('cora', 0.19971621), ('casserole', 0.1977807), ('chopstick', 0.191115), ('330mg', 0.18312687)]
+Words and score of topic 12:
+ [('labradoodle', 0.33699757), ('pitbull', 0.33580562), ('chewers', 0.33099478), ('collies', 0.32563168), ('rawhides', 0.29619354), ('swallows', 0.2915483), ('bitten', 0.27644664), ('chewer', 0.24301092), ('digestible', 0.23876995), ('baggies', 0.23716915)]
+Words and score of topic 13:
+ [('supplementing', 0.4298745), ('superfoods', 0.38523567), ('bloated', 0.33903998), ('bloating', 0.32119912), ('aminos', 0.30442944), ('gastric', 0.30307806), ('legumes', 0.27526438), ('liquids', 0.27138358), ('oligosaccharides', 0.24620044), ('wheatgrass', 0.19220814)]
+Words and score of topic 14:
+ [('salmonella', 0.31845152), ('poisons', 0.27410746), ('patties', 0.27336848), ('livers', 0.26938644), ('toxins', 0.2584948), ('recalls', 0.23973957), ('pups', 0.23962703), ('veterinarians', 0.23696974), ('mastiff', 0.2236647), ('poisoned', 0.22194037)]
+Words and score of topic 15:
+ [('popcorns', 0.55129033), ('poplite', 0.41148755), ('kale', 0.37222025), ('kernal', 0.30188745), ('kernals', 0.28927165), ('smartpop', 0.2221285), ('corrosive', 0.21063451), ('whirly', 0.20884663), ('redenbacher', 0.20204672), ('flavacol', 0.19912781)]
+Words and score of topic 16:
+ [('coconutty', 0.55981314), ('coconuts', 0.5173463), ('colada', 0.2548067), ('hydrator', 0.24410373), ('unflavored', 0.23757191), ('whisky', 0.22283658), ('bahamas', 0.20179309), ('replenish', 0.1962024), ('indonesia', 0.19586882), ('guava', 0.19234076)]
+Words and score of topic 17:
+ [('shampoo', 0.40302336), ('vitacost', 0.3442663), ('salon', 0.34216985), ('walnutty', 0.28279024), ('scalp', 0.27420187), ('mascara', 0.2726308), ('martini', 0.2662721), ('conditioner', 0.25560164), ('makeup', 0.24394706), ('purify', 0.22674456)]
+Words and score of topic 18:
+ [('replica', 0.37455964), ('solder', 0.28748763), ('sliders', 0.27522543), ('pirated', 0.27190155), ('mimi', 0.26350984), ('moo', 0.25099212), ('staral', 0.24400592), ('groove', 0.23934911), ('', 0.23436058), ('', 0.23436058)]
+Words and score of topic 19:
+ [('ph', 0.28192395), ('refrigeration', 0.21893178), ('swallowing', 0.21373186), ('cleanser', 0.2014234), ('gerd', 0.20066833), ('essentia', 0.19933301), ('trivedi', 0.19226605), ('odorless', 0.18459061), ('pollutants', 0.16608512), ('purest', 0.16130441)]
+Words and score of topic 20:
+ [('expire', 0.3764594), ('easters', 0.31211835), ('chuckles', 0.2635886), ('debris', 0.23566388), ('bulbs', 0.22480455), ('pocky', 0.22378092), ('nothingness', 0.21333024), ('pinata', 0.19254011), ('butterfinger', 0.18489021), ('refundable', 0.17497005)]

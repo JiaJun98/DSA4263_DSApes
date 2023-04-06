@@ -1,0 +1,22 @@
+name: voc_project
+channels:
+  - conda-forge
+dependencies: #Remember to add pytest
+  - python=3.8
+  - numpy
+  - pandas
+  - matplotlib
+  - pip
+  - pip:
+    - gensim
+    - ipykernel==6.16.0
+    - joblib==1.2.0
+    - jupyter
+    - nltk==3.7
+    - regex==2022.9.13
+    - scikit-learn
+    - sklearn
+    - tqdm
+    - bertopic
+    - matplotlib
+    - syspend
