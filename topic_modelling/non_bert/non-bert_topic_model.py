@@ -17,14 +17,14 @@ from preprocess_class import Dataset, create_datasets
 from model_base_class import BaseModel
 
 class TopicModel(BaseModel):
-    def __init__(self, train_dataset = None, test_dataset = None, pickled_model = None, topic_label = None):
+    def __init__(self, train_dataset = None, test_dataset = None, pickled_model = None, topic_label = None, pickled_bow = None):
         self.train_dataset = train_dataset
         self.test_dataset = test_dataset
         self.training_tokens = None
-        self.model = None
+        self.model = pickle.load(open(pickled_model, 'rb')) if pickled_model is not None else None
         self.num_of_topics = None
-        self.topic_label = pd.DataFrame(topic_label, columns = ['Topic_no', 'Topic_label']) if topic_label is not None else pd.DataFrame(columns = ['Topic_no', "Topic_label"])
-        self.pickled_model = pickle.load(open(pickled_model, 'rb')) if pickled_model is not None else None
+        self.topic_label = pd.read_csv(topic_label)['Topic_label'].tolist() if topic_label is not None else []
+        self.training_bow = pickle.load(open(pickled_bow, 'rb')) if pickled_bow is not None else None
 
     def train(self, training_model, num_of_topics, num_top_words, num_top_documents, train_output_path, coherence_measure = 'c_v'):
         self.num_of_topics = num_of_topics
@@ -40,6 +40,7 @@ class TopicModel(BaseModel):
         fitted_model = training.fit(self.train_dataset.bow[2])
         trained_model = fitted_model.transform(self.train_dataset.bow[2])
         self.model = fitted_model
+        self.training_bow = self.train_dataset.bow[1]
 
         training_bow_path = os.path.join(train_output_path,'training_bow_{}.pk'.format(self.num_of_topics))
         pickle.dump(self.train_dataset.bow[1], open(training_bow_path, 'wb'))
@@ -70,13 +71,13 @@ class TopicModel(BaseModel):
                 custom_print("\n" + ", ".join(text), logger = logger)
 
             self.set_topic_labels(i)
-            full_topic_path = os.path.join(train_output_path, "full_doc_{}.csv".format(self.topic_label.loc[i, "Topic_label"]))
-            sampled_topic_path = os.path.join(train_output_path, "sample_doc_{}.csv".format(self.topic_label.loc[i, "Topic_label"]))
+            full_topic_path = os.path.join(train_output_path, "full_doc_{}.csv".format(self.topic_label[i]))
+            sampled_topic_path = os.path.join(train_output_path, "sample_doc_{}.csv".format(self.topic_label[i]))
 
             curr_topic_doc.to_csv(full_topic_path)
             topic_samples.to_csv(sampled_topic_path)
 
-        topic_key_words_df = pd.DataFrame(topic_key_words, index = self.topic_label['Topic_label'])
+        topic_key_words_df = pd.DataFrame(topic_key_words, index = self.topic_label)
         topic_key_words_path = os.path.join(train_output_path, "topic_key_words.csv")
         topic_key_words_df.to_csv(topic_key_words_path)
 
@@ -85,21 +86,21 @@ class TopicModel(BaseModel):
         custom_print("-------- End of training for {} topics ----------".format(num_of_topics), logger = logger)
 
     def predict(self, test_output_path, root_word_option, num_top_documents):
-        if self.model is not None:
-            test_input = self.get_input_text(self.test_dataset, root_word_option)
-            test_data_fitted = self.train_dataset.bow[1].transform(test_input.apply(lambda x: " ".join(x)))
-            testing_lda = self.model.transform(test_data_fitted)
-        elif self.pickled_model is not None: #check whether the pickled model works on test dataset
-            testing_lda = self.pickled_model.fit_transform(self.test_dataset.bow[1])
-        assigned_topic = pd.DataFrame(testing_lda).idxmax(axis = 1)
+        test_input = self.get_input_text(self.test_dataset, root_word_option)
+        test_data_fitted = self.training_bow.transform(test_input.apply(lambda x: " ".join(x)))
+        testing_labels = self.model.transform(test_data_fitted)
+
+        assigned_topic = pd.DataFrame(testing_labels).idxmax(axis = 1)
         num_of_doc_per_topic = assigned_topic.value_counts().sort_index()
         custom_print("------ Number of documents assigned to each topic--------\n", logger = logger)
-        for i in range(len(num_of_doc_per_topic)):
-            custom_print("Topic {}: {}".format(i, num_of_doc_per_topic[i]),logger = logger)
+        # for i in range(len(num_of_doc_per_topic)):
+        #     custom_print("Topic {}: {}".format(i, num_of_doc_per_topic[i]),logger = logger)
         
         custom_print("-------- Exporting labelled topics ----------", logger = logger)
         labelled_test = pd.DataFrame({"Text": self.test_dataset.text, "Topic_no": assigned_topic})
-        labelled_test = labelled_test.merge(self.topic_label, how = "left", on = "Topic_no") 
+        indexed_topic_label = pd.DataFrame({"Topic label":self.topic_label}).reset_index()
+
+        labelled_test = labelled_test.merge(indexed_topic_label, how = "left", left_on = "Topic_no", right_on = "index") 
         labelled_test_output_path = os.path.join(test_output_path, "full_labelled_test_dataset.csv")
         labelled_test.to_csv(labelled_test_output_path, index = False)
         
@@ -144,7 +145,7 @@ class TopicModel(BaseModel):
 
     def set_topic_labels(self, topic_no):
         curr_topic_label = input("Label for Topic {}: ".format(topic_no))
-        self.topic_label.loc[len(self.topic_label)] = [len(self.topic_label), curr_topic_label]
+        self.topic_label.append(curr_topic_label)
 
     def get_input_text(self, dataset, root_word_option):
         if root_word_option == 0:
@@ -166,11 +167,11 @@ class TopicModel(BaseModel):
         custom_print("-------Evaluating training sample accuracy-------", logger = logger)
         topic_accuracy = []
         sample_labelling = pd.DataFrame()
-        for i in range(self.topic_label.shape[0]):
+        for i in range(len(self.topic_label)):
             curr_topic = labelled_test.loc[labelled_test['Topic_no']== i, "Text"]
             curr_topic_samples = curr_topic.sample(n=num_top_documents, random_state=4263)
             custom_print("\n--------Allocate next topic------------", logger = logger)
-            custom_print("Current topic: {}".format(self.topic_label.loc[i, "Topic_label"]), logger = logger)
+            custom_print("Current topic: {}".format(self.topic_label[i]), logger = logger)
 
             correct_labels = []
             for sample in curr_topic_samples:
@@ -184,15 +185,15 @@ class TopicModel(BaseModel):
                 correct_labels.append(curr_label)
 
             sample_topic_labels = pd.DataFrame({"Sample text": curr_topic_samples, "Prediction": correct_labels})
-            sample_topic_labels.insert(0, 'Topic label', self.topic_label.loc[i, "Topic_label"])
-            sample_test_output_path = os.path.join(test_output_path, "test_{}.csv".format(self.topic_label.loc[i, "Topic_label"]))
+            sample_topic_labels.insert(0, 'Topic label', self.topic_label[i])
+            sample_test_output_path = os.path.join(test_output_path, "test_{}.csv".format(self.topic_label[i]))
 
             sample_topic_labels.to_csv(sample_test_output_path, index = False)
             sample_labelling = pd.concat([sample_labelling, sample_topic_labels])
 
             accuracy = sum(correct_labels) / num_top_documents
             topic_accuracy.append(accuracy)
-            custom_print("{} topic testing accuracy: {}".format(self.topic_label.loc[i, "Topic_label"], str(accuracy)), logger = logger)
+            custom_print("{} topic testing accuracy: {}".format(self.topic_label[i], str(accuracy)), logger = logger)
         
         average_topic_accuracy = sum(topic_accuracy) / len(topic_accuracy)
         custom_print("-------- Average topic accuracy: {} --------".format(str(average_topic_accuracy)), logger = logger) 
@@ -210,9 +211,11 @@ def train_test(train_dataset, train_output_path, training_model, num_of_topics, 
         test_labels = trainModel.predict(test_output_path, root_word_option, num_top_documents)
         trainModel.churn_eval_metrics(test_labels, num_top_documents, test_output_path)    
 
-def test(test_dataset, pickled_model, test_output_path, topic_label, num_top_documents, replace_stop_words_list, include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
+def test(test_dataset, pickled_model, pickled_bow, test_output_path, topic_label, num_top_documents, replace_stop_words_list, include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
              word_form, ngrams, max_doc, min_doc):
-    testModel = TopicModel(test_dataset=test_dataset, pickled_model=pickled_model, topic_label = topic_label)
+    #max_doc = 1 and min_doc = 1 so that not all the key words will be filtered off, esp when the input size is small.
+    testModel = TopicModel(test_dataset=test_dataset, pickled_model=pickled_model, topic_label = topic_label, pickled_bow= pickled_bow)
+    custom_print("-------Preprocessing test data--------", logger = logger)
     testModel.preprocess_dataset(replace_stop_words_list, include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
              word_form, ngrams, max_doc, min_doc)
     testModel.predict(test_output_path=test_output_path, root_word_option= root_word_option, num_top_documents = num_top_documents)
@@ -260,6 +263,9 @@ if __name__ == "__main__":
     pickled_model = config_file['model'][model_choice]['pickled_model']
     if pickled_model is not None:
         pickled_model = os.path.join(curr_dir, pickled_model)
+    pickled_bow = config_file['model'][model_choice]['pickled_bow']
+    if pickled_bow is not None:
+        pickled_bow = os.path.join(curr_dir, pickled_bow)
 
     data_df = pd.read_csv(os.path.join(home_folder,train_file))
     logger = open(logging_path, 'w')
@@ -278,13 +284,11 @@ if __name__ == "__main__":
     
     elif isTester:
         test_dataset = Dataset(data_df)
-        test(test_dataset, pickled_model, test_output_path, topic_label, num_top_documents, replace_stop_words_list, include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
+        test(test_dataset, pickled_model, pickled_bow, test_output_path, topic_label, num_top_documents, replace_stop_words_list, include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
              word_form, ngrams, max_doc, min_doc)
         custom_print('Testing complete!',logger = logger)
     logger.close()
 
-## yet to figure out why preprocess class is invoked many times at get_coherence function
-## modify code to run gridsearchcv and create the graph
 
 
 
