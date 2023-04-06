@@ -26,7 +26,9 @@ n_classes = int(config_file['flask']['num_classes'])
 max_len = int(config_file['flask']['max_len'])
 model_path = config_file['flask']['model_path']
 THRESHOLD = float(config_file['flask']['THRESHOLD'])
-MODEL =  BertClassifier(model_name, n_classes) #Add non-bert also
+MODEL =  BertClassifier(model_name, n_classes)
+checkpoint = torch.load(model_path, map_location=device)
+MODEL.model.load_state_dict(checkpoint['model_state_dict'])
 MODEL.model.to(device)
 
 #Routes - Creating a simple route
