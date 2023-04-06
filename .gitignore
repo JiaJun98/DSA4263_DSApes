@@ -1,12 +1,3 @@
-sentimental_analysis/non_bert/__init__.py
-sentimental_analysis/non_bert/non_bert_sentiment_config.yml
-sentimental_analysis/non_bert/train.py
-sentimental_analysis/non_bert/logs/non_bert_sentiment.log
-sentimental_analysis/non_bert/models/lr_model.sav
-sentimental_analysis/non_bert/models/rf_model.sav
-sentimental_analysis/non_bert/models/xgb_model.sav
-sentimental_analysis/non_bert/plots/pr_curve.png
-flask_app/__init__.py
-flask_app/boot.sh
-flask_app/notebooks/app.ipynb
-flask_app/templates/index.html
+*.pyc
+__pycache__/
+venv/
