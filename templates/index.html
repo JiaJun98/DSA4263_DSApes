@@ -7,12 +7,16 @@
 
     <link href='static/css/style.css' rel='stylesheet'>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+    
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
   <nav>
     <ul>
-      <li><a href="#sentiment-analysis">Sentimental Analysis</a></li>
-      <li><a href="#topic-modelling">Topic Modelling</a></li>
+      <li><a href="#sentiment-analysis">Sentiments and Topics</a></li>
       <li><a href="#historic-trends">Historic and Future Trends of Sentiment and Key Topics</a></li>
     </ul>
   </nav>
@@ -25,10 +29,8 @@
     </div>
     <div class="container" id="sentiment-analysis">
       <div style="display: flex; flex-direction: column;">
-        <h2 class="text-centre">Sentimental Analysis</h2>
-        <h2 class="text-centre">Please enter your review or Upload a csv file</h2>
-        <hr>
-        <hr>
+        <h2 class="text-centre">Predicting customer sentiment and topics</h2>
+        <h2 class="text-centre">Enter review or submit your csv file</h2>
       </div>
     </div>
     <div class="container justify-content-center">
@@ -57,6 +59,7 @@
         <tr>
           <th>Text</th>
           <th>Predicted Customer Sentiment</th>
+          <th>Predicted Topic</th>
         </tr>
       </thead>
       <tbody>
@@ -65,20 +68,20 @@
             <tr>
               <td>{{ tweets[i] }}</td>
               <td>{{ preds[i] }}</td>
+              <!--Place holder for topic-->
+              <td>{{ topics[i] }}</td>
             </tr>
           {% endfor %}
         {% else %}
           <tr>
             <td>{{ tweets }}</td>
             <td>{{ preds }}</td>
+            <!--Place holder for topic-->
+            <td>{{ topics }}</td>
           </tr>
         {% endif %}
       </tbody>
     </table>
-    </div>
-
-    <div class="container" id="topic-modelling">
-      <h2 class="text-centre">Topic modelling</h2>
     </div>
 
   </body>

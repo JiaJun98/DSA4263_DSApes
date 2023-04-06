@@ -30,13 +30,18 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 20px;
     height: 20vh;
+    margin-bottom: 10px;
+    
   }
 
   .row {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    margin-top: 150px;
+    margin-bottom: 200px;
     height: 40vh;
   }
 
@@ -56,19 +61,40 @@ body {
   }
 
 .table {
+    justify-content: center;
     margin-top: 20px;
     border-collapse: collapse;
-    width: 100%;
-    margin: 0 auto;
-}
-
-.table th, .table td {
-    padding: 8px;
+    box-shadow: 20px 20px 20px 5px #062144;
+    align-items: center;
+    background-color: rgb(255, 255, 255);
+    width: 80%;
     text-align: center;
+    overflow: hidden;
+    border-radius: 10px;
 }
 
 .table th {
-    background-color: #f2f2f2;
+  background-color: #d0def2;
+  padding: 0.75rem 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  font-size: 0.7rem;
+  font-weight: 900;
+  width: 40%;
+}
+
+th:first-child {
+  width: 40%;
+}
+
+.table td {
+  padding: 1rem 1rem;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+tr:nth-child(even) {
+    background-color: #f3f8fe;
 }
 
   form {
@@ -78,7 +104,7 @@ body {
     padding: 20px;
     background-color: #f1f1f1;
     border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 20px 20px 20px 5px #062144;
     height: 110px;
     width: 400px;
   }
@@ -92,7 +118,7 @@ body {
     padding: 20px;
     background-color: #f1f1f1;
     border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 20px 20px 20px 5px #062144;
     height: 20px;
     width: 400px;
   }

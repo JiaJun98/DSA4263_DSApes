@@ -43,7 +43,8 @@ def predict(): #Send data from front-end to backend then to front end
         test_dataloader = data_loader(model_name, max_len, tweets, 1)
         preds = MODEL.predict(test_dataloader, THRESHOLD)
         # Return the template with the form data
-        return render_template("index.html", tweets = tweets, preds = preds)
+        topics = "Coffee" #Place holder
+        return render_template("index.html", tweets = tweets, preds = preds, topics = topics)
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -51,6 +52,7 @@ def upload():
     filename = secure_filename(file.filename)
     tweets = []
     preds = []
+    #topics = [] Uncomment when done
     if not filename.endswith('.csv'): #Place holder. Havent set the thing yet
         print("ONLY CSV is allowed!")
     df = pd.read_csv(file, header=None)
@@ -61,7 +63,8 @@ def upload():
     preds = MODEL.predict(test_dataloader, THRESHOLD)
     print(f"Current predictions: {preds}")
     # Do something with the uploaded file
-    return render_template("index.html", tweets = tweets, preds = preds)
+    topics = ["Coffee" for ele in preds ]
+    return render_template("index.html", tweets = tweets, preds = preds, topics = topics)
 
 
 if __name__ == '__main__':
