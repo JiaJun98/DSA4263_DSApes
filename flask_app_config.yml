@@ -1,17 +1,8 @@
 flask:
-<<<<<<< HEAD
-  #model_type: "BERT" #NON-BERT
+  model_type: "BERT" #NON-BERT
   model_name : bert-base-uncased
   num_classes : 2
   model_path : sentimental_analysis/bert/models/bert_base_gpu_sentimental_non_trainer_latest.pt
   max_len : 64
   THRESHOLD : 0.5
   
-=======
-  model_type: BERT #NON-BERT
-  model_name : roberta-large
-  num_classes : 2
-  model_path : sentimental_analysis/bert/models/roberta_large_gpu_sentimental_non_trainer_latest.pt
-  max_len : 64
-  THRESHOLD : 0.6148 #From PR curve
->>>>>>> jj_branch
