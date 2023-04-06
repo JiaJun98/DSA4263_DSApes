@@ -1,2 +1,0 @@
-data_path: data/topics_samples.csv
-output_path: test_zero_shot_output
