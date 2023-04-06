@@ -102,8 +102,9 @@ class TopicModel(BaseModel):
         labelled_test = labelled_test.merge(self.topic_label, how = "left", on = "Topic_no") 
         labelled_test_output_path = os.path.join(test_output_path, "full_labelled_test_dataset.csv")
         labelled_test.to_csv(labelled_test_output_path, index = False)
-        self.churn_eval_metrics(labelled_test, num_top_documents, test_output_path)     
+        
         custom_print("-------- End of predicting for {} topics ----------".format(num_of_topics), logger = logger)
+        return labelled_test
 
     def preprocess_dataset(self, replace_stop_words_list = None, include_words = ['taste', 'flavor', 'amazon', 'price', 'minute', 'time', 'year'],
                             exclude_words = ["not", "no", "least", "less", "last", "serious", "too", "again", "against", "already", "always", "cannot", "few", "must", "only", "though"],
@@ -137,8 +138,8 @@ class TopicModel(BaseModel):
         coherence = coherence_model.get_coherence()
         return coherence
 
-    def dump_model(self, train_output_path):
-        train_output_path = os.path.join(train_output_path,'lda_model_{}.pk'.format(self.num_of_topics))
+    def dump_model(self, train_output_path, training_model):
+        train_output_path = os.path.join(train_output_path,'{}_model_{}.pk'.format(training_model, self.num_of_topics))
         pickle.dump(self.model, open(train_output_path, 'wb'))
 
     def set_topic_labels(self, topic_no):
@@ -198,22 +199,23 @@ class TopicModel(BaseModel):
 
 def train_test(train_dataset, train_output_path, training_model, num_of_topics, num_top_words, num_top_documents, coherence_measure, replace_stop_words_list, include_words, 
           exclude_words, root_word_option, remove_stop_words, lower_case, word_form, ngrams, max_doc, min_doc, test_dataset = None, test_output_path = None):
-    LDA_model = TopicModel(train_dataset=train_dataset, test_dataset = test_dataset)
+    trainModel = TopicModel(train_dataset=train_dataset, test_dataset = test_dataset)
     custom_print("------Preprocessing text data--------", logger = logger)
-    LDA_model.preprocess_dataset(replace_stop_words_list, include_words, exclude_words, root_word_option,
+    trainModel.preprocess_dataset(replace_stop_words_list, include_words, exclude_words, root_word_option,
                                  remove_stop_words, lower_case, word_form, ngrams, max_doc, min_doc)
-    LDA_model.train(training_model, num_of_topics, num_top_words, num_top_documents, train_output_path, coherence_measure)
-    LDA_model.dump_model(train_output_path)
+    trainModel.train(training_model, num_of_topics, num_top_words, num_top_documents, train_output_path, coherence_measure)
+    trainModel.dump_model(train_output_path, training_model)
 
     if test_dataset is not None:
-        LDA_model.predict(test_output_path, root_word_option, num_top_documents)
+        test_labels = trainModel.predict(test_output_path, root_word_option, num_top_documents)
+        trainModel.churn_eval_metrics(test_labels, num_top_documents, test_output_path)    
 
 def test(test_dataset, pickled_model, test_output_path, topic_label, num_top_documents, replace_stop_words_list, include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
              word_form, ngrams, max_doc, min_doc):
-    testLDA = TopicModel(test_dataset=test_dataset, pickled_model=pickled_model, topic_label = topic_label)
-    testLDA.preprocess_dataset(replace_stop_words_list, include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
+    testModel = TopicModel(test_dataset=test_dataset, pickled_model=pickled_model, topic_label = topic_label)
+    testModel.preprocess_dataset(replace_stop_words_list, include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
              word_form, ngrams, max_doc, min_doc)
-    testLDA.predict(test_output_path=test_output_path, root_word_option= root_word_option, num_top_documents = num_top_documents)
+    testModel.predict(test_output_path=test_output_path, root_word_option= root_word_option, num_top_documents = num_top_documents)
 
 if __name__ == "__main__":
     curr_dir = os.getcwd()
