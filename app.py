@@ -43,10 +43,11 @@ def predict(): #Send data from front-end to backend then to front end
         # Get the form data
         texts = request.form["review"]
         test_dataloader = data_loader(model_name, max_len, texts, 1)
-        preds = MODEL.predict(test_dataloader, THRESHOLD)
+        preds,probs = MODEL.predict(test_dataloader, THRESHOLD)
+        print(probs)
         # Return the template with the form data
         topics = "Coffee" #Place holder
-        return render_template("index.html", texts = texts, preds = preds, topics = topics)
+        return render_template("index.html", texts = texts, preds = preds, topics = topics, probs = probs)
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -64,11 +65,12 @@ def upload():
     predicted_topics = df[1].tolist()[1:]
     X_preprocessed = np.array([text for text in texts])
     test_dataloader = data_loader(model_name, max_len, X_preprocessed, len(texts))
-    preds = MODEL.predict(test_dataloader, THRESHOLD)
+    preds, probs = MODEL.predict(test_dataloader, THRESHOLD)
     print(f"Current predictions: {preds}")
+    print(f"Current predictions: {probs}")
     # Do something with the uploaded file
     topics = [ele for ele in predicted_topics ]
-    return render_template("index.html", texts = texts, preds = preds, topics = topics)
+    return render_template("index.html", texts = texts, preds = preds, topics = topics, probs = probs)
 
 
 if __name__ == '__main__':
