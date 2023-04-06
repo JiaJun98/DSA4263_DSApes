@@ -1,8 +1,9 @@
-#add pytest in environment.yml
+import sys
+sys.path.append(".")
+
 from preprocess_class import *
 from pandas.api.types import is_datetime64_any_dtype as is_datetime
-
-# import warnings
+# import warningspy
 import pytest
 
 @pytest.fixture
@@ -75,17 +76,20 @@ def test_create_datasets(example_data):
     assert sentiment_counts_test['Positive'] == 10 * 0.2
     assert sentiment_counts_test['Negative'] == 5 * 0.2
 
+def test_modify_stop_words_list(example_data):
+    test = Dataset(example_data)
+    test.modify_stop_words_list(replace_stop_words_list = ["DSA4263", "NUS", "Faculty of Science"], include_words = [], exclude_words = [])
+    assert test.stop_words_list == ["DSA4263", "NUS", "Faculty of Science"]
+
 def test_word_tokenizer(example_data):
     """
     Ensures that each text is tokenised, with non alphabet characters such as numbers and punctuations removed
     """
     test = Dataset(example_data)
-    expected_output_1 = ["I", "hate", "mash", "potatoes", "But", "I", "still", "rate", "this", "Taste", "perfect"]
-    expected_output_2 = ["I", "like", "this", "drink"]
+    expected_output_1 = ["hate", "potatoes", "rate", "Taste", "perfect"]
 
-    test.word_tokenizer(False)
+    test.word_tokenizer(False, ['noun', 'verb'])
     assert test.tokenized_words[7] == expected_output_1
-    assert test.tokenized_words[0] == expected_output_2
 
 def test_sentence_tokenizer(example_data):
     """

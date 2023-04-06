@@ -19,6 +19,7 @@ dependencies: #Remember to add pytest
     - numpy
     - pickle5
     - pickleshare==0.7.5
+    - pyLDAvis
     - pillow==9.2.0
     - pytest
     - regex==2022.9.13

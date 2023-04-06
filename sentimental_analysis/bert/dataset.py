@@ -90,7 +90,7 @@ def preprocessing_for_bert(data,tokenizer_name,max_len):
 
 
 # In[4]:
-def single_data_loader(tokenizer_name,max_len, sentences):
+def data_loader(tokenizer_name,max_len, sentences, num_setences):
      """Facilitate loading of data
      
     @param tokenizer_name: Name of tokenizer, usually the name of the model being used
@@ -101,7 +101,7 @@ def single_data_loader(tokenizer_name,max_len, sentences):
      inputs, masks = preprocessing_for_bert(sentences,tokenizer_name,max_len)
      data = TensorDataset(inputs, masks)
      sampler = SequentialSampler(data)
-     return DataLoader(data, sampler=sampler, batch_size = 1)
+     return DataLoader(data, sampler=sampler, batch_size = num_setences)
 
 
 

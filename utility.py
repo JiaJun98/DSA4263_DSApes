@@ -158,7 +158,7 @@ def plot_pr_curve(Y_pred, Y_test, plotting_dir):
     plt.ylabel('recall')
     plt.title('Precision-Recall Curve')
     plt.legend()
-    plt.savefig(os.path.join(plotting_dir+ '_pr_curve'))
+    plt.savefig(plotting_dir + '_pr_curve')
     plt.close()
     
     # Returns best threshold for f1, accuracy
