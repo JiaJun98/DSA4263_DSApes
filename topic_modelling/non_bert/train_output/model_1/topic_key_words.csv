@@ -1,11 +1,15 @@
-Topic_label,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19
-cat_ingredient,food,cat,cat food,ingredient,year,cat cat,baby,time,science,food cat,pet,baby food,review,product,thing,diet,formula,brand,way,grain
-coffee,coffee,cup,coffee coffee,bean,cup coffee,ground,roast,time,blend,decaf,brand,starbucks,coffee cup,melitta,coffee flavor,ground coffee,keurig,cups,flavor coffee,cocoa
-tea,tea,tea tea,bag,tea flavor,packet,tea bag,leaf,flavor tea,cup,lipton,water,caffeine,brewing,lot,point,honey,color,tea water,tin,vanilla
-sweet drinks,flavor,drink,juice,soda,orange,fruit,flavor flavor,tangerine,salt,calorie,bit,sugar,water,pack,way,cherry,vitamin,switch,orange tangerine,grape
-baby_syrup,water,stool,baby,formula,sugar,milk,bottle,juice,syrup,corn,problem,breast,corn syrup,lot,time,drink,month,child,fiber,thing
-chip_snack,chip,bag,kettle,brand,time,chip chip,company,salt,potato,sodium,case,bag chip,bag bag,calorie,snack,texture,chip bag,way,review,seed
-dog,dog,treat,product,jerky,chicken,china,food,dog food,fda,dog treat,chicken jerky,illness,time,complaint,pet,number,consumer,owner,health,ingredient
-ingredient,mix,box,cup,recipe,biscuit,rice,bisquick,time,ingredient,flour,salt,oil,milk,rice flour,sugar,gum,cake,pound,powder,starch
-grocery,price,store,grocery,brand,grocery store,time,item,pack,box,package,review,cacao,way,jar,oil,sauce,shipping,stuff,deal,coconut
-bar_snack,bar,snack,chocolate,sugar,calorie,protein,cooky,candy,butter,peanut,ingredient,nut,bit,fiber,granola,peanut butter,almond,texture,size,cereal
+,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19
+unknown,food,ingredient,baby,best,organic,baby food,earth,dog food,little,pet,real,jar,thing,earth best,dog,healthy,kind,dinner,meat,stuff
+coffee,coffee,cup,bean,ground,strong,roast,decaf,cup coffee,bitter,blend,brand,ground coffee,keurig,starbucks,melitta,time,dark,cups,coffee coffee,rich
+tea,tea,green,green tea,bag,tea tea,black,white,black tea,leaf,loose,white tea,packet,tea bag,iced,hot,bitter,caffeine,iced tea,water,lipton
+flavoring,flavor,salt,favorite,little,time,strong,pack,bit,best,way,lime,texture,fresh,artificial,vanilla,licorice,variety,sweet,wonderful,flavor flavor
+baby,stool,water,baby,formula,infant,milk,bottle,breast,syrup,diet,problem,hard,sugar,corn,corn syrup,fed,little,residue,cereal,lot
+healthy food,free,gluten,gluten free,bisquick,sugar,oil,mix,pound,rice,flour,baking,betty,gum,store,betty crocker,crocker,grain,product,ingredient,ounce
+chips,chip,bag,kettle,baked,time,potato,sodium,brand,salt,little,company,total,kettle chip,fat,calorie,case,bag chip,bbq,popchips,sour
+dog,dog,treat,jerky,product,china,chicken,fda,chicken jerky,dog food,time,illness,dog treat,pet,complaint,number,consumer,owner,small,animal,year
+grocery,price,store,grocery,grocery store,local,time,best,better,item,pack,box,brand,package,cheaper,local grocery,jar,noodle,bean,shipping,deal
+snack,bar,snack,sugar,chocolate,calorie,protein,peanut,butter,sweet,healthy,fat,cooky,peanut butter,candy,fiber,cereal,nut,low,little,almond
+sweet drinks,juice,drink,water,orange,sugar,soda,tangerine,calorie,fruit,natural,vitamin,switch,sweet,regular,beverage,orange tangerine,apple,ingredient,carbonation,grape
+carbohydrates,box,mix,cup,biscuit,recipe,flour,rice,bisquick,time,ingredient,milk,rice flour,new,original,hot,cake,money,little,chocolate,thing
+chocolate_milk_nuts,raw,different,aware,cacao,alive,hot,review,oil,coconut,brand,milk,powder,organic,cocoa,chocolate,price,sauce,stuff,coconut oil,reviewer
+cat,cat,food,cat food,year,diet,time,dry,formula,pet,food cat,felidae,science,science diet,grain,review,product,like,lamb,rice,grain free

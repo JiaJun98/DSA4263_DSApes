@@ -1,18 +1,7 @@
 Train dataset loaded
 ---------------------------------
 
------- Number of documents assigned to each topic--------
-
-Topic 0: 243
-Topic 1: 491
-Topic 2: 327
-Topic 3: 822
-Topic 4: 424
-Topic 5: 359
-Topic 6: 324
-Topic 7: 573
-Topic 8: 1082
-Topic 9: 799
+-------Preprocessing test data--------
 -------- Exporting labelled topics ----------
 -------- End of predicting for 10 topics ----------
 Testing complete!
