@@ -1,8 +1,15 @@
 flask:
-  model_type: BERT #NON-BERT
-  model_name : roberta-base
-  num_classes : 2
-  model_path : sentimental_analysis/bert/models/roberta_base_sentimental_gpu_non_trainer_latest.pt
-  max_len : 64
-  THRESHOLD : 0.6148
+  sentimental_analysis:
+    model_name : roberta-base
+    num_classes : 2
+    max_len : 64
+    model_path : sentimental_analysis/bert/models/roberta_base_sentimental_gpu_non_trainer_latest.pt
+    THRESHOLD : 0.6148
+  topic_modelling:
+    model_name : non_bert
+    topic_modelling_dir: topic_modelling/non_bert
+    config_path: topic_modelling/non_bert/non_bert_topic_modelling_config.yml
+    
+
+
   
