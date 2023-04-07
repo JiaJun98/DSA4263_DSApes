@@ -1,11 +1,11 @@
-Topic_label,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19
-breakfast_tea,tea,chocolate,cooky,milk,vanilla,cookie,energy,tea tea,husband,shipping,breakfast,time,taste,morning,thing,pod,review,work,tea flavor,favorite
-coffee,coffee,bean,seed,flavor,blend,price,way,money,ground,coffee coffee,roast,starbucks,date,coffee flavor,aroma,love,shop,maker,package,year
-ingredients,ingredient,item,oil,rice,stuff,price,syrup,health,corn,powder,brand,company,product,milk,recipe,pancake,food,wheat,egg,spice
-drinks,flavor,water,drink,sugar,juice,fruit,calorie,orange,soda,bottle,bit,aftertaste,cherry,apple,licorice,glass,vitamin,beverage,ounce,tangerine
-baking_dessert,time,mix,box,cracker,price,soup,cake,cream,bread,service,subscribe,smell,customer,ice,texture,package,snack,stick,deal,money
-dog_cat,food,dog,treat,cat,product,year,chicken,time,china,review,jerky,problem,diet,pet,dog food,grain,issue,thing,week,life
-cereal_bar,bar,snack,cereal,candy,sugar,kid,protein,nut,lot,honey,calorie,size,almond,bit,granola,piece,sweet,texture,type,sweetener
-coffee_hot beverage,cup,price,brand,box,pack,cocoa,coffee,keurig,cups,chocolate,machine,water,cup coffee,time,month,milk,size,problem,baby,formula
-grocery_sauce_spread,store,sauce,grocery,butter,grocery store,jar,peanut,way,flavor,family,price,variety,noodle,coconut,package,daughter,baby,food,meal,spicy
-chips_salty snacks,bag,chip,salt,flavor,potato,snack,popcorn,salty,time,onion,pack,apple,pepper,thing,salad,reason,brand,sea,case,stock
+Topic label,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19
+breakfast_tea,tea,chocolate,milk,taste,energy,tea tea,husband,powder,drink,morning,work,time,thing,star,benefit,ice,tea flavor,favorite,review,month
+coffee,coffee,bean,cup,flavor,seed,money,blend,vanilla,ground,roast,coffee coffee,way,starbucks,cup coffee,love,time,coffee flavor,aroma,maker,waste
+ingredients,item,cooky,ingredient,price,stuff,syrup,corn,cookie,cracker,food,box,lot,oil,date,package,cream,wheat,milk,way,kind
+drinks,flavor,sugar,drink,water,juice,fruit,calorie,orange,soda,lot,cherry,aftertaste,licorice,vitamin,bit,beverage,apple,noodle,glass,hint
+baking_dessert,time,mix,soup,cake,smell,product,son,subscribe,service,tasting,bread,customer,snack,company,box,cracker,thing,stick,texture,recipe
+dog_cat,food,dog,treat,cat,product,chicken,year,pasta,china,time,jerky,review,problem,pet,diet,dog food,grain,thing,protein,ingredient
+snacks_water,bar,water,cereal,candy,snack,kid,bottle,nut,honey,sugar,protein,calorie,almond,bit,lot,packet,wife,piece,sweetener,sweet
+grocery,price,store,brand,box,cup,grocery,grocery store,pack,cocoa,keurig,deal,machine,size,cups,breakfast,month,water,granola,chocolate,time
+mains_spread,sauce,flavor,butter,family,jar,way,peanut,food,rice,coconut,baby,daughter,texture,meal,spicy,peanut butter,variety,pork,review,package
+chips_corn,bag,chip,salt,oil,snack,pack,shipping,potato,popcorn,time,reason,salty,flavor,apple,way,stock,onion,pepper,salad,sea

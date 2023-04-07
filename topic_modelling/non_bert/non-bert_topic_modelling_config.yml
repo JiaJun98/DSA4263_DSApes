@@ -4,7 +4,6 @@ model:
     num_of_topics: 14
     num_top_words: 20
     num_top_documents: 8
-    # coherence_measure: 'c_v'
     replace_stop_words_list: 
     include_words: ['quality', 'taste', 'tasty', 'nice', 'good', 'great', 'amazon', 'year', 'month', 'day', 'order', 'product']
     exclude_words: []
@@ -31,7 +30,6 @@ model:
     num_of_topics: 10
     num_top_words: 20
     num_top_documents: 8
-    # coherence_measure: 'c_v'
     replace_stop_words_list: 
     include_words: ['quality', 'taste', 'tasty', 'nice', 'good', 'great', 'amazon', 'year', 'month', 'day', 'order', 'product']
     exclude_words: []
@@ -58,7 +56,6 @@ model:
     num_of_topics: 10
     num_top_words: 20
     num_top_documents: 8
-    # coherence_measure: 'c_v'
     replace_stop_words_list: 
     include_words: ['quality', 'taste', 'tasty', 'nice', 'good', 'great', 'amazon', 'year', 'month', 'day', 'order', 'product']
     exclude_words: []
@@ -76,8 +73,8 @@ model:
     log_path: logs/test_1.log
     train: False
     test: True
-    pickled_model: train_output/model_1/NMF_model_10.pk
-    pickled_bow: train_output/model_1/training_bow_10.pk
+    pickled_model: train_output/model_1/NMF_model_14.pk
+    pickled_bow: train_output/model_1/training_bow_14.pk
     topic_label: train_output/model_1/topic_key_words.csv
 
   test_2:
@@ -85,7 +82,6 @@ model:
     num_of_topics: 10
     num_top_words: 20
     num_top_documents: 8
-    # coherence_measure: 'c_v'
     replace_stop_words_list: 
     include_words: ['quality', 'taste', 'tasty', 'nice', 'good', 'great', 'amazon', 'year', 'month', 'day', 'order', 'product']
     exclude_words: []
@@ -106,4 +102,5 @@ model:
     pickled_model: train_output/model_2/LDA_model_10.pk
     pickled_bow: train_output/model_2/training_bow_10.pk
     topic_label: train_output/model_2/topic_key_words.csv
-model_choice: model_1
+  
+model_choice: test_2
