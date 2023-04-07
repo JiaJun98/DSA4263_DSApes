@@ -1,3 +1,6 @@
 *.pyc
 __pycache__/
 env/
+topic_modelling/bert/sentence-transformers-key-bigram
+topic_modelling/bert/sentence-transformers-key-bigram-v2
+topic_modelling/bert/zero-shot
