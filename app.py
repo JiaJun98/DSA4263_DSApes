@@ -14,6 +14,64 @@ from preprocess_class import Dataset
 from sentimental_analysis.bert.train import BertClassifier
 from topic_modelling.non_bert.non_bert_topic_model import test
 from sentimental_analysis.bert.dataset import data_loader
+import plotly.express as px
+from plotly.subplots import make_subplots
+
+def visualise(Sentiment, Time, Text, Topic_label):
+    """
+    Plot the recent topic trends and general trends
+
+    Parameters
+    ----------
+    Sentiment : Array
+        Predicted Sentiments
+    Time : Array
+        Time of text
+    Text : Array
+        Text to predict
+    Topic_label : Array
+        Labels of each text
+    
+    Returns
+    -------
+    String containing the div element of HTML
+    """
+    df = pd.DataFrame({"Sentiment":Sentiment, "Time":Time, "Text":Text, "Topic_label":Topic_label})
+    df['Time'] = pd.to_datetime(df['Time'],dayfirst=True)
+    df.loc[df['Sentiment'] == 'positive', 'Sentiment'] = 1
+    df.loc[df['Sentiment'] == 'negative', 'Sentiment'] = 0
+    group_df_1mo = df.groupby(['Topic_label', pd.Grouper(freq="1M",key='Time')]).agg(Positive=('Sentiment', np.sum), Count = ('Sentiment', len), Avg=('Sentiment', lambda x: x.sum()/len(x)))
+    group_df_1mo.reset_index(inplace=True)
+    group_df_1mo = group_df_1mo.loc[group_df_1mo['Time'] >='2020-01-01',:]
+    group_df_1mo_general = group_df_1mo.groupby('Time').agg(Positive=('Positive', np.sum), Count = ('Count', np.sum))
+    group_df_1mo_general['Avg'] = group_df_1mo_general['Positive'] / group_df_1mo_general['Count']
+    pivot_df_1mo_avg = group_df_1mo.pivot(index='Time',columns='Topic_label', values='Avg')
+    group_df =df.groupby(['Topic_label'], as_index=False, group_keys=False).agg(Positive=('Sentiment', np.sum), Count = ('Sentiment', len), Avg=('Sentiment', lambda x: x.sum()/len(x)))
+
+
+    fig3 = px.bar(group_df, x='Topic_label', y ='Count', hover_data=['Avg'], labels={"Count":'Number of reviews',
+                                                                                                "Time":'Date', "Topic_label": "Topic label",
+                                                                                                "Avg":"Positive Review Percentage"})
+
+    fig1 = px.line(pivot_df_1mo_avg, x=pivot_df_1mo_avg.index, y =pivot_df_1mo_avg.columns, labels={"value":'Positive Review Percentage',
+                                                                                                "Time":'Date', "Topic_label": "Topic label"})
+
+    fig2 = px.line(group_df_1mo_general, x=group_df_1mo_general.index, y ='Avg', hover_data=['Positive'], labels={"Avg":'Positive Review Percentage',
+                                                                                                "Time":'Date'})
+    figures = [
+                fig1,
+                fig2,
+                fig3
+        ]
+    fig = make_subplots(rows=len(figures), cols=1, subplot_titles=('Change in positive Review Percentage from 2020 onwards','Change in positive Review Percentage from 2020 onwards (All topics)',
+                                                                'Total reviews per topic')) 
+
+    for i, figure in enumerate(figures):
+        for trace in range(len(figure["data"])):
+            fig.append_trace(figure["data"][trace], row=i+1, col=1)
+    fig.update_layout(margin =dict(l=10,r=10,t=30,b=30), height = 800, width=1100)
+
+    return fig.to_html(full_html = False)
 
 
 app = Flask(__name__)
@@ -58,12 +116,17 @@ ngrams = (topic_modelling_config_file['model'][model_choice]['ngrams_start'], to
 max_doc = topic_modelling_config_file['model'][model_choice]['max_doc']
 min_doc = topic_modelling_config_file['model'][model_choice]['min_doc']
 
+# Setting up csv for initial historic trend plot
+historic_data_path = config_file['flask']['historic_trend']['data_path']
+df = pd.read_csv(historic_data_path)
+df['Time'] = pd.to_datetime(df['Time'],dayfirst=True)
+plot_html = visualise(df['Sentiment'], df['Time'],df['Text'],df['Topic_label'])
 
 
 #Routes - Creating a simple route
 @app.route('/')
 def index():
-    return render_template("index.html")
+    return render_template("index.html", plot_html = plot_html)
 
 @app.route('/predict', methods = ['GET', 'POST'])
 def predict(): #Send data from front-end to backend then to front end
@@ -75,7 +138,7 @@ def predict(): #Send data from front-end to backend then to front end
         print(probs)
         # Return the template with the form data
         topics = "Coffee" #Place holder
-        return render_template("index.html", texts = texts, preds = preds, topics = topics, probs = probs)
+        return render_template("index.html", texts = texts, preds = preds, topics = topics, probs = probs, plot_html = plot_html)
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -106,9 +169,12 @@ def upload():
     print(f"Current predictions: {preds}")
     print(f"Current predictions: {probs}")
     # Do something with the uploaded file
-    topics = [ele for ele in topic_labels ]
-    return render_template("index.html", texts = texts, preds = preds, topics = topics, probs = probs)
 
+    # Plotting of historic trend
+    global plot_html
+    plot_html = visualise(df['Sentiment'], df['Time'],labelled_test_df['Text'],labelled_test_df['Topic_label'])
+    topics = [ele for ele in topic_labels ]
+    return render_template("index.html", texts = texts, preds = preds, topics = topics, probs = probs, plot_html = plot_html)
 
 if __name__ == '__main__':
     app.run(debug = True, use_reloader = True)

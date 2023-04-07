@@ -9,7 +9,8 @@ flask:
     model_name : non_bert
     topic_modelling_dir: topic_modelling/non_bert
     config_path: topic_modelling/non_bert/non_bert_topic_modelling_config.yml
-    
+  historic_trend:
+    data_path : data/LDA_10_topics_labelled.csv
 
 
   
