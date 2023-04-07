@@ -9,7 +9,7 @@ import torch
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.decomposition import PCA
+from sklearn.decomposition import TruncatedSVD
 from xgboost import XGBClassifier
 from sklearn.metrics import roc_auc_score
 from imblearn.over_sampling import SMOTE
@@ -64,7 +64,8 @@ class NonBertClassifier(BaseModel):
         Returns a 80-20 train and test set for the given dataset. 
         '''
         df = pre.Dataset(self.data)
-        df.create_bow(root_words_option = 2, remove_stop_words = True, lower_case = True, ngrams = (1,2), min_doc = 0.05, max_doc = 0.95)
+        df.create_bow(root_words_option = 2, remove_stop_words = True, lower_case = True, ngrams = (1,2),
+                      word_form = ['adverb', 'adjective'], min_doc = 0.05, max_doc = 0.5)
         bow = pd.DataFrame(df.bow[1].toarray())
         bow['Time'] = df.date
         bow['Sentiment'] = df.sentiments
@@ -76,8 +77,21 @@ class NonBertClassifier(BaseModel):
         self.y_test = test['Sentiment'].to_numpy()
         oversample = SMOTE()
         self.x_train, self.y_train = oversample.fit_resample(self.x_train, self.y_train)
-        self.x_train = pd.DataFrame(PCA(n_components=6).fit_transform(self.x_train))
-        self.x_test = pd.DataFrame(PCA(n_components=6).fit_transform(self.x_test))
+        svd = TruncatedSVD(n_components=len(self.x_train.axes[1]), random_state=4263)
+        svd.fit(self.x_train)
+        exp = 0
+        n = 0
+        for i in svd.explained_variance_ratio_:
+            if exp < 0.9:
+                exp += i
+                n += 1
+                print(i)
+            else:
+                break
+        print([n,exp])
+        print(svd.explained_variance_ratio_)
+        self.x_train = pd.DataFrame(TruncatedSVD(n_components = n, random_state = 4263).fit_transform(self.x_train))
+        self.x_test = pd.DataFrame(TruncatedSVD(n_components = n, random_state = 4263).fit_transform(self.x_test))
 
 
     def predict(self, model_type, threshold):
@@ -94,9 +108,10 @@ class NonBertClassifier(BaseModel):
         self.data['Sentiment'] = 0
         self.data['Time'] = '1/1/1900'
         df = pre.Dataset(self.data)
-        df.create_bow(root_words_option = 2, remove_stop_words = True, lower_case = True, ngrams = (1,2), min_doc = 0.05, max_doc = 0.95)
+        df.create_bow(root_words_option = 2, remove_stop_words = True, lower_case = True, ngrams = (1,2),
+                      word_form = ['adverb', 'adjective'], min_doc = 0.05, max_doc = 0.5)
         self.data = pd.DataFrame(df.bow[1].toarray())
-        self.data = pd.DataFrame(PCA(n_components=6).fit_transform(self.data))
+        self.data = pd.DataFrame(TruncatedSVD(n_components=10).fit_transform(self.data))
         if model_type == 'LogisticRegression':
             logreg = pickle.load(open(model_save_loc, 'rb'))
             sentiment_proba = logreg.predict_proba(self.data)[:,1]
@@ -168,6 +183,14 @@ class NonBertClassifier(BaseModel):
         utility.custom_print('\n---------------------------------\n',logger = logger)
         utility.custom_print('Threshold parameter tuning\n', logger = logger)
         threshold, accuracy = utility.plot_pr_curve(lr_proba, self.y_test, plot_path)
+        lr_pred_best = []
+        for i in lr_proba:
+            if i>=threshold:
+                lr_pred_best.append(1)
+            else:
+                lr_pred_best.append(0)
+        utility.custom_print('Prediction using best threshold for accuracy\n-------------------------\n', logger = logger)                
+        utility.churn_eval_metrics(lr_pred_best, self.y_test, logger)
         utility.custom_print('Best threshold for accuracy: ' + str(threshold), logger = logger)
         utility.custom_print('Accuracy score at best threshold: ' + str(accuracy), logger = logger)
         if save_model:
@@ -205,6 +228,14 @@ class NonBertClassifier(BaseModel):
         utility.custom_print('\n---------------------------------\n',logger = logger)
         utility.custom_print('Threshold parameter tuning\n', logger = logger)
         threshold, accuracy = utility.plot_pr_curve(rf_proba, self.y_test, plot_path)
+        rf_pred_best = []
+        for i in rf_proba:
+            if i>=threshold:
+                rf_pred_best.append(1)
+            else:
+                rf_pred_best.append(0)
+        utility.custom_print('Prediction using best threshold for accuracy\n-------------------------\n', logger = logger)                
+        utility.churn_eval_metrics(rf_pred_best, self.y_test, logger)
         utility.custom_print('Best threshold for accuracy: ' + str(threshold), logger = logger)
         utility.custom_print('Accuracy score at best threshold: ' + str(accuracy), logger = logger)
         if save_model:
@@ -250,6 +281,14 @@ class NonBertClassifier(BaseModel):
         utility.custom_print('\n---------------------------------\n',logger = logger)
         utility.custom_print('Threshold parameter tuning\n', logger = logger)
         threshold, accuracy = utility.plot_pr_curve(xgb_proba, self.y_test, plot_path)
+        xgb_pred_best = []
+        for i in xgb_proba:
+            if i>=threshold:
+                xgb_pred_best.append(1)
+            else:
+                xgb_pred_best.append(0)
+        utility.custom_print('Prediction using best threshold for accuracy\n-------------------------\n', logger = logger)                
+        utility.churn_eval_metrics(xgb_pred_best, self.y_test, logger)
         utility.custom_print('Best threshold for accuracy: ' + str(threshold), logger = logger)
         utility.custom_print('Accuracy score at best threshold: ' + str(accuracy), logger = logger)
         if save_model:
