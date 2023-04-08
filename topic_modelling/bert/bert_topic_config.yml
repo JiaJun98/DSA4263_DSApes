@@ -1,0 +1,69 @@
+model_0:
+  model_name: 'sentence-transformers-key-bigram'
+  embedding_model: SentenceTransformer('all-MiniLM-L12-v2')
+  dim_reduction_model: None
+  clustering_model: None
+  vectorizer_params: {'min_df': 1, 'max_df': 1.0, "ngram_range": 2}
+  ctfidf_params: {"bm25_weighting": True, "reduce_frequent_words": True}
+  representation_model: KeyBERTInspired()
+  min_topic_size: 30
+  nr_topics: 'auto'
+
+model_1:
+  model_name: 'sentence-transformers-key-unigram'
+  embedding_model: SentenceTransformer('all-MiniLM-L12-v2')
+  dim_reduction_model: None
+  clustering_model: None
+  vectorizer_params: {'min_df': 1, 'max_df': 1.0, "ngram_range": 1}
+  ctfidf_params: {"bm25_weighting": True, "reduce_frequent_words": True}
+  representation_model: KeyBERTInspired()
+  min_topic_size: 30
+  nr_topics: 'auto'
+
+model_2:
+  model_name: 'bert-base-uncased-key-unigram'
+  embedding_model: pipeline("feature-extraction", model="bert-base-uncased")
+  dim_reduction_model: None
+  clustering_model: None
+  vectorizer_params: {'min_df': 1, 'max_df': 1.0, "ngram_range": 1}
+  ctfidf_params: {"bm25_weighting": True, "reduce_frequent_words": True}
+  representation_model: KeyBERTInspired()
+  min_topic_size: 30
+  nr_topics: 'auto'
+
+model_3:
+  model_name: 'bert-base-uncased-unigram'
+  embedding_model: pipeline("feature-extraction", model="bert-base-uncased")
+  dim_reduction_model: None
+  clustering_model: None
+  vectorizer_params: {'min_df': 1, 'max_df': 1.0, "ngram_range": 1}
+  ctfidf_params: {"bm25_weighting": True, "reduce_frequent_words": True}
+  representation_model: None
+  min_topic_size: 30
+  nr_topics: 'auto'
+
+model_4:
+  model_name: 'sentence-transformers-key-bigram-v2'
+  embedding_model: SentenceTransformer('all-MiniLM-L12-v2')
+  dim_reduction_model: None
+  clustering_model: None
+  vectorizer_params: {'min_df': 1, 'max_df': 1.0, "ngram_range": 2}
+  ctfidf_params: {"bm25_weighting": True, "reduce_frequent_words": False}
+  representation_model: KeyBERTInspired()
+  min_topic_size: 30
+  nr_topics: 'auto'
+
+model_5:
+  model_name: 'zero-shot'
+  embedding_model: SentenceTransformer('all-MiniLM-L12-v2')
+  dim_reduction_model: None
+  clustering_model: None
+  vectorizer_params: {'min_df': 1, 'max_df': 1.0, "ngram_range": 2}
+  ctfidf_params: {"bm25_weighting": True, "reduce_frequent_words": False}
+  representation_model: ZeroShotClassification(['drinks', 'cat', 'dog', 'carbohydrates', 'chocolate', 'snacks', 'healthy alternatives', 'household', 'baby food', 'sauce'], model="facebook/bart-large-mnli", min_prob = 0.5)
+  min_topic_size: 30
+  nr_topics: None
+
+data_folder: data/reviews.csv
+image_folder: image/
+log_path: logs/ 
