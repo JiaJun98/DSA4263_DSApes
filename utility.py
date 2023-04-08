@@ -11,7 +11,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import torch
 import yaml
-import boto3
 
 import nltk
 from nltk.corpus import stopwords
