@@ -1,6 +1,5 @@
 pandas
 matplotlib
-boto3
 datasets
 flask
 flake8
