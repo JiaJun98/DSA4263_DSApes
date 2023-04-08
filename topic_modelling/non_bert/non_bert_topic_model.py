@@ -239,7 +239,7 @@ class TopicModel(BaseModel):
             if self.custom_print:
                 custom_print("{} topic testing accuracy: {}".format(topic, str(accuracy)), logger = logger)
         
-        sample_test_output_path = os.path.join(test_output_path, "test_labels.csv")
+        sample_test_output_path = os.path.join(test_output_path, "test_sample_labels.csv")
         sample_labelling.to_csv(sample_test_output_path, index = False)
         average_topic_accuracy = sum(topic_accuracy) / len(topic_accuracy)
 
@@ -249,7 +249,6 @@ class TopicModel(BaseModel):
 def train_test(train_dataset, feature_engineer, train_output_path, training_model, num_of_topics, num_top_words, num_top_documents, replace_stop_words_list, include_words, 
           exclude_words, root_word_option, remove_stop_words, lower_case, word_form, ngrams, max_doc, min_doc, test_dataset = None, test_output_path = None):
     trainModel = TopicModel(train_dataset=train_dataset, test_dataset = test_dataset, feature_engineer=feature_engineer)
-    custom_print("------Preprocessing text data--------", logger = logger)
     trainModel.preprocess_dataset(replace_stop_words_list, include_words, exclude_words, root_word_option,
                                  remove_stop_words, lower_case, word_form, ngrams, max_doc, min_doc)
     trainModel.train(training_model, num_of_topics, num_top_words, num_top_documents, train_output_path)
@@ -258,18 +257,17 @@ def train_test(train_dataset, feature_engineer, train_output_path, training_mode
         test_labels = trainModel.predict(test_output_path, root_word_option, remove_stop_words)
         trainModel.churn_eval_metrics(test_labels, num_top_documents, test_output_path)    
 
-def test(test_dataset, pickled_model, pickled_vectorizer, test_output_path, topic_label, replace_stop_words_list, include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
+def test(test_dataset, feature_engineer, pickled_model, pickled_vectorizer, test_output_path, topic_label, replace_stop_words_list, include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
              word_form, ngrams, max_doc, min_doc):
     #max_doc = 1 and min_doc = 1 so that not all the key words will be filtered off, esp when the input size is small.
     testModel = TopicModel(test_dataset=test_dataset, pickled_model=pickled_model, topic_label = topic_label, pickled_vectorizer= pickled_vectorizer, feature_engineer=feature_engineer)
-    custom_print("-------Preprocessing test data--------", logger = logger)
     testModel.preprocess_dataset(replace_stop_words_list, include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
              word_form, ngrams, max_doc, min_doc)
     testModel.predict(test_output_path=test_output_path, root_word_option= root_word_option, remove_stop_words = remove_stop_words)
 
 if __name__ == "__main__":
     curr_dir = os.getcwd()
-    config_path = os.path.join(curr_dir, 'non-bert_topic_modelling_config.yml')
+    config_path = os.path.join(curr_dir, 'non_bert_topic_modelling_config.yml')
     config_file = parse_config(config_path)
     model_choice = config_file['model_choice']
     training_model = config_file['model'][model_choice]['type_of_model']
@@ -325,13 +323,16 @@ if __name__ == "__main__":
         else:
             train_dataset = Dataset(data_df)
             test_dataset = None
-        train_test(train_dataset, feature_engineer, train_output_path, training_model, num_of_topics, num_top_words, num_top_documents, replace_stop_words_list, include_words, 
-          exclude_words, root_word_option, remove_stop_words, lower_case, word_form, ngrams, max_doc, min_doc, test_dataset, test_output_path)
+        custom_print("------Preprocessing text data--------", logger = logger)
+        train_test(train_dataset, feature_engineer, train_output_path, training_model, num_of_topics, num_top_words, num_top_documents, 
+                   replace_stop_words_list, include_words, exclude_words, root_word_option, remove_stop_words, lower_case, word_form, 
+                   ngrams, max_doc, min_doc, test_dataset, test_output_path)
     
     elif isTester:
         test_dataset = Dataset(data_df)
-        test(test_dataset, feature_engineer, pickled_model, pickled_vectorizer, test_output_path, topic_label, replace_stop_words_list, include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
-             word_form, ngrams, max_doc, min_doc)
+        custom_print("------Preprocessing text data--------", logger = logger)
+        test(test_dataset, feature_engineer, pickled_model, pickled_vectorizer, test_output_path, topic_label, replace_stop_words_list, include_words, 
+             exclude_words, root_word_option, remove_stop_words, lower_case, word_form, ngrams, max_doc, min_doc)
         custom_print('Testing complete!',logger = logger)
     logger.close()
 

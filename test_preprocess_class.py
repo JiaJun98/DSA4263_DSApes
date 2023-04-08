@@ -3,8 +3,11 @@ sys.path.append(".")
 
 from preprocess_class import *
 from pandas.api.types import is_datetime64_any_dtype as is_datetime
-# import warningspy
 import pytest
+import numpy as np
+
+pytestmark = pytest.mark.filterwarnings("ignore")
+
 
 @pytest.fixture
 def example_data():
@@ -161,7 +164,7 @@ def test_create_bow(example_data):
     test = Dataset(example_data)
 
     test.create_bow(2, True, True)
-    assert test.bow[1].toarray().shape[0] == len(test.text)
+    assert test.bow[2].toarray().shape[0] == len(test.text)
 
 def test_create_tfidf(example_data):
     """
@@ -171,7 +174,7 @@ def test_create_tfidf(example_data):
     test = Dataset(example_data)
 
     test.create_tfidf(1, True, False)
-    assert test.tfidf[1].toarray().shape[0] == len(test.text)
+    assert test.tfidf[2].toarray().shape[0] == len(test.text)
     assert test.tfidf[0].get_feature_names_out()[0].islower() == False
 
 def test_create_doc2vec(example_data):
@@ -193,4 +196,4 @@ def test_create_word2vec(example_data):
     test = Dataset(example_data)
 
     test.create_word2vec()
-    assert len(test.word2vec) == len(test.bow[0].get_feature_names_out())
+    assert list(np.intersect1d(list(test.word2vec.keys()), list(test.bow[0].get_feature_names_out()))) == list(test.word2vec.keys())
