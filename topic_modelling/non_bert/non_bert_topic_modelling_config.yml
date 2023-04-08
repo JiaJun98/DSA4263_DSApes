@@ -1,6 +1,7 @@
 model:
   model_1:
     type_of_model: "NMF"
+    feature_engineering: "bow"
     num_of_topics: 14
     num_top_words: 20
     num_top_documents: 8
@@ -22,11 +23,12 @@ model:
     train: True
     test: True
     pickled_model: 
-    pickled_bow:
+    pickled_vectorizer:
     topic_label: 
 
   model_2:
     type_of_model: "LDA"
+    feature_engineer: "bow"
     num_of_topics: 10
     num_top_words: 20
     num_top_documents: 8
@@ -48,11 +50,12 @@ model:
     train: True
     test: True
     pickled_model: 
-    pickled_bow:
+    pickled_vectorizer:
     topic_label: 
   
   test_1:
     type_of_model:
+    feature_engineer: "bow"
     num_of_topics: 10
     num_top_words: 20
     num_top_documents: 8
@@ -74,11 +77,12 @@ model:
     train: False
     test: True
     pickled_model: train_output/model_1/NMF_model_14.pk
-    pickled_bow: train_output/model_1/training_bow_14.pk
+    pickled_vectorizer: train_output/model_1/training_bow_14.pk
     topic_label: train_output/model_1/topic_key_words.csv
 
   test_2:
     type_of_model:
+    feature_engineer: "bow"
     num_of_topics: 10
     num_top_words: 20
     num_top_documents: 8
@@ -100,7 +104,7 @@ model:
     train: False
     test: True
     pickled_model: train_output/model_2/LDA_model_10.pk
-    pickled_bow: train_output/model_2/training_bow_10.pk
+    pickled_vectorizer: train_output/model_2/training_bow_10.pk
     topic_label: train_output/model_2/topic_key_words.csv
   
 model_choice: test_2
