@@ -32,8 +32,8 @@ class Dataset:
         """
         All the attributes will be stored in the form of dataframe
         """
-        self.sentiments = dataset['Sentiment']
-        self.date = pd.to_datetime(dataset['Time'])
+        self.sentiments = dataset['Sentiment'] if 'Sentiment' in dataset else None
+        self.date = pd.to_datetime(dataset['Time']) if  'Time' in  dataset else None
         self.text = dataset['Text'].apply(lambda x: sub("<[^>]+>", " ", x).strip())
         self.root_words_options = [None, "stem", "lemmatize"]
         self.tokenized_words = None
