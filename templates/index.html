@@ -6,7 +6,7 @@
     <title class="text-center">VOC App</title>
 
     <link href='static/css/style.css' rel='stylesheet'>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    
     
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -44,7 +44,10 @@
             <input type="file" name="file" id="file" class="inputfile">
             <label for="file">Upload csv file</label>
             <button type="submit" class="btn btn-primary mb-2">Submit csv file</button>
-            <div id="error_msg"></div>
+            <div id="error_msg">
+              <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+            </div>
+            
           </form>
         </div>
       </div>
@@ -56,26 +59,23 @@
         <tr>
           <th>Text</th>
           <th>Predicted Customer Sentiment</th>
-          <th>Predicted Probabilities</th>
           <th>Predicted Topic</th>
         </tr>
       </thead>
       <tbody>
-        {% if texts|length > 1 %}
-          {% for i in range(texts|length) %}
+        {% if tweets|length > 1 and preds|length > 1  %}
+          {% for i in range(tweets|length) %}
             <tr>
-              <td>{{ texts[i] }}</td>
+              <td>{{ tweets[i] }}</td>
               <td>{{ preds[i] }}</td>
-              <td>{{ probs[i] }}</td>
               <!--Place holder for topic-->
               <td>{{ topics[i] }}</td>
             </tr>
           {% endfor %}
         {% else %}
           <tr>
-            <td>{{ texts }}</td>
+            <td>{{ tweets }}</td>
             <td>{{ preds }}</td>
-            <td>{{ probs }}</td>
             <!--Place holder for topic-->
             <td>{{ topics }}</td>
           </tr>
@@ -87,9 +87,6 @@
     <div class="container" id="historic-trends">
       <div style="display: flex; flex-direction: column;">
         <h2 class="text-centre">Historic and Future Trends of Sentimental and Key Topics</h2>
-        <div id="historic-plot">
-          {{ plot_html | safe }}
-        </div>
       </div>
     </div>
 
