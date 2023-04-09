@@ -11,6 +11,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import torch
 import yaml
+import boto3
 
 import nltk
 from nltk.corpus import stopwords
@@ -18,35 +19,25 @@ from sklearn.metrics import accuracy_score, precision_score, roc_curve, auc, f1_
 
 def set_seed(seed_value=42):
     """Set seed for reproducibility.
+    
+    Parameters
+    ----------
+        seed_value : int
+            Seed value to be set. Default value is 42
     """
     random.seed(seed_value)
     np.random.seed(seed_value)
     torch.manual_seed(seed_value)
     torch.cuda.manual_seed_all(seed_value)
 
-
-def parse_config(config_file):
-    with open(config_file, "rb") as f:
-        config = yaml.safe_load(f)
-    return config
-
-def custom_print(*msg, logger):
-    """Prints a message and uses a global variable, logger, to save the message
-    :param msg: can be a list of words or a word
-    :returns: nothing
-    """
-    for i in range(0, len(msg)):
-        if i == len(msg) - 1:
-            print(msg[i])
-            logger.write(str(msg[i]) + '\n')
-        else:
-            print(msg[i], ' ', end='')
-            logger.write(str(msg[i]))
-
 def seed_everything(seed=42):
-    """"
-    Seed everything.
-    """   
+    """Seed everything in the environment
+    
+    Parameters
+    ----------
+        seed_value : int
+            Seed value to be set. Default value is 42
+    """
     random.seed(seed)
     os.environ['PYTHONHASHSEED'] = str(seed)
     np.random.seed(seed)
@@ -56,7 +47,63 @@ def seed_everything(seed=42):
     torch.backends.cudnn.deterministic = True
 
 
+def parse_config(config_file):
+    """Parsing function for YAML file
+
+    Parameters
+    ----------
+        config_file : str
+        Path of YAML file
+
+    Return
+    ------
+        config: Nested Python Dictionary containing various information in YAML file
+    """
+    with open(config_file, "rb") as f:
+        config = yaml.safe_load(f)
+    return config
+
+def custom_print(*msg, logger):
+    """Prints a message and uses a global variable, logger, to save the message
+    
+    Parameters
+    ------
+    msg : 
+       Message to be logged
+    logger : FileObject
+        Logger to create logs
+    Return
+    ------
+        None
+    """
+    for i in range(0, len(msg)):
+        if i == len(msg) - 1:
+            print(msg[i])
+            logger.write(str(msg[i]) + '\n')
+        else:
+            print(msg[i], ' ', end='')
+            logger.write(str(msg[i]))
+
+
+
+
 def churn_eval_metrics(Y_pred, Y_test, logger):
+    """ Logges the accuracy, precision, AUC, F1-Score, Sensitivity, Specificity between predicted and test
+    
+    Parameters
+    ------
+    y_pred : list of int
+         Predicted values
+    y_test : list of int
+            Actual values
+    logger : FileObject
+        Logger to create logs
+
+    Return
+    ------
+        None
+    """
+    
     model_acc = accuracy_score(Y_test, Y_pred)
     model_prec = precision_score(Y_test, Y_pred)
     fpr, tpr, thresholds = roc_curve(Y_test, Y_pred, pos_label = 1)
@@ -76,6 +123,22 @@ def churn_eval_metrics(Y_pred, Y_test, logger):
     custom_print("specificity: ", "{:.2f}".format(specificity), logger = logger)
 
 def plot_roc_curve(Y_pred, Y_test,plotting_dir):
+    """ PLotting ROC curve for predictions by Machine Learning/Deep Learning Model
+    
+    Parameters
+    ------
+    y_pred : list of int
+         Predicted values
+    Y_test : list of int
+            Actual values
+    plotting_dir : str
+        Directory to plot the ROC curve
+
+    Return
+    ------
+        None
+    """
+    
     fpr, tpr, thresholds = roc_curve(Y_test, Y_pred, pos_label = 1)
     f1_scores = [f1_score(Y_test, Y_pred >= t) for t in thresholds]
     accuracy_scores = [accuracy_score(Y_test, Y_pred >= t) for t in thresholds]
@@ -103,6 +166,22 @@ def plot_roc_curve(Y_pred, Y_test,plotting_dir):
     plt.close()
 
 def plot_pr_curve(Y_pred, Y_test, plotting_dir):
+    """ PLotting Precision-Recall curve for predictions by Machine Learning/Deep Learning Model
+    
+    Parameters
+    ------
+    y_pred : list of int
+         Predicted values
+    Y_test : list of int
+            Actual values
+    plotting_dir : str
+        Directory to plot the ROC curve
+
+    Return
+    ------
+        None
+    """
+    
     precision, recall, thresholds = precision_recall_curve(Y_test, Y_pred)
     accuracy_scores = [accuracy_score(Y_test, Y_pred >= t) for t in thresholds]
     f1_scores = [f1_score(Y_test, Y_pred >= t) for t in thresholds]
