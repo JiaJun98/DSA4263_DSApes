@@ -42,6 +42,7 @@ def visualise(Sentiment, Time, Text, Topic_label):
     df.loc[df['Sentiment'] == 'positive', 'Sentiment'] = 1
     df.loc[df['Sentiment'] == 'Negative', 'Sentiment'] = 0
     df.loc[df['Sentiment'] == 'negative', 'Sentiment'] = 0
+    print(df)
     group_df_1mo = df.groupby(['Topic_label', pd.Grouper(freq="1M",key='Time')]).agg(Positive=('Sentiment', np.sum), Count = ('Sentiment', len), Avg=('Sentiment', lambda x: x.sum()/len(x)))
     group_df_1mo.reset_index(inplace=True)
     group_df_1mo = group_df_1mo.loc[group_df_1mo['Time'] >='2020-01-01',:]
@@ -133,14 +134,28 @@ def index():
 @app.route('/predict', methods = ['GET', 'POST'])
 def predict(): #Send data from front-end to backend then to front end
     if request.method == "POST":
-        # Get the form data
-        texts = request.form["review"]
-        test_dataloader = data_loader(model_name, max_len, texts, 1)
-        preds,probs = MODEL.predict(test_dataloader, THRESHOLD)
-        print(probs)
-        # Return the template with the form data
-        topics = "Coffee" #Place holder
-        return render_template("index.html", texts = texts, preds = preds, topics = topics, probs = probs, plot_html = plot_html)
+        text = request.form["review"]
+        test_dataloader = data_loader(model_name, max_len, text, 1)
+        pred,prob = MODEL.predict(test_dataloader, THRESHOLD)
+        one_line_df = pd.DataFrame({"Text": [text]})
+        one_text_dataset = Dataset(one_line_df)
+        logger = open(logging_path, 'w')
+        labelled_test_df = test(one_text_dataset, pickled_model, pickled_bow, test_output_path, 
+        topic_label, num_top_documents, replace_stop_words_list, 
+        include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
+                word_form, ngrams, max_doc, min_doc, logger, num_of_topics)
+        topic = list(labelled_test_df["Topic label"].apply(lambda x: " ".join(list(map(lambda y: y.capitalize(),x.split("_"))))))[0]
+        logger.close()
+        return render_template("index.html", 
+                                texts = [], 
+                                preds = [], 
+                                topics = [], 
+                                probs = [],
+                                text =  text,
+                                pred = pred[0],
+                                prob = prob[0],
+                                topic = topic,
+                                plot_html = plot_html)
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -159,24 +174,20 @@ def upload():
         include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
                 word_form, ngrams, max_doc, min_doc, logger, num_of_topics)
     
-    #Place holder for him his reviews_csv have "Text" "Time" slightly hardcoded
-    texts =  df['Text'].tolist()#[1:]
-    time =  df['Time'].tolist()#[1:]
+    texts =  df['Text'].tolist()
+    time =  df['Time'].tolist()
     print(labelled_test_df)
     topic_labels = list(labelled_test_df["Topic label"].apply(lambda x: " ".join(list(map(lambda y: y.capitalize(),x.split("_"))))))
-    
+    topics = [ele for ele in topic_labels]
     X_preprocessed = np.array([text for text in texts])
     test_dataloader = data_loader(model_name, max_len, X_preprocessed, len(texts))
     preds, probs = MODEL.predict(test_dataloader, THRESHOLD)
     print(f"Current predictions: {preds}")
     print(f"Current predictions: {probs}")
-    # Do something with the uploaded file
 
-    # Plotting of historic trend
     # Columns needed: Sentiment, Time, Text, Topic Label
     plot_html = visualise(preds, time, texts, topic_labels)
-    
-    topics = [ele for ele in topic_labels ]
+    logger.close()
     return render_template("index.html", texts = texts, preds = preds, topics = topics, probs = probs, plot_html = plot_html)
 
 if __name__ == '__main__':
