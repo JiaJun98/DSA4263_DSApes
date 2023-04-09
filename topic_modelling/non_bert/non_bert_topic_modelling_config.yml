@@ -76,7 +76,7 @@ model:
     log_path: logs/test_1.log
     train: False
     test: True
-    pickled_model: train_output/model_1/NMF_model_14.pk
+    pickled_model: train_output/model_1/training_NMF_model_14.pk
     pickled_vectorizer: train_output/model_1/training_bow_14.pk
     topic_label: train_output/model_1/topic_key_words.csv
 
@@ -103,7 +103,7 @@ model:
     log_path: logs/test_2.log
     train: False
     test: True
-    pickled_model: train_output/model_2/LDA_model_10.pk
+    pickled_model: train_output/model_2/training_LDA_model_10.pk
     pickled_vectorizer: train_output/model_2/training_bow_10.pk
     topic_label: train_output/model_2/topic_key_words.csv
   

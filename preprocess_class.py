@@ -21,17 +21,17 @@ nltk.download('stopwords')
 nltk.download("averaged_perceptron_tagger")
 
 
-"""
-This dataset class includes all the necessary preprocessing and feature extraction 
-to be experimented for the different non-Bert models to predict sentiment analysis 
-and topic modelling.
-Users should call create_* functions directly to get their ideal preprocessed data.
-Functions without "create" as the start are only helper functions for the main create_* functions.
-"""
 class Dataset:
+    """
+    This dataset class includes all the necessary preprocessing and feature extraction 
+    to be experimented for the different non-Bert models to predict sentiment analysis 
+    and topic modelling.
+    Users should call create_* functions directly to get their ideal preprocessed data.
+    Functions without "create" as the start are only helper functions for the main create_* functions.
+    """
     def __init__(self, dataset):
         """
-        All the attributes will be stored in the form of dataframe
+        Input dataset should minimally consist of columns named "Text" and "Date", optionally include column named "Sentiment"
         """
         self.sentiments = dataset['Sentiment'] if 'Sentiment' in dataset.columns else pd.DataFrame()
         self.date = pd.to_datetime(dataset['Time'])
@@ -50,28 +50,39 @@ class Dataset:
 
     def create_bow(self, root_words_option = 0, remove_stop_words = True, lower_case = True, word_form = None, ngrams = (1,1), max_doc = 1, min_doc = 1):
         """
-        Update self.bow with [vectorizer, bow_matrix]. vectorizer is the model to generate the bow output 
+        Update self.bow with [vectorizer, fitted vectorizer, bow_matrix]. vectorizer is the model to generate the bow output 
         while bow_matrix is the resultant of applying bow on the texts
-        @param  root_words_option:  0 - None, 1 - stem, 2 - lemmatize (based on self.root_words_options)
-        @param  remove_stop_words:  True if stop words should not be included, False otherwise
-        @param  lower_case: True if should apply lower case to all words before creating BOW, False otherwise
-        @param  word_form:  To specify in a list format if only words of certain word forms are included for model building
-                            Word forms include ["noun", "adverb", "adjective", "preposition", "verb"]
-        @param  ngrams: specify if the user wants unigram, bigram, trigrams or even mixture
-                        (1,1) means only unigram, (1,2) means unigram and bigram
-        @param  max_doc:    in the range [0,1): if token appear in more than max_doc % of documents,
-                            the word is not considered in the bag of words.
-                            for any integer n >= 1: the token can only appear in at most n documents.
-                            If min_doc > 1, max_doc must be < 1.
-        @param  min_doc:    in the range [0,1): if token appear in less than min_doc % of documents, 
-                            the word is not considered in the bag of words
-                            for any integer n >= 1: the token must appear in at least n documents
-                            
+
+        Parameters
+        ----------
+        root_words_option: int
+            0 - None, 1 - stem, 2 - lemmatize (based on self.root_words_options)
+        remove_stop_words:  bool
+            True if stop words should not be included, False otherwise
+        lower_case: bool
+            True if should apply lower case to all words before creating BOW, False otherwise
+        word_form:  list of str
+            Specific parts of sentence to be included for topic model training and prediction.
+            valid word forms: "verb", "noun", "adjective", "preposition", "adverb"
+        ngrams: tuple of int
+            Specify if the user wants unigram, bigram, trigrams or even mixture.
+            (1,1) means only unigram, (1,2) means unigram and bigram
+        max_doc: int
+            in the range [0,1): if token appear in more than max_doc % of documents, the word is not considered in the bag of words.
+            for any integer n >= 1: the token can only appear in at most n documents.
+            If min_doc > 1, max_doc must be < 1.
+        min_doc: int
+            in the range [0,1): if token appear in less than min_doc % of documents, the word is not considered in the bag of words
+            for any integer n >= 1: the token must appear in at least n documents
+
+        Return
+        ------
+        List of [vectorizer, fitted_vectorizer, transformed bow matrix]                   
         To get list of bag of words, use self.bow[0].get_feature_names_out()
-        To get the array version to input into models, use self.bow[1].toarray()
+        To get the array version to input into models, use self.bow[2].toarray()
         
         Code to create DataFrame with Tokens as columns and Documents as rows:
-        pd.DataFrame(data=self.bow[1].toarray(), columns = self.bow[0].get_feature_names_out())
+        pd.DataFrame(data=self.bow[2].toarray(), columns = self.bow[0].get_feature_names_out())
         """
         final_text = self.input_text(root_words_option, remove_stop_words, lower_case, word_form)
 
@@ -82,25 +93,36 @@ class Dataset:
 
     def create_tfidf(self, root_words_option = 0, remove_stop_words = True, lower_case = True, word_form = None, ngrams = (1,1), max_doc = 1, min_doc = 1):
         """
-        Update self.tfidf with [vectorizer, tfidf_matrix]. vectorizer is the model to generate the tfidf output 
+        Update self.tfidf with [vectorizer, fitted_vectorizer, tfidf_matrix]. vectorizer is the model to generate the tfidf output 
         while tfidf_matrix is the resultant of applying tfidf on the texts
-        @param  root_words_option: 0 - None, 1 - stem, 2 - lemmatize (based on self.root_words_options)
-        @param  remove_stop_words:  True if stop words should not be included, False otherwise
-        @param  lower_case: True if should apply lower case to all words before creating BOW, False otherwise
-        @param  word_form:  To specify in a list format if only words of certain word forms are included for model building
-                            Word forms include ["noun", "adverb", "adjective", "preposition", "verb"]
-        @param  ngrams: specify if the user wants unigram, bigram, trigrams or even mixture
-                        (1,1) means only unigram, (1,2) means unigram and bigram
-        @param  max_doc:    in the range [0,1): if token appear in more than max_doc % of documents,
-                            the word is not considered in the bag of words.
-                            for any integer n >= 1: the token can only appear in at most n documents.
-                            If min_doc > 1, max_doc must be < 1.
-        @param  min_doc:    in the range [0,1): if token appear in less than min_doc % of documents, 
-                            the word is not considered in the bag of words
-                            for any integer n >= 1: the token must appear in at least n documents
 
+        Parameters
+        ----------
+        root_words_option: int
+            0 - None, 1 - stem, 2 - lemmatize (based on self.root_words_options)
+        remove_stop_words:  bool
+            True if stop words should not be included, False otherwise
+        lower_case: bool
+            True if should apply lower case to all words before creating BOW, False otherwise
+        word_form:  list of str
+            Specific parts of sentence to be included for topic model training and prediction.
+            valid word forms: "verb", "noun", "adjective", "preposition", "adverb"
+        ngrams: tuple of int
+            Specify if the user wants unigram, bigram, trigrams or even mixture.
+            (1,1) means only unigram, (1,2) means unigram and bigram
+        max_doc: int
+            in the range [0,1): if token appear in more than max_doc % of documents, the word is not considered in the bag of words.
+            for any integer n >= 1: the token can only appear in at most n documents.
+            If min_doc > 1, max_doc must be < 1.
+        min_doc: int
+            in the range [0,1): if token appear in less than min_doc % of documents, the word is not considered in the bag of words
+            for any integer n >= 1: the token must appear in at least n documents
+
+        Return
+        ------
+        List of [vectorizer, fitted_vectorizer, transformed tfidf matrix] 
         To get list of tfidf, use self.tfidf[0].get_feature_names_out()
-        To get the array version to input into models, use self.tfidf[1].toarray()
+        To get the array version to input into models, use self.tfidf[2].toarray()
         
         Code to create DataFrame with Tokens as columns and Documents as rows:
         pd.DataFrame(data=self.tfidf[1].toarray(), columns = self.tfidf[0].get_feature_names_out())
@@ -116,21 +138,18 @@ class Dataset:
         """
         Update self.doc2vec to store vector representation of each text. Can use machine learning to see how to group
         the texts under the same topic
-        @param  root_words_option:  0 - None, 1 - stem, 2 - lemmatize (based on self.root_words_options)
-        @param  remove_stop_words:  True if stop words should not be included, False otherwise
-        @param  lower_case: True if should apply lower case to all words before creating BOW, False otherwise
-        @param  word_form:  To specify in a list format if only words of certain word forms are included for model building
-                            Word forms include ["noun", "adverb", "adjective", "preposition", "verb"]
-        @param  ngrams: specify if the user wants unigram, bigram, trigrams or even mixture
-                        (1,1) means only unigram, (1,2) means unigram and bigram
-        @param  max_doc:    in the range [0,1): if token appear in more than max_doc % of documents,
-                            the word is not considered in the bag of words.
-                            for any integer n >= 1: the token can only appear in at most n documents.
-                            If min_doc > 1, max_doc must be < 1.
-        @param  min_doc:    in the range [0,1): if token appear in less than min_doc % of documents, 
-                            the word is not considered in the bag of words
-                            for any integer n >= 1: the token must appear in at least n documents
 
+        Parameters
+        ----------
+        root_words_option: int
+            0 - None, 1 - stem, 2 - lemmatize (based on self.root_words_options)
+        remove_stop_words:  bool
+            True if stop words should not be included, False otherwise
+        lower_case: bool
+            True if should apply lower case to all words before creating BOW, False otherwise
+        word_form:  list of str
+            Specific parts of sentence to be included for topic model training and prediction.
+            valid word forms: "verb", "noun", "adjective", "preposition", "adverb"
         """
         final_text = self.input_text(root_words_option, remove_stop_words, lower_case, word_form)
 
@@ -149,20 +168,28 @@ class Dataset:
     def create_word2vec(self, root_words_option = 0, remove_stop_words = True, lower_case = True, word_form = None, ngrams = (1,1), max_doc = 1, min_doc = 1):
         """
         Update self.word2vec with a dictionary, with key as the word token and value as the corresponding number to the word
-        @param  root_words_option:  0 - None, 1 - stem, 2 - lemmatize (based on self.root_words_options)
-        @param  remove_stop_words:  True if stop words should not be included, False otherwise
-        @param  lower_case: True if should apply lower case to all words before creating BOW, False otherwise
-        @param  word_form:  To specify in a list format if only words of certain word forms are included for model building
-                            Word forms include ["noun", "adverb", "adjective", "preposition", "verb"]
-        @param  ngrams: specify if the user wants unigram, bigram, trigrams or even mixture
-                        (1,1) means only unigram, (1,2) means unigram and bigram
-        @param  max_doc:    in the range [0,1): if token appear in more than max_doc % of documents,
-                            the word is not considered in the bag of words.
-                            for any integer n >= 1: the token can only appear in at most n documents.
-                            If min_doc > 1, max_doc must be < 1.
-        @param  min_doc:    in the range [0,1): if token appear in less than min_doc % of documents, 
-                            the word is not considered in the bag of words
-                            for any integer n >= 1: the token must appear in at least n documents
+
+        Parameters
+        ----------
+        root_words_option: int
+            0 - None, 1 - stem, 2 - lemmatize (based on self.root_words_options)
+        remove_stop_words:  bool
+            True if stop words should not be included, False otherwise
+        lower_case: bool
+            True if should apply lower case to all words before creating BOW, False otherwise
+        word_form:  list of str
+            Specific parts of sentence to be included for topic model training and prediction.
+            valid word forms: "verb", "noun", "adjective", "preposition", "adverb"
+        ngrams: tuple of int
+            Specify if the user wants unigram, bigram, trigrams or even mixture.
+            (1,1) means only unigram, (1,2) means unigram and bigram
+        max_doc: int
+            in the range [0,1): if token appear in more than max_doc % of documents, the word is not considered in the bag of words.
+            for any integer n >= 1: the token can only appear in at most n documents.
+            If min_doc > 1, max_doc must be < 1.
+        min_doc: int
+            in the range [0,1): if token appear in less than min_doc % of documents, the word is not considered in the bag of words
+            for any integer n >= 1: the token must appear in at least n documents
         """
         
         final_text = self.input_text(root_words_option, remove_stop_words, lower_case, word_form)
@@ -182,11 +209,18 @@ class Dataset:
     def input_text(self, root_word_option = 0, remove_stop_words = True, lower_case = True, word_form = None):
         """
         Helper function to generate the required tokenised words to input for feature extraction / preprocessing
-        @param  root_word_option:   0 - None, 1 - stem, 2 - lemmatize (based on self.root_words_options)
-        @param  remove_stop_words:  True if stop words should not be included, False otherwise
-        @param  lower_case: True if should apply lower case to all words before creating BOW, False otherwise
-        @param  word_form:  To specify in a list format if only words of certain word forms are included for model building
-                            Word forms include ["noun", "adverb", "adjective", "preposition", "verb"]
+
+        Parameters
+        ----------
+        root_words_option: int
+            0 - None, 1 - stem, 2 - lemmatize (based on self.root_words_options)
+        remove_stop_words:  bool
+            True if stop words should not be included, False otherwise
+        lower_case: bool
+            True if should apply lower case to all words before creating BOW, False otherwise
+        word_form:  list of str
+            Specific parts of sentence to be included for topic model training and prediction.
+            valid word forms: "verb", "noun", "adjective", "preposition", "adverb"
         """
         if type(root_word_option) != int or root_word_option > 2 or root_word_option < 0:
             raise Exception("invalid root word option")
@@ -213,12 +247,19 @@ class Dataset:
                                exclude_words = ["not", "no", "least", "less", "last", "serious", "too", "again", "against", "already", "always", "cannot", "few", "must", "only", "though"]):
         """
         Function to modify the stop_words_list according to model requirements
-        If expecting to use pos_tag to filter the tokens, users may prefer to specify your own stop words list instead of ENGLISH_STOP_WORDS list to prevent important words to be filtered out.
-        @param  replace_stop_words_list: If user does not want to use ENGLISH_STOP_WORDS list, user may like to specify the list here
-        @param  include_words: Usually used to add on to default stop words list (when replace_stop_words_list is None). Specify the list of additional words to be included if necessary. 
-                               If no words is to be specified in this parameter, specify this parameter as []
-        @param  exclude_words: Usually used to remove from default stop words list (when replace_stop_words_list is None). Specify the list of additional words to be included if necessary.
-                               If no words is the be specified in this parameter, specify this parameter as []
+        If expecting to use pos_tag to filter the tokens, users may prefer to specify your own stop words list instead of ENGLISH_STOP_WORDS list 
+        to prevent important words to be filtered out.
+
+        Parameters
+        ----------
+        replace_stop_words_list: list of str
+            Specify own list of stop words instead of using the default stop words list in Dataset class.
+        include_words: list of str
+            Specify additional words to the original stop words list.
+            Default are just some words that can be considered to be added into the stop words list.
+        exclude_words: list of str
+            Specify words that should not be included in the stop words list.
+            Default are just some words that can be considered to be removed from stop words list.
         """
         if replace_stop_words_list is not None:
             self.stop_words_list = replace_stop_words_list
@@ -233,9 +274,14 @@ class Dataset:
         """
         Update self.tokenized_words attribute with lists of tokenized words for each text. 
         Tokens such as numbers and punctuations are not considered as words, hence removed.
-        @param  lower_case: True if should apply lower case to all words before creating BOW, False otherwise
-        @param  word_form: To specify in a list format if only words of certain word forms are included for model building
-                           Word forms include ["noun", "adverb", "adjective", "preposition", "verb"]
+        
+        Parameters
+        ----------
+        lower_case: bool
+            True if should apply lower case to all words before creating BOW, False otherwise
+        word_form:  list of str
+            Specific parts of sentence to be included for topic model training and prediction.
+            valid word forms: "verb", "noun", "adjective", "preposition", "adverb"
         """
         def extract_relevant_tokens(text, lower_case):
             """
@@ -286,9 +332,14 @@ class Dataset:
     def removing_stop_words(self, lower_case = True, word_form = None):
         """
         Update self.tokenized_no_stop_words to remove any tokens in self.tokenized_words that exist in the list of stop words
-        @param  lower_case: True if should apply lower case to all words before creating BOW, False otherwise
-        @param  word_form: To specify in a list format if only words of certain word forms are included for model building
-                           Word forms include ["noun", "adverb", "adjective", "preposition", "verb"]
+        
+        Parameters
+        ----------
+        lower_case: bool
+            True if should apply lower case to all words before creating BOW, False otherwise
+        word_form:  list of str
+            Specific parts of sentence to be included for topic model training and prediction.
+            valid word forms: "verb", "noun", "adjective", "preposition", "adverb"
         """
         self.word_tokenizer(lower_case, word_form)
 
@@ -298,10 +349,16 @@ class Dataset:
     def stemming(self, remove_stop_words = True, lower_case = True, word_form = None):
         """
         Update self.stem after stemming all the tokens as specified
-        @param  remove_stop_words:  True if stop words should not be included, False otherwise
-        @param  lower_case: True if should apply lower case to all words before creating BOW, False otherwise
-        @param  word_form: To specify in a list format if only words of certain word forms are included for model building
-                           Word forms include ["noun", "adverb", "adjective", "preposition", "verb"]
+        
+        Paremeters
+        ----------
+        remove_stop_words: bool
+            True if stop words should be removed before feature engineering. False if all words are kept for feature engineering.
+        lower_case: bool
+            True if all the words should be lowercased, False otherwise.
+        word_form: list of str
+            Specific parts of sentence to be included for topic model training and prediction.
+            valid word forms: "verb", "noun", "adjective", "preposition", "adverb"
         """
         words_to_stem = self.input_text(0, remove_stop_words, lower_case, word_form)
 
@@ -311,10 +368,16 @@ class Dataset:
     def lemmatization(self, remove_stop_words = True, lower_case = True, word_form = None):
         """
         Update self.lemmatize after lemmatizing all the tokens as specified
-        @param  remove_stop_words:  True if stop words should not be included, False otherwise
-        @param  lower_case: True if should apply lower case to all words before creating BOW, False otherwise
-        @param  word_form: To specify in a list format if only words of certain word forms are included for model building
-                           Word forms include ["noun", "adverb", "adjective", "preposition", "verb"]
+       
+        Parameters
+        ----------
+        remove_stop_words: bool
+            True if stop words should be removed before feature engineering. False if all words are kept for feature engineering.
+        lower_case: bool
+            True if all the words should be lowercased, False otherwise.
+        word_form: list of str
+            Specific parts of sentence to be included for topic model training and prediction.
+            valid word forms: "verb", "noun", "adjective", "preposition", "adverb"
         """
         words_to_lemmatize = self.input_text(0, remove_stop_words, lower_case, word_form)
         
@@ -326,8 +389,15 @@ class Dataset:
 def create_datasets(df):
     """
     Create standardised training and testing dataset after splitting the raw dataset based on Sentiment proportion
-    @param  df: Raw dataframe with columns: Sentiments, Time, Text
-    @return train and test dataset after converting these dataframe into Dataset Class
+    
+    Parameter
+    ---------
+    df: pandas DataFrame
+        Consist of columns named "Text" and "Date", optionally include column named "Sentiment" 
+    
+    Return
+    ------
+    Train and test dataset after converting these dataframes into Dataset Class
     """
 
     train, test = train_test_split(df, test_size = 0.2, random_state = 4263, stratify = df['Sentiment'])
