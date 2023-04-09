@@ -19,14 +19,10 @@ from sklearn.metrics import precision_recall_fscore_support, accuracy_score
 from sklearn.model_selection import train_test_split,KFold
 
 import matplotlib.pyplot as plt
-from transformers import BertTokenizer
-from transformers import BertModel
-from transformers import AdamW, get_linear_schedule_with_warmup
-from transformers import AutoModelForSequenceClassification, TrainingArguments, Trainer
+from transformers import AutoModelForSequenceClassification, AdamW, get_linear_schedule_with_warmup
 
 from utility import parse_config, seed_everything, custom_print,churn_eval_metrics, plot_roc_curve, plot_pr_curve
-from preprocess_class import create_datasets
-from sentimental_analysis.bert.dataset import full_bert_data_loader,preprocessing_for_bert, create_data_loader, full_create_data_loader
+from sentimental_analysis.bert.dataset import create_data_loader, full_create_data_loader
 
 from model_base_class import BaseModel
 
@@ -44,11 +40,6 @@ class BertClassifier(BaseModel):
         number of output class
     freeze_bert : bool
          Set `False` to fine-tune the BERT model
-
-    Methods
-    -------
-    info(additional=""):
-        Prints the person's name and age.
     """
     def __init__(self, model_name, num_classes,freeze_bert=False):
         """
@@ -81,9 +72,13 @@ class BertClassifier(BaseModel):
                 an input tensor with shape (batch_size,max_length)
             attention_mask : torch.Tensor
                 a tensor that hold attention mask information with shape (batch_size, max_length)
+            
+        Return
+        ------
             logits : torch.Tensor
-                an output tensor with shape (batch_size,num_labels)
+                    an output tensor with shape (batch_size,num_labels)
         """
+       
         outputs = self.model(input_ids=input_ids,
                             attention_mask=attention_mask)
         #TODO: Change SequenceClassifierOutput to Tensor; Some issues for forward
@@ -108,17 +103,18 @@ class BertClassifier(BaseModel):
                 Set `True` to evaluate the model after each epoch (default is False)
             logger : _io.TextIOWrapper
                 logger file to write the training process (default is None)
+        Return
+        ------
+            time_elapsed : float
+                time elapsed for training the model
         """
-        # TODO: Create the differrent optimisers
         optimizer = AdamW(self.model.parameters(),
                         lr=learning_rate,    
                         eps=epsilon    
                         )
-        # Total number of training steps
         total_steps = len(train_dataloader) * epochs
-        # Set up the learning rate scheduler
         scheduler = get_linear_schedule_with_warmup(optimizer,
-                                                    num_warmup_steps=0, # Default value
+                                                    num_warmup_steps=0,
                                                     num_training_steps=total_steps)
         
         loss_fn = nn.CrossEntropyLoss()
@@ -126,10 +122,6 @@ class BertClassifier(BaseModel):
         custom_print("Start training...\n",logger = logger)
         start_time = time.time()
         for epoch_i in tqdm(range(epochs)):
-            # =======================================
-            #               Training
-            # =======================================
-            # Print the header of the result table
             custom_print(f"{'Epoch':^7} | {'Batch':^7} | {'Train Loss':^12} | {'Val Loss':^10} | {'Val Acc':^9} | {'Elapsed':^9}",logger = logger)
             custom_print("-"*70,logger = logger)
 
@@ -137,10 +129,7 @@ class BertClassifier(BaseModel):
             correct_predictions = 0
             all_logits = []
             all_labels = []
-            # Measure the elapsed time of each epoch
             t0_epoch, t0_batch = time.time(), time.time()
-
-            # Reset tracking variables at the beginning of each epoch
             total_loss, batch_loss, batch_counts = 0, 0, 0
 
             # Put the model into the training mode
@@ -204,9 +193,6 @@ class BertClassifier(BaseModel):
             churn_eval_metrics(all_labels, y_preds, logger)
 
             custom_print("-"*70,logger = logger)
-            # =======================================
-            #               Evaluation
-            # =======================================
             if evaluation == True:
                 # After the completion of each training epoch, measure the model's performance
                 # on our validation set.
@@ -227,32 +213,32 @@ class BertClassifier(BaseModel):
         custom_print(f"Current training time:",logger = logger)
         custom_print("{:02d}:{:02d}:{:06.2f}".format(int(hours), int(minutes), seconds), logger = logger)
         return time_elapsed
-        #custom_print("Training complete!",logger = logger)
 
 
     def evaluate(self, dataloader, test = False, plotting_dir = None, logger = None):
         """After the completion of each training epoch, measure the model's performance
         on our validation set.
-         Parameters
+        Parameters
         ----------
             model : transformers.models.bert.modeling_bert.BertForSequenceClassification
                 BERT-based model
             dataloader : torch.utils.data.DataLoader
                 DataLoader containing validation or test dataset
+
+        Return
+        ------
+            mean_loss : float
+                Average trianing loss from all batches
+            mean_accuracy : float
+                Average training accuracy from all batches
         """
-        # Put the model into the evaluation mode. The dropout layers are disabled during
-        # the test time.
         loss_fn = nn.CrossEntropyLoss()
         self.model.eval()
-
-        # Tracking variables
         total_loss = []
         total_accuracy = []
-       
         all_logits = []
         all_labels = []
 
-        # For each batch in our validation/holdout set...
         for batch in tqdm(dataloader, 'Validation' if not test else 'Testing'):
             # Load batch to GPU
             b_input_ids, b_attn_mask, b_labels = tuple(t.to(device) for t in batch)
@@ -278,19 +264,14 @@ class BertClassifier(BaseModel):
         #Finding validation metrics    
         all_logits = torch.cat(all_logits, dim=0)
         all_labels = torch.cat(all_labels, dim=0)
-        #print(all_logits)
         probs = F.softmax(all_logits, dim=1).detach().cpu().numpy()
-        #print(probs)
         threshold = 0.5
         y_preds = np.where(probs[:, 1] > threshold, 1, 0)
-        #print(y_preds)
         all_labels = [tensor.cpu().tolist() for tensor in all_labels]
         y_preds = y_preds.tolist()
         churn_eval_metrics(all_labels, y_preds, logger)
-        #print(probs[:, 1].tolist())
         
         if test:
-            #plotting_dir = "plots/roberta_large_sentimental_non_trainer"
             plot_roc_curve(probs[:, 1].tolist(),all_labels,plotting_dir)
             plot_pr_curve(probs[:, 1].tolist(),all_labels,plotting_dir)
         
@@ -301,6 +282,21 @@ class BertClassifier(BaseModel):
         return mean_loss, mean_accuracy
 
     def predict(self, single_dataloader,threshold):
+        """Takes a single dataloader object and returns predicted sentimental class and probabilities
+        Parameters
+        ----------
+            single_dataloader : torch.utils.data.DataLoader
+                DataLoader containing single review
+            threshold : float
+                Threshold for classifying a review as positive or negative
+        Return
+        ------
+            predicted_class : str
+                Predicted Class (Positive or Negative)
+            predicted_probs : float
+                Predicted Probability
+        """
+
         self.model.eval()
         all_logits = []
         for batch in single_dataloader:
@@ -310,10 +306,9 @@ class BertClassifier(BaseModel):
             with torch.no_grad():
                 logits = self.model(b_input_ids, b_attn_mask)
             all_logits.append(logits)
-        probs = F.softmax(logits[0], dim=1).cpu().numpy() 
-        print(probs)
-        preds = np.where(probs[:, 0] > threshold, "Positive", "Negative") #SWITCH later
-        return preds, probs[:, 0] 
+        predicted_probs = F.softmax(logits[0], dim=1).cpu().numpy()[:, 0]
+        predicted_class = np.where(predicted_probs > threshold, "Positive", "Negative")
+        return predicted_class, predicted_probs
 
 ###### Driver class
 if __name__ == "__main__":
@@ -339,8 +334,6 @@ if __name__ == "__main__":
     data_df = pd.read_csv(os.path.join(home_folder,train_file))
     logger = open(os.path.join(curr_dir, logging_path), 'w')
     custom_print(f'Device availiable: {device}', logger = logger)
-    train_df, test_df = train_test_split(data_df, test_size = 0.2, random_state = 4263) #Trainer Arguments
-    train_dataset, val_dataset = full_bert_data_loader(model_name,max_len, batch_size, True, train_df) #Trainer Arguments
     custom_print("Train_val dataset loaded",logger = logger)
     custom_print('Training model',logger = logger)
     seed_everything()
