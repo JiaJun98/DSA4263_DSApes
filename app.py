@@ -38,7 +38,9 @@ def visualise(Sentiment, Time, Text, Topic_label):
     """
     df = pd.DataFrame({"Sentiment":Sentiment, "Time":Time, "Text":Text, "Topic_label":Topic_label})
     df['Time'] = pd.to_datetime(df['Time'],dayfirst=True)
+    df.loc[df['Sentiment'] == 'Positive', 'Sentiment'] = 1
     df.loc[df['Sentiment'] == 'positive', 'Sentiment'] = 1
+    df.loc[df['Sentiment'] == 'Negative', 'Sentiment'] = 0
     df.loc[df['Sentiment'] == 'negative', 'Sentiment'] = 0
     group_df_1mo = df.groupby(['Topic_label', pd.Grouper(freq="1M",key='Time')]).agg(Positive=('Sentiment', np.sum), Count = ('Sentiment', len), Avg=('Sentiment', lambda x: x.sum()/len(x)))
     group_df_1mo.reset_index(inplace=True)
@@ -68,7 +70,7 @@ def visualise(Sentiment, Time, Text, Topic_label):
 
     for i, figure in enumerate(figures):
         for trace in range(len(figure["data"])):
-            fig.append_trace(figure["data"][trace], row=i+1, col=1)
+            fig.add_trace(figure["data"][trace], row=i+1, col=1)
     fig.update_layout(margin =dict(l=10,r=10,t=30,b=30), height = 800, width=1100)
 
     return fig.to_html(full_html = False)
@@ -158,8 +160,8 @@ def upload():
                 word_form, ngrams, max_doc, min_doc, logger, num_of_topics)
     
     #Place holder for him his reviews_csv have "Text" "Time" slightly hardcoded
-    texts =  df['Text'].tolist()[1:]
-    time =  df['Time'].tolist()[1:]
+    texts =  df['Text'].tolist()#[1:]
+    time =  df['Time'].tolist()#[1:]
     print(labelled_test_df)
     topic_labels = list(labelled_test_df["Topic label"].apply(lambda x: " ".join(list(map(lambda y: y.capitalize(),x.split("_"))))))
     
@@ -171,8 +173,9 @@ def upload():
     # Do something with the uploaded file
 
     # Plotting of historic trend
-    global plot_html
-    plot_html = visualise(df['Sentiment'], df['Time'],labelled_test_df['Text'],labelled_test_df['Topic_label'])
+    # Columns needed: Sentiment, Time, Text, Topic Label
+    plot_html = visualise(preds, time, texts, topic_labels)
+    
     topics = [ele for ele in topic_labels ]
     return render_template("index.html", texts = texts, preds = preds, topics = topics, probs = probs, plot_html = plot_html)
 
