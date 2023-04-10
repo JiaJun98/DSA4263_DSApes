@@ -214,5 +214,32 @@ model:
     pickled_model: train_output/model_4/training_NMF_model_10.pk
     pickled_vectorizer: train_output/model_4/training_tfidf_vectorizer_10.pk
     topic_label: train_output/model_4/topic_key_words.csv
+
+  test_5: #negative eg of not using only noun
+    type_of_model: LDA
+    feature_engineer: tfidf
+    num_of_topics: 10
+    num_top_words: 20
+    num_top_documents: 3
+    replace_stop_words_list: 
+    include_words: []
+    exclude_words: []
+    root_word_option: 2
+    remove_stop_words: True
+    lower_case: True
+    word_form: 
+    ngrams_start: 1
+    ngrams_end: 2
+    max_doc: 0.95
+    min_doc: 5
+    data_folder: data/reviews.csv
+    train_output_path: train_output/test_5 
+    test_output_path: 
+    log_path: logs/test_5.log
+    train: True
+    test: False
+    pickled_model: 
+    pickled_vectorizer: 
+    topic_label: 
   
 model_choice: test_4

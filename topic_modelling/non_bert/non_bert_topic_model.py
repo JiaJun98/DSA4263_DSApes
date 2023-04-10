@@ -65,10 +65,10 @@ class TopicModel(BaseModel):
         """
         Mainly to generate the fitted vectorizer, trained model, topic key words and topic labels for each text in trained_dataset.
         Fitted vectorizer and trained model are stored in pickled file.
-        Topic key words are stored in a csv file with the first column as the Topic label and the subsequent columns as 
+        Topic key words are stored in a csv file with the first column as the Topic_label and the subsequent columns as 
         top key words / phrases for each topic. Each row represents one topic.
-        Topic labels will have columns "Text" and "Topic label".
-        Sample training doc that are used for generating topic labels are also stored as csv file with columns "Text" and "Topic label"
+        Topic labels will have columns "Text" and "Topic_label".
+        Sample training doc that are used for generating topic labels are also stored as csv file with columns "Text" and "Topic_label"
 
         Parameters
         ----------
@@ -152,10 +152,10 @@ class TopicModel(BaseModel):
 
             self.set_topic_labels(i)
 
-        topic_labels = pd.DataFrame({"Topic label": self.topic_label}).reset_index()
+        topic_labels = pd.DataFrame({"Topic_label": self.topic_label}).reset_index()
         topic_labels.rename(columns = {"index":"Topic no"}, inplace = True)
-        labelled_train_topics = labelled_train_topics.merge(topic_labels, how = "left", on = "Topic no").loc[:, ['Text', "Topic label"]]
-        sample_doc_labels = sample_doc_labels.merge(topic_labels, how = "left", on = "Topic no").loc[:, ['Text', "Topic label"]]
+        labelled_train_topics = labelled_train_topics.merge(topic_labels, how = "left", on = "Topic no").loc[:, ['Text', "Topic_label"]]
+        sample_doc_labels = sample_doc_labels.merge(topic_labels, how = "left", on = "Topic no").loc[:, ['Text', "Topic_label"]]
         
         full_topic_path = os.path.join(train_output_path, "full_training_doc.csv")
         sampled_topic_path = os.path.join(train_output_path, "sample_training_doc.csv")
@@ -164,7 +164,7 @@ class TopicModel(BaseModel):
         sample_doc_labels.to_csv(sampled_topic_path, index = False)
 
         topic_key_words_df = pd.DataFrame(topic_key_words, index = self.topic_label).reset_index()
-        topic_key_words_df.rename(columns = {"index": 'Topic label'}, inplace = True)
+        topic_key_words_df.rename(columns = {"index": 'Topic_label'}, inplace = True)
         topic_key_words_path = os.path.join(train_output_path, "topic_key_words.csv")
         topic_key_words_df.to_csv(topic_key_words_path, index = False)
 
@@ -176,7 +176,7 @@ class TopicModel(BaseModel):
 
     def predict(self, test_output_path, root_word_option, remove_stop_words):
         """
-        Generate test labels based on the trained model. Test labels are stored as a csv file with 2 columns "Text" and "Topic Label".
+        Generate test labels based on the trained model. Test labels are stored as a csv file with 2 columns "Text" and "Topic_label".
 
         Parameters
         ----------
@@ -190,7 +190,7 @@ class TopicModel(BaseModel):
 
         Return
         ------
-        labelled_test: pandas dataframe with columns Text and Topic label
+        labelled_test: pandas dataframe with columns Text and Topic_label
         """
         test_input = self.get_input_text(self.test_dataset, root_word_option, remove_stop_words)
         test_data_fitted = self.training_vectorizer.transform(test_input.apply(lambda x: " ".join(x)))
@@ -201,10 +201,10 @@ class TopicModel(BaseModel):
         if self.custom_print:
             custom_print("-------- Exporting labelled topics ----------", logger = logger)
         labelled_test = pd.DataFrame({"Text": self.test_dataset.text, "Topic_no": assigned_topic})
-        indexed_topic_label = pd.DataFrame({"Topic label":self.topic_label}).reset_index()
+        indexed_topic_label = pd.DataFrame({"Topic_label":self.topic_label}).reset_index()
 
         labelled_test = labelled_test.merge(indexed_topic_label, how = "left", left_on = "Topic_no", right_on = "index")
-        labelled_test = labelled_test.loc[:, ['Text', 'Topic label']]
+        labelled_test = labelled_test.loc[:, ['Text', 'Topic_label']]
         labelled_test_output_path = os.path.join(test_output_path, "full_labelled_test_dataset.csv")
         labelled_test.to_csv(labelled_test_output_path, index = False)
         
@@ -385,7 +385,7 @@ class TopicModel(BaseModel):
         topic_accuracy = []
         sample_labelling = pd.DataFrame()
         for topic in self.topic_label:
-            curr_topic = labelled_test.loc[labelled_test['Topic label']== topic, "Text"]
+            curr_topic = labelled_test.loc[labelled_test['Topic_label']== topic, "Text"]
             curr_topic_samples = curr_topic.sample(n=num_top_documents, random_state=4263)
 
             if self.custom_print:
@@ -406,7 +406,7 @@ class TopicModel(BaseModel):
                 correct_labels.append(curr_label)
 
             sample_topic_labels = pd.DataFrame({"Sample text": curr_topic_samples, "Prediction": correct_labels})
-            sample_topic_labels.insert(0, 'Topic label', topic)
+            sample_topic_labels.insert(0, 'Topic_label', topic)
             
             sample_labelling = pd.concat([sample_labelling, sample_topic_labels])
 
