@@ -332,7 +332,7 @@ I've tried many of the various coffee sticks out there, but these are the best t
 THE LIDS DO NOT FIT. COFFEE RUNS OUT OF THE POD. A TOTAL WASTE OF MONEY. THERE ARE OTHER FILTERS ON THE MARKET THAT ARE MUCH BETTER.
 
 I love coffee, and this product was a nice mid-afternoon pick me up. It was refreshingly cold on a hot day and gave me that burst of caffeine energy that keeps me going.  I enjoyed the taste very much. I like my hot morning coffee with lots of milk and a bit of sugar, and this was similar to how I make it. People who like their coffee black or with milk/cream and no sugar will probably not like this product.  Overall, I was very pleased with it, though I doubt I'd buy it often at approximately two bucks a can.
-coffee topic testing accuracy: 1.0
+coffee topic testing accuracy: 0.875
 
 --------Allocate next topic------------
 Current topic: tea
@@ -352,10 +352,10 @@ I love this tea! It's so refreshing. I drink it regularly and was able to buy it
 This is pretty good tea.  I use it to make iced tea.  I will usually use two of these tea bags with a few of the cheap plain tea bags in order to make mango tea that doesn't taste like mango juice.  Good stuff at a great price.
 
 I purchased this item because I wanted the tea chest.  The item description is completely inaccurate.  It states that it is a "Wood Grain" tea chest.  The chest is a cheap box that is very poorly covered with a wood grain contact paper.  I say poorly because the faux wood contact paper has ripples and bubbles all over it.  Please don't waste your money or time on this item like I did.
-tea topic testing accuracy: 0.75
+tea topic testing accuracy: 0.875
 
 --------Allocate next topic------------
-Current topic: flavor
+Current topic: flavoring
 
 Not the sweetest chickpeas I've ever had, but close enough. Nice flavor and texture, very fresh, no old beans. Cooked up great. Very pleased.
 
@@ -372,10 +372,10 @@ So happy I got this on a subscription. I might even have to increase the frequen
 This was a very pleasant surprise. I was a bit hesitant when I read through the ingredients. Sure, it sounded healthy, but would it taste good?  In a word, outstanding! Good crunch, flavor and just the right amount of salt. Great to see that there's snack foods available that are a lot better for you than the usual chips and nachos.  The only problem is that everyone likes them, so they disappear quickly!
 
 Like the chocolate, hard to find the other flavor, don't know why but no one carries it.
-flavor topic testing accuracy: 1.0
+flavoring topic testing accuracy: 1.0
 
 --------Allocate next topic------------
-Current topic: baby_meal
+Current topic: baby
 
 It says Habenero peppers on the ingredients, but my guess is they just waved it over the closed bottle. Smells like molasses and soy sauce. Taste like molasses and soy sauce. Absolutely boring.
 
@@ -392,7 +392,7 @@ For a microwavable chili, this stuff, and the firehouse variant, do taste good. 
 I am very pleased with this sherry vinegar.  It is a little costly but has a wonderful,robust taste and really makes a tasty vinegrette.
 
 I love the product.  But, the bottle design is terrible.  In order to get the last 1/3 or so of the body wash out of the bottle in a timely manner you would normally store the bottle upside down.  With the pointy top that is impossible.  So, you must stand in the shower the try to shake the remaining product the length of the bottle to squirt it out.  This takes much more time that you'll want it to take.  Redesign the bottle with a flat top...please.
-baby_meal topic testing accuracy: 0.375
+baby topic testing accuracy: 0.25
 
 --------Allocate next topic------------
 Current topic: healthy food
@@ -472,10 +472,10 @@ I couldn't find any cake flour at the grocery stores close by, so I decided to g
 Pops up great in the microwave (a handful of kernels in a brown paper lunch bag folded up and taped shut for ~3 minutes) with almost no leftover kernels.  I'm a popcorn seasoning junkie, but this popcorn is so fresh and flavorful that a little butter and salt does the job.  It's also been my experience so far that Snappy is a little less prone to getting scorched than grocery store popcorn.  Higher moisture content, maybe?  Either way, it's nice to have fewer unpleasant burnt surprises.
 
 These raw shelled pumpkin seed kernels actually have a slight pumpkin flavor which I assume indicates that they are fresh, unlike the store bought (H-E-B) raw kernels that were pretty bland. They are also extremely nutritious: high in iron, protein and fiber. Actually, pumpkin seed kernels have four times the iron and about 25% more protein than beef per 100 gram. The price produces somewhat of a sticker shock, though, at over seven bucks per pound; however, considering all of the fiber and nutrients, I believe they are well worth the price. Bob's Red Mill has the nutrition facts displayed on his web site. I highly recommend these pumpkin kernels because they taste great and, as you can from the facts below, are at the top of the nutrition chart.  USDA nutrition content, Seeds, pumpkin and squash seed kernels, dried Protein 33.97% Fiber, total dietary 15.79% Folate, food 18.13% Niacin 41.56% Vitamin B-6 10.21% Riboflavin 13.91% Thiamin 27.30% Vitamin C, total ascorbic acid 2.53% Vitamin A, RAE 0.16% Vitamin E (alpha-tocopherol) 18.17% Calcium, Ca 5.75% Iron, Fe 147.00% Phosphorus, P 212.59% Magnesium, Mg 169.14% Copper, Cu 0.19% Selenium, Se 20.89% Zinc, Zn 83.09%
-grocery topic testing accuracy: 0.875
+grocery topic testing accuracy: 0.625
 
 --------Allocate next topic------------
-Current topic: snacks
+Current topic: snack
 
 These are by far and away THE best chocolate chip granola bars..They're nice and chewy, without being too dry or wearing out your jaw like other organic granola bars.  We are never without these as a special treat for us or our kids! However, they're way cheaper at Walmart .. around $2.75 a box and there are generally coupons that can be printed online which brings the price inline with a sale price on Quaker bars, which don't even come close in taste to the Cascadian Farms bars, not to mention the high frutose corn syrups and hydrogenated oils in Quaker bars .. Even with Subscribe and Save these are $3.44 a box, boo for the price!
 
@@ -492,10 +492,10 @@ These bars taste quite good, although I agree with other reviewers that there is
 I do not like protein at all. Not protein bars, not protein in my shakes, I just don't like the taste. These bars taste great. I was hesistant to get them because I was afraid they would taste like the protein I hate. BUT, they are great. I like these better than the cereal bars.
 
 These were really good. I got them free to try and loved them. Very filling and tasty. Me and my husband shared it and we couldn't wait to buy more.
-snacks topic testing accuracy: 0.625
+snack topic testing accuracy: 0.625
 
 --------Allocate next topic------------
-Current topic: drinks
+Current topic: sweet drinks
 
 Love these. They taste so good and are good for you. I love giving my son something that is not full of un-natural sugars!
 
@@ -512,10 +512,10 @@ So many  flavorings like this sound and look great but taste funky, this tastes 
 Although some may like this drink, it will not be a repeat buy for me.  140 calories for an 8+ oz serving is too much when that amount of orange juice is 115.  Actually this drink isn't 100% orange/tangerine juice, but a mix of juices.  Secondly, if this were unaltered juice, seems you wouldn't have to add ascorbic acid to get 100% of your daily Vitamin C since that amount of orange juice naturally provides over 150%. Perhaps the processing requires it. But, alas, the biggest issue for me was taste.  It tasted to me like dishwashing liquid smells.  On the good side, the carbonization is just right and the flavor is bold for those who seek that.  There is no sugar added and the non-traditional taste is not overly sweet.  The taste may appeal to some, but I'm not a fan.
 
 These gummi vitamins taste great - -sweet and sour. Made with arctic cloudberries, which are like yellow raspberries but not as sweet. Suitable for adults as well as kids.
-drinks topic testing accuracy: 0.375
+sweet drinks topic testing accuracy: 0.625
 
 --------Allocate next topic------------
-Current topic: carbohydrates_meal
+Current topic: carbohydrates
 
 I get it from my grocery store for $1.50 a box and 3 boxes will be $4.50. I love the flavor. This is ridiculously over-priced.
 
@@ -532,10 +532,10 @@ This candy can be purchased anywhere fom $2.00 a box to .65 cents a box. I order
 I purchased this item as an alternative to traditional K-cups in an attempt to save money; however, this product did not work well in my machine. I followed the directions and read reviews to see what works best, but was not able to use the K-cups effectively. The cup itself is too weak and warps in my machine. I compared the shape before and after and there is a big difference; this K-cup seems to expand horizontally and vertically because the plastic is not strong enough. Also, the K-cup is shaped differently from the traditional K-cup. This is neccessary because it does not use foil as a topper, but does not seem to work. In the end, I had to clean up several coffee explosions in my kitchen to figure out how it works, but still could not use it effectively. Maybe I am not doing something correctly, but I'm sure there is also an issue with the product itself. While I do like the idea, I would not suggest purchasing this product until the bugs are worked out.
 
 There isn't a whole lot that is special about Stride Gum. I kind of got annoyed chewing it all the time. It doesn't really freshen your breath and you don't get the "clean" feeling of other gums. It doesn't really last that long either so I wasn't too fond of it. Either way if your a fan of Stride go for it.
-carbohydrates_meal topic testing accuracy: 0.25
+carbohydrates topic testing accuracy: 0.25
 
 --------Allocate next topic------------
-Current topic: chocolate_milk_nuts_oil
+Current topic: chocolate_milk_nuts
 
 The Just Tomatoes brand combines nutrition and fresh taste.  The whole family loves these freeze-dried strawberries, but of most important note, my 2 year old loves these (even though she won't eat fresh strawberries).  They are less messy too!  We like to take them on the road when we're traveling so we get some fruit in when it's not convenient to eat fresh.  The other reviews are accurate in their description of texture loss - especially in humid climates.  However, the strawberries are still tasty when they are a little chewy.  In fact, I prefer them that way.  This is one of the few fruits my husband will take in his lunch!
 
@@ -552,7 +552,7 @@ Ugh, this stuff may be good for me but it's not appealing.  I mixed it in my oat
 We tried all different saimins (noodles), the dashi (soup)is most delicious. Didn't know Koreans made saimins too. They are better then Japanese saimins (noodles). Cannot wait till I receive them.
 
 Not much to say. I grew up on this stuff and it is very good.
-chocolate_milk_nuts_oil topic testing accuracy: 0.25
+chocolate_milk_nuts topic testing accuracy: 0.125
 
 --------Allocate next topic------------
 Current topic: cat
@@ -573,4 +573,4 @@ cats - if you are owned by a cat you know how fussy they can be.  My adopted fer
 
 [[ASIN:I purchase these probably 1 year ago.  I was very disappointed with the quality.  I was unable to eat these sardines.  They had scales and hard bones along with a tough texture.  Sorry product.  I'm giving them to the cats.  B000EEWZF0 Crown Prince Natural Skinless & Boneless Sardines in Pure Olive Oil, 3.75-Ounce Cans (Pack of 12)]]
 cat topic testing accuracy: 0.75
--------- Average topic accuracy: 0.5803571428571429 --------
+-------- Average topic accuracy: 0.5625 --------

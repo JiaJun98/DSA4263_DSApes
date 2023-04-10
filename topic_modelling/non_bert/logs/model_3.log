@@ -1,0 +1,575 @@
+---------------------------------
+
+------Preprocessing text data--------
+------ Training model --------
+
+------ Distribution for number of documents in each topic --------
+
+Topic 0: 335
+Topic 1: 141
+Topic 2: 227
+Topic 3: 522
+Topic 4: 95
+Topic 5: 459
+Topic 6: 258
+Topic 7: 134
+Topic 8: 319
+Topic 9: 197
+Topic 10: 525
+Topic 11: 521
+Topic 12: 461
+Topic 13: 161
+------4355 documents trained------
+------ Generating key words and sample documents for each topic ------------
+
+
+Topic 0
+tea, taste, energy, milk, tea tea, hour, pod, thing, time, water, type, night, drink, pepper, plant, powder, chocolate, price, effect, miss
+
+hand, tea, tea, drinker, benefit, water, taste, dirt, wood
+
+biryani, product, food, lover, preparation, time, hour
+
+water, packet, chocolate, mix, miss
+
+daughter, train, vanilla, chai, chai
+
+chance, review, hour, energy, work, rain, work, rain, work, hour, energy, hour, power, ingredient, hour, energy
+
+tea, bergamote, tea
+
+vodka, tonic, wish, case, husband
+
+antioxidant, taste, arabica, world
+
+Topic 1
+seed, service, customer, company, price, customer service, seller, refund, gum, business, time, way, pumpkin, money, package, gift, beef, value, item, star
+
+deal, seed, seed, buy
+
+purchase, banh, trang, spring, roll, batch, spring, roll, container, spot, skin, work, container, skin, ant, skin, point, spring, roll, batch, brand, company, internet, company, webpage, reference, bahn, trang
+
+extract, night, afternoon, plenty, wrap, tissue, paper, note, seller, cocoa, powder, good, food, cream, cooky, sweetbread, cake, chocolate, extract, depth, food, additiona, sugar, future, merchant, customer, service
+
+sturgeon, roe, problem, supplier, caviar, caviar, markys, dollar, oz, dollar, shipping, money, marky, caviar, charleston, seafood, charleston, fact, customer, service
+
+gift, recipient, business, folk
+
+company, item, stock, company
+
+flour, tasting, consistent, bob
+
+plant, fly, fly, bloom, rip, business, vendor
+
+Topic 2
+item, syrup, corn, price, stuff, pancake, sugar, maple, time, ingredient, corn syrup, flavor, tasting, sardine, lot, place, maple syrup, waffle, egg, cream
+
+cone, school, ice, cream
+
+moist, rum, flavor, bit, dessert, experience
+
+maple, syrup, maple, syrup, husband, math, gallon, man, jug, mail
+
+price, case, bag, case
+
+pricy, corn, rice, try, time, money
+
+daughter, review, people, bottle, family, stuff, fan, flavor, syrup, ice, syrup, basic, collection
+
+coffee, connoisseur, stuff, disappointment, class, ton, cream, sweetener
+
+evoo, flavor, stuff
+
+Topic 3
+flavor, drink, juice, calorie, sugar, water, soda, fruit, orange, pasta, noodle, rice, alternative, variety, tea, beverage, size, vitamin, lot, pop
+
+sweet, tooth, thought, water, flavor, brand, flavor
+
+earth, dinner, variety, pack, fruit, variety, pack, fruit, variety, pack, oatmeal, fruit, variety, pack, dinner, pack, item, phone, help, stuff
+
+flavor, hint, water
+
+bag, bbq, store, lunch, subscribe, lunch, fact, flavor, flavor, england, flavor, chip, crisp, flavor, box, flavor, fact, fat, content, issue, husband, son, box, chance
+
+energy, flavor, calorie, beverage, blueberry
+
+can, switch, promise, sugar, corn, syrup, preservative, juice, juice, ingredient, state, juice, water, sufficient, juice, concentrate, apple, grape, tangerine, orange, acerola, juice, concentrate, flavor, color, vitamin, c, soy, tangerine, soda, calorie, thanks, mg, sodium, carbohydrate, sugar, rda, vitamin, c, vitamin, sparkling, juice, drink, money, izze, juice, clementine, 8.4-ounce, can, pack, brand, juice, calorie
+
+household, pasta, father, grocery, store, east, coast, mid, west, selection, pasta, store, subscribe, price, cost, staple, house, pasta, form, texture, pasta, shape
+
+glass, tea, fuss, water, sweetner, enjoy
+
+Topic 4
+smell, time, cheese, stick, almond, curry, price, cake, snack, online, container, yummy, cream, texture, paste, product, tasting, thing, bread, car
+
+lobster, biscuit, ticket, yummy
+
+bagel, cream, cheese, scallion, way, caviar, bank
+
+son, milk, milk, complaint, serve, size, container, cooler, trip, car, airplane, travel, serve, rice, milk
+
+closet, thing, bulk, deal, smell
+
+fantasicakes, cake, fast, moist, chocolate, cake, icing, leisure, lot
+
+appetizer, stuff, guy, goat, cheese, goat, cheese, cheese, basil, cheese, basil, plastic, baggie, corner, bag, squeeze, peppadews, hit, dinner, party, style, point, skinny, dish
+
+honey, flavor, barbeque, tang, spice, smell, section, smell, price, pound, jerky, bang, buck, jerky, selection, favor, jerky
+
+good, good, product, daughter, college, time, bread, zucchini, bread, muffin, carrot, marge, bread, moist, icing, carrot, cake, couple, day, basket, website, carrot, cake, option, bread, thank, product, business, country
+
+Topic 5
+food, dog, treat, cat, chicken, china, ingredient, product, dog food, grain, baby, month, review, diet, pet, vet, time, issue, problem, formula
+
+record, stuff, shepard, food, allergy, royal, canine, venison, ok, dog, food, crazy, stool, coat, yes
+
+time, kelp, noodle, food, company, kelp
+
+case, tomato, couple, month, can, case, can, case
+
+dog, couple, week, beneful, try, time, bite, state, place, house, blame, attention, home, time, week, food, hell, laxative, thats, glad, bag, try, star, sure, weight
+
+internet, word, temptation, vomit, review, problem, hour, treat, cat, vomit, minute, cause, time, cat, time, vomit, bathroom
+
+cat, cat, couple, bite, cat, like, piece
+
+treat, reviewer, state, dog, meal, treat, sense, state, anorexia, symptom, dog, chicken, jerky, treat, china, treat, exclusion, food, fact, dog, treat, dogswell, company, party, tester, owner, company, china, scene, batch, jerky, vet, explanation, dog, anorexia, hip, spring, kidney, function, research, web, dog, failure, link, caution, consumer, chicken, jerky, product, china
+
+dog, subscribe, couple, bichon, frise, newsgroup, dog, china, critter, forest, dogswell, today, china
+
+Topic 6
+candy, bag, honey, kid, cereal, wife, nut, sweet, lot, bag bag, value, price, water, cherry, flavor, size, sugar, tea, money, stevia
+
+tub, jelly, cardboard, box, plastic, bag, bean, twist, tie, labeling, bag, box, label, apple, list, company, information, food, package, food, bag, twist, tie, time, tub, refund, experience
+
+flavor, carob, nutrient, size, bag
+
+cereal, family, restriction, sugar, house
+
+review, brand, candy, sooo, chewy, hardness, jaw, stuff, heard, candy, world, market, mouth, candy, comer
+
+ship, price
+
+bag, chocolate, michael, ton, bag, sale, money, time, bag
+
+lollipop, option, store, brand, child, flavor, size, treat, pound, bag, time
+
+nut, snack, thing, school, work
+
+Topic 7
+cup, keurig, cocoa, machine, brand, price, chocolate, cups, tea, office, oat, time, lime, pack, brewer, purchase, one, square, store, grove
+
+heat, wave, issue, burnt, one, trader, joe
+
+time, forget, k-cups, cat, keurig, price, rip
+
+holder, office, today, bb, b, amozon
+
+machine, size, service, price
+
+cocoa, tasting, cocoa, thing, cup, box, machine, coffee, flavor, cocoa, try, cup, size, need, result, cup, water, stick, coffee
+
+purchase, mushroom, shroomy, word
+
+chocolate, sister, kid, sugar, night, kid, idea, adult, clue, reviewer, stove, pot, time, packet, water, lot, chocolate, note, packet, size, cup, chocolate, enjoy
+
+chip, hotel, office
+
+Topic 8
+sauce, butter, peanut, jar, flavor, daughter, shipping, family, coconut, peanut butter, price, tea, spicy, earth, store, meat, rice, price shipping, baby, product
+
+change, soy, sauce, way, tsao, company
+
+time, lot, butter, cooking, size, stuff
+
+sauce, spicy, flavor, burrito, food, bit, bottle, fluid, ounce, two-thirds, size, soda, sauce, bottle, appearance, capacity, concave, curve, eye, sauce, price, bottle, supermarket, six-pack, flavor, cost
+
+family, flavor, mac, taste, kraft, velveeta, shell, recipe, box, yummy
+
+kraft, spicy, brown, sugar, barbecue, sauce, taste, chicken, breast, flavor, spicy, sugar, kraft, food
+
+pleasure, outerbridge, sherry, pepper, sauce, chowder, delicious, stew, soup, marinade, kick, load, steak, sauce, soy, sauce, flavor, island, house
+
+dog, shipping, day, price
+
+price, pack, package, marshmallow, shipping, homemade, marshmallow, content
+
+Topic 9
+friend, bag, snack, apple, chip, gift, time, reason, thank, pack, crunch, price, salad, vinegar, store, dressing, cider, tea, tuna, lot
+
+family, friend, spinach, cheese, meal
+
+gaint, slim, jims, refrig, reason, snack, run
+
+chip, grease, bag, chip, bag, trans, lot
+
+farm, line, calorie, dressing, sauce, money
+
+sam, snack, son, daughter-in-law
+
+son-in-law, store
+
+chip, snack, crunch, saltiness, time, lot, calorie, protein, time, serving, size, package, portion, control
+
+pack, chip, style, munchos, calorie, flavor, cream, onion, salt, vinegar, cheddar, bbq
+
+Topic 10
+bar, cooky, chocolate, box, snack, protein, breakfast, texture, cookie, bit, milk, health, granola, cereal, benefit, fiber, ingredient, chip, flavor, sugar
+
+easy, hand, fun, milk, box
+
+son, diet, snack, category, bar, cocoa, krispies, box, vitamin, mineral, bar, store, bulk, eater, snack, product, one, cut, envirokidz, koala, crispy, rice, bar, bar, pack
+
+product, calorie, k, bar, cookie, pack, season, share, flavor
+
+bar, fruit, butt, breakfast, bar, breakfast
+
+value, subscribe, save, quinoa, flavor, color, quinoa, newbie, protein, benefit
+
+protein, powder, year, review, gunk, displeasure, mouth, protein, hand, blender, mixing, problem, protein, fun, time, shake, mouth, apple, juice, protein, powder, standpoint, opinion, type, seat, fyi, brand, egg, protein, powder, sensitivity, egg, protein, powder, recommendation
+
+quaker, cookie, cooky, box, yes
+
+treat, calorie, cooky, cooky, size, snack, gingerbread, honey, thing, allergy, alert
+
+Topic 11
+coffee, cup, price, bean, soup, blend, flavor, roast, coffee coffee, vanilla, coffee price, cup coffee, coffee flavor, ground, starbucks, house, aroma, morning, maker, love
+
+stomach, problem, love, coffee, solution, coffee, cup, bag, home, brew
+
+yuban, coffee, area, case, price, case, week, time
+
+tasting, coffee, heartburn, sufferrers
+
+choice, gourmet, roast, darker
+
+aroma, package, minute, coffee, press, drip, brewer, result, body, notch, diner, coffee, price, bean, cafe, food, store
+
+tassimo, cup, coffee
+
+ground, coffee, price, grind, auto-drip, maker, occasion
+
+type, starbucks, coffee, blend, brew, milder, coffee, vanilla, flavor, alternative, change, smell, vanilla, kitchen, bean, ingredient, bag, coffee, star
+
+Topic 12
+salt, chip, mix, oil, store, grocery, bottle, grocery store, way, flavor, salty, potato, recipe, water, cake, deal, store price, packet, sea, popcorn
+
+stuff, egg, dish, scent, salt
+
+nori, bargain, sheet, nori, grocery, store, sheet, sheet, time, week
+
+recipe, walnut, oil, bottle, grocery, store, ounce, walnut, oil, price, internet, reluctant, can, place, evoo, vinaigrette, oil, raspberry, vinegar, b, s, season, krazy, salt, spring, mix, salad, lot, oil, touch, walnut, flavor, course, walnut, pack
+
+chip, lip, mouth, market
+
+repeat, customer, time, salt, crystal, grinder, flavor, minerality, color, pink, finishing, salt, conversation, piece, table, grinder, seller, coupon, purchase, package, bonus
+
+stuff, bottle
+
+obsession, kofta, review, flavor, dinner, potato, pouch, time, packet, way, thing, restaurant, mile
+
+idea, cake, midrowave
+
+Topic 13
+cracker, son, licorice, box, home, brand, store, graham, fat, choice, flavor, graham cracker, snack, pie, way, thing, water, crust, milk, flavour
+
+rj, licorice, log, today, licorice
+
+son, snack, lunch, car, ride, grocery, store, section, subscribe
+
+snack, cracker, price
+
+england, chip, flavour, shame
+
+cracker, offer, patient, crunchy, treat, ton, money, box, pricey, cracker, flavor, favorite
+
+condenser, microphone, dynamic, hum, signal, window, build
+
+case, soup, son, deal, food
+
+flavour, rice, cracker, hummus
+-------- End of training for 14 topics ----------
+-------- Exporting labelled topics ----------
+-------- End of predicting for 14 topics ----------
+-------Evaluating training sample accuracy-------
+
+--------Allocate next topic------------
+Current topic: breakfast drinks
+
+This is the first time I've really been misled by other reviews on amazon. I like 5-hr Energy, I find Rain ok and so I thought I'd try this product based on the reviews. Boy am I sorry! I gagged getting one bottle down even with my nose pinched (really). And it leaves the worst medicinal taste in your mouth afterwards. 8 tic tacs at once did not get rid of it! But worst of all, within an hour I was yawning and drowsy. Unless you really like things that taste of a weird tea-flavored cough syrup and don't work, don't buy this! I don't know what to do with the other 11 bottles. big fail
+
+I do not drink much caffeine, so I need my spearmint leaves to be pure and not cut with other teas. This brand delivers. My first order was for 3 1# packages and I have just completed an order for 4 more. For those of you that want a good refreshing spearmint tea, I encourage you to give this brand a try.
+
+I am already a fan/buyer of Lipton's herbal tea, having tried the  Island Mango & Peach ,  the Mandarin Orange  and  Blueberry Pomegranate .  I like the fact that the ingredients are natural - hibiscus flowers, rosehips, blackberry, blueberry, raspberry. It's definitely 'herbal' tea - there are no actual tea leaves in the ingredients (which is why it's caffeine free).  I also like that Lipton uses the least amount of material needed to make the tea bags, and they aren't wrapped individually. (The teas that do so annoy me, as wrapped bags are a time waster and a resources waster - there's no need to wrap each one!)  I especially like the taste of the tea - it has a very nice flavor.  Note: I use 9 bags at a time to make a full pitcher of iced tea.
+
+I use this powder to make the Jamba Juice equivalent of the Matcha Green Tea Blast. It does a great job in reproducing the taste. I'd recommend this supplier!
+
+I love this tea. It's delicious and is one of my favorite teas. I like its aroma and taste. I drink it both after and between meals. Highly recommended.
+
+I received my order in time.  The walnuts are very good, fresh, and delicious.  There was a slight issue with the package.  It's a plastic bag.  There were a couple of small cuts on the bag.  Since the package was left on my front porch for a few hours, some ants got into the box.  Fortunately there wasn't enough time for them to really get into the plastic bag.  Overall I'm satisfied with this purchase.
+
+But as far as it helping me produce more milk - not sure it helped much.  Tastes good though.
+
+This tea is amazing, I cannot believe the price. The price I paid is less than half of what other companies charge and this tea is delicious!  I love it.  FAST delivery too.  Great job!
+breakfast drinks topic testing accuracy: 0.625
+
+--------Allocate next topic------------
+Current topic: service
+
+I bought Himalayan Organic Salt twice. Each time, quality was really good and service was fast and courteous (The Spice Lab's). I will buy it again.
+
+Like the previous reviewer, I have found the price when using Subscribe and Save to be better than any that I can find anywhere else. These are quality pumpkin seeds. Hopefully they will be good for my prostate. Excellent in cereal or in a smoothie. Recommended.
+
+What can I say....It's ground flax seed.  The five stars are for the price.  I used to buy the stuff at Walmart who sold it in their baking goods section in a box at a very reasonable price.  The last time I looked for it the sales lady says "Oh, we moved it to pharmacy section."  They sure did move it, along with repackaging and bumping the price about 4 times as much.  Amazon has a great price but the only drawback is that a 6 pack of 40oz jars is a lot of flax seed.
+
+Very pleased with the quality of this product. A beginner at cake decorating this was very easy to work with and the flavor was great as expressed by all that tasted it. Will be ordering more product from this company.
+
+I have tried a few other wheat grass powders and had a hard time drinking them. This was very mild. I can drink it just mixed with water. My 2 year old and 4 year old liked it and wanted more. I love all of the Amazing Grass products. They all taste great and are a great company to order from.
+
+I've just gone through my first box of this beef jerky, and it tastes really good.  My whole family likes it.  It's spicy, but not unbearable.  The sweetness tend to balance out the spiciness.  The only problem I had with my first order was that one of the bags was moldy.  Must be faulty packaging.
+
+i get these all the time and this seller has a good price, best on the web so far. and just the rite size too, not too big and there hard all the way through. iv had some the crumbled about 2/3 through.
+
+This is a good product for sugar free gum. Not long after purchasing and using this gum, I found Spry gum in the same packaging with the same ingredients for less at the Vitamin Shoppe.
+service topic testing accuracy: 0.875
+
+--------Allocate next topic------------
+Current topic: dessert
+
+I really enjoyed this. I bought it when it was on sale for $14 for two boxes!!! I don't drink, but I think this would make an excellent cocktail with rum, vodka or whiskey. I will say, though, it's very rich, I usually only drink a couple gulps. I'd like to try it with different syrups, like maybe raspberry syrup or put ice cream in it.
+
+Very tasty and filling if you are watching your diet.  It has a lot of flavor and satisfies that craving for chocolate....
+
+This is the best tasting pancake mix in the market and it is so easy to make.
+
+I recieved the delivery quicker than I thought I would. I was concerned with how the food item would be packaged. The Gyro slices were still frozen when I recieved them. The gyro slices were delicious, they taste better than most of the restaurants I frequent.
+
+I have this on autoship.  Maple syrup is sooo expensive in the grocery store and you only get a small bottle.  I have a family of 5!  I love the autoship and you can't beat the price! Tastes great too!
+
+They have some textured powder stuff on them that makes them taste bad.. bad after taste. I guess it's so they don't stick together. Never again
+
+I purchased two of these and they arrived with the package split and the items all over the box. I contacted Amazon and they sent two more out, these also arrived with the packages open. Amazon was very courteous and professional as always, I cannot review the item itself because the packaging is so horrible that I have given up on trying again.
+
+I have looked locally and cannot locate sardines packed in tomato, let alone the nice small sardines.  These are absolutely delicious and I am very happy I selected the autoship option.
+dessert topic testing accuracy: 0.5
+
+--------Allocate next topic------------
+Current topic: flavoured drinks_carbohydrates
+
+Ultra light weight and real live fruit, a great combination. The fruit is freeze dried, for those of you that remember space ice cream, it is the same idea. The fruit is sliced and placed in a machine that freezes the fruit and then a vacuum pulls off the water. The process retains a lot of the original flavor and preserves the fruit for almost eternity (well about two years expiration date on the pouches) without using any chemicals.  The taste is really nice. These are all crisp fruit pieces, not the gummy fruit leather food. Banana / Strawberry is probably the tastiest and most fragile. The strawberry flavor is strong and the bananas are subtle without picking up the strawberry flavor. Apples come in a nice second. The pieces are thick and about two inches in diameter. The pears are good, maybe a touch tart and have the same texture as the apples.  The fruit is completely dry and absorbs water in your mouth very quickly. If you eat it too fast, the strawberries coat your teeth a little bit. The others are very clean to eat.  I like these packages in my carryon bag for plane trips. They make a great emergency snack, take up little space, and weigh nothing. Number two son packs these in his lunch almost every day now. He likes the strawberry banana the best. I really like all three flavors.  The pouches list that they are a product of China. I list that as information so you can be aware of where this fruit comes from, and make no value judgment for you. The manufacturing process has been around for a very long time. It is a very safe process, and as long as the fruit going in is good, the food should be good. So far every pouch has been consistently good.  I like these a lot. They make a great snack.
+
+Material is very thin and the shirt had several spots where the color was faded. The only thing that it had going for it was the fact that it was cheap, but I guess sometimes you get what you pay for.
+
+Idk what everyone is freaking out about. It tastes like slightly salty smart water. The color is a little unnerving at first, looks like rust water. A  friend of (nutrition major) likes the idea of it so I can't be that bad...maybe
+
+This Healthy Request version of Chunky Chicken Noodle is delicious. It tastes the same as the regular version, which isn't true of all of the varities of Healthy Request soup.   Before I start to warm the soup. I add a package of Ramen noodles, without the flavoring packet. The Ramen noodles absorb the chicken flavor of the liquid for a great taste. And makes for an inexpensive, and filling, complete meal that is quick and easy to prepare. With much less salt than the regular version.
+
+These cereal bars are fantastic. All of their verities have great fruit flavors and not to mention NO added sugar (fruit juice sweetened and plenty sweet enough). Perfect for a mid-morning snack or otherwise.
+
+I am a fan of Healthy Choice products and this one is good too. I've generally used their frozen food options but liked the idea of a shelf storable healthy option for lunch.  This pack contains everything needed for a quick and healthy pasta lunch.  The directions are clear and easy to follow.  The straining device that drains excess water after microwaving the pasta works well and the pasta sauce packet contains a sufficient amount of sauce for the pasta.  This mixer takes a little more time and effort that a frozen option due to having the microwave the pasta, drain it and add the sauce.  However, the trade off of more time for preparation is outweighed by having an option that can be stored on a shelf or in a desk drawer.  A nice option for work or on the go!
+
+I have been trying to give up soda and I found that the Sparkling Ice Spring Water is a great Substitute. Love the taste!!!! Bob
+
+Has a smooth taste like it claims without any unpleasant metallic flavor. Hydrates well although I think it is rather expensive and I personally didn't notice it hydrating any better than Arrowhead water which is what I normally drink. If, however, you have already discovered that high ph water helps you more than other types this water tastes good and would be a good choice.
+flavoured drinks_carbohydrates topic testing accuracy: 0.625
+
+--------Allocate next topic------------
+Current topic: snacks_dairy
+
+This cake was super easy to make. It tasted great and had an absolutly awesome texture. The "mouth feel" of the cake is nothing like most microwaved treats. Even people who regularly eat wheat would be very surprised this is a wheat free and microwave product give the taste and texture.   The texture is very soft and light and not at all grainy. The cake tastes like a cinnamon donut in terms of degree of sweetness and the cinnnamon flavor is very authentic and high quality tasting. The cake delivers a completely authentic cake experience but you should know it is not supper pretty to look at and does not come with any topping as might be suggested by the label art. If you are giving it as a special treat to someone, as a birthday cake for instance, you might want to spread some gluten free icing or whipped cream cheese on it to improve the aesthetic effect.  This would be a great purchase to keep in the pantry as an "emergency treat" or to keep at work as a courtesy maybe if you are doing a birthday and it turns out someone is on a gluten free diet. Really what this kit is perfect for is when you are at a motel with a microwave, to send with a child going on a sleepover at someone else's house, or to leave with grandparents as an easy treat to give gluten free grandchildren.
+
+Our family loves these tasty and healthy sesame honey almonds by Trader Joe's.  You get the crunchy flavor of the sesame seeds combined with the subtle sweetness of the honey and almond flavoring.  Wow--it's a great snack that you feel good while eating.  It is my favorite of Trader Joe's almond snacks.  Almonds are good for you and a handful of these in the morning with a fruit smoothie or as a snack at lunch is a great way to get protein, the healthy fat and the Vitamin E that almonds offer. It's a good idea to measure out 1/4-1/2 cup of these almonds or count the almonds out to stay in the calorie range you want to keep within. Nutritionist recommend having a small amount of almonds or walnuts each day for good fat and protein.
+
+Warning: this is a STRONG flavor.  I thought that this would be Blue Mountain-y... oh no. It is like... rum flavored or something. Yuk.
+
+I bought this product from vitacost.  I really enjoyed the fresh healthy flavor.  I decided to purchse from Amazon because it's in bulk thereore cheaper.  It'sso worht it. I've tried a lot.  This mix really impressed me.  No chocolate to melt in the car.
+
+First time we have used Chebe produce.  We loved it.  Has great taste and easy to make.  Will buy again.
+
+...so you know I am serious. I would give it a 0, were it an option. I love Amazon - they have never let me down, so I am hoping they come through for me when I file a claim with them.  The product was rock hard, so I followed the enclosed instructions and heated it even less than the recommended time in the microwave. It kneaded easily enough and smelled/ tasted good. When it came to rolling, I could tell immediately that this was going to be a challenge. Sure enough, it tore all over the place. Redo. I used cornstarch, the way I was taught, and it still stuck to every surface as if it were too warm or wet, yet cracked as if it were too dry. Nothing made it cooperate, so I lowered my standards and draped it anyway. Durring the two-foot trip from the rolling surface to the cake, it ripped in several places and the application to the cake ended in absolute disaster. No, I did not roll it too thin. Yes, I used cornstarch (even though the packaging specifically claims it is unnecessary.) It sucks. The end.
+
+I've tried many of the various coffee sticks out there, but these are the best tasting. Not that strong, but not like water either. Perfect for me. To me it tastes like the coffee you get at the TGIF restaurants, so that's why I like it. Easy and tasty! Just how I like my women.
+
+These have a great taste and are very crispy. Just cheese so they are good if you are trying to go low carb or are gluten free. The only problem I had was they are expensive.
+snacks_dairy topic testing accuracy: 0.5
+
+--------Allocate next topic------------
+Current topic: dog_cat
+
+My cat was extremely ill and I had to give him 7 pills a day. He's a big kitty--about 20 lbs--and was really fighting me, or taking the pill and then spitting it out. I came across these while searching for something else and decided to try them. Wow! What a difference. As soon as he heard me open the bag he came running to get his "treat." This has got to be one of the best ideas I've ever seen. I highly recommend these.
+
+I had been buying my 2 year old Bichon Frise these Happy Hips Duck Treats for  months until recently when I purchased a large bag that, upon opening it, reeked of some sort of chemical substance which smelled very much like chlorine or bleach. The smell was overwhleming and disgusting. Not knowing what was wrong with it, just out of curiosity I looked on the back of the bag to read the contents and sure enough....at the bottom of the bag were those dreaded words, "Made in China".  Up until this time I had assumed their treats were made in the USA, and some of them are. But after looking through all their products it seems that their duck and chicken breast treats come from China.  Do NOT trust this product!!!
+
+This Organic Baby food is very tasty but has a very thin consistency..my son has to drink it. It is also very sweet. Nice as a desert but not for a meal for my 10 month old.
+
+I've tried a number of high-quality canned cat foods to supplement the dry food my cats always have available to them, and these appear to be the best as judged by me and the cats.  For one thing, these actually look like fish.  You open the can, and there are large pieces of actual fish in the can, instead of the weird, mystery paste.  It pretty much smells like you've opened a can of real fish, too (not in a bad way, though I don't share my cats' love of sardines.)  One of my two cats is a picky eater when it comes to canned food.  I picked up a can of each of the varieties from the local pet store when I wanted to try switching to Tiki Cat, and learned that the picky one will only eat the varieties that include sardines.  There are a few different sardine varieties, so at least it forces her to have some variety in her diet in case they stop producing one of them.  The picky one has always been very excited about getting her daily quota of canned food, but the other cat seems way more excited about dinner time since we switched to Tiki Cat, so I take that as her endorsement of this positive review.
+
+This product is really good. My baby loves it every time!!! He can eat it by itself as breakfast, lunch or dinner! I also sometimes mix it with my homemade food when I need to improve its texture or flavor (too spicy, too lumpy e.t.c). Great healthy option no matter how you want to offer it to your baby or toddler.
+
+I have two small dogs that both require medicating 3 times a day.  This product is a life saver.  They stand at the counter and bark to remind me when it is time for their medicine.  The pill pockets are pricey, but at Amazon you can save a bundle compared to buying them at the vet's office.  If you opt for standard shipping, plan on a good week's time for your order to arrive.
+
+I bought this product last week for our dogs, within a day both were vomiting and refusing food. Our larger dog is doing ok since we stopped feeding them but our little guy is not. Taking both to the vet tomorrow along with these treats.
+
+My labrador LOVES all the treats from Dogswell ! However, all of the Dogswell Jerky treats I have come across are Made In China. As a dog lover, I cannot knowingly give my dog a product from China. It does say "cage-free", but really? I'm not sure. BUT DOGSWELL Jerky Bars are Made in the USA & my dog loves this just as much! So bad news on the regular jerky, but upside: Dogswell has some USA products too!
+dog_cat topic testing accuracy: 0.625
+
+--------Allocate next topic------------
+Current topic: family_sweet snacks
+
+I used these tablets during a demonstration for a talk I gave about taste to a group of student chefs.  Needless to say they were amazed and pleased with the effects.  The tablets were easy to distribute and very effective in turning lemons into candy!  thanks!
+
+This is a great tasting product. It doesn't have any sugar. It flows just like honey!
+
+These go great for movie watching with the kids at home. The amount of the candies sold here will last for many movie nights!
+
+My kids loves Chips Ahoy! and I will have them once in a while as well.  But the kids refuse to eat them from this Family Size package.  Once I tasted them, I knew why.  They have an awful medicinal taste.  Really bad.  I don't what the problem is, but if you like Chips Ahoy, you will not like these.  Go elsewhere.
+
+My kids love this white cheddar snack, but it isn't always easy to find in our shopping area. This wasn't cheap, but we are happy that we can order Pirate Booty through Amazon. The 1 oz. bags are the perfect size for their school lunches. The taste is cheesy and light...love 'em.
+
+I was at Wal Mart today and compared pricing.  $1.83 a box for 12.2 oz.  It was around $2.80 at Wal-Mart for 18 oz in their store brand.  So the real deal is slightly cheaper and shows right up at the door.  Can't beat it.  I wish the prices were as good on other cereal on Amazon.  As a bonus, these boxes came with a Spider-Man movie ticket promotion.  So I ordered more to get free tickets for my family via the promotion.  Consider that, the cereal was almost free.
+
+These little nut squares are delicious!  There is just enough sweetness to make you feel like you have had a real treat but not so much that you get a sugar high with a crash.  Nuts have protein so these snacks stay with you and give you a needed boost in the middle of the day or anytime.
+
+Purchased the 0.8oz bag (Seemed the same size as the other bags when purchased), but didn't realize it was 0.8 ounces as compared to other bags.  Just be aware - might be perfect for some, but not for us.  Having a bag with 10 potato chips in it doesn't cut it for me.  Might be perfect for kids - but just a heads up.
+family_sweet snacks topic testing accuracy: 0.875
+
+--------Allocate next topic------------
+Current topic: coffee
+
+When I weigh the convenience of a K cup against the price and the taste, I would characterize these as a winner. Not the best cup of cocoa on the planet but compared to making it yourself or using a packet, these are pretty darn good. They nice a nice chocolate flavor with no funny after taste that I've had with some other brands. Do not select 10 oz on your machine though. Make it only at 6 or 8 oz otherwise it will be watery in my opinion. All in all a fine cup of hot chocolate.
+
+I'm new to Green Tea, but I wanted to give these a shot after I got my Senseo machine.  I was pleasently surprised with the taste.  It is very smooth, with a light taste of lemon.  These aren't made for the Senseo machine, but they work just as well.
+
+This was a great price as opposed to the Wal-Mart price for the same brand. My kids love to eat these as an after school snack and this price allows me to provide them with this.  Olivia
+
+Having liked the various types of Ghirardelli chocolate and premium hot cocoa's I decided to try some Ghirardelli Chocolate Premium Hot Cocoa Mix, Chocolate Mocha. After trying several cups of this I started to wonder what happened to the Ghirardelli Chocolate as myself I thought it was overpowered with the coffee taste. Not my cup of hot cocoa!!
+
+This product has bad reviews because it is quite horrible. Unlike most of the Keurig K-cups, this one tastes very artifical. It is extremely bitter and not sweet. It seems like it has excess cocoa and artificial sweetner, yet all watered down.
+
+We have been using this product for over a year now and that should speak volumes because we are a popcorn loving bunch!  The convenience of having everything measured and ready to go at a minute's notice is great.  I have a popcorn machine in the media room and so we love to munch popcorn while watching movies.....we feel we are at a theater eating the "real deal".  I will continue to purchase even though it isn't the most figure friendly popcorn....taste outweighs the waist....tee-he.
+
+Yummy, great tasting and very convenient.  Only drawback is you must clean your machine at least once a week to keep it from clogging, just like with hot chocolate.
+
+Well you get what you paid for. While this milk chocolate k-cup is pretty cheap $12.95 per 24 (54 cents per count) but it is not good. It tasted like watered down chocolate (as if you put in too much water and not enough milk or chocolate/cacao for that matter). This thing is sweet tho, in fact kinda too sweet for my taste (i am beginning to think half of the powdery content is sugar/sweetener). I thought it was the amount of water that made it taste watered down so I lowered the cup size from 8 ounce to 6 ounce on my Keurig brewer and it's the same thing.
+coffee topic testing accuracy: 0.125
+
+--------Allocate next topic------------
+Current topic: sauce_condiments
+
+The peanut butter was very fresh tasting.  The peanut chunks just as advertised were big.  The price was great.  The shipping was fast.  Lot easier to order on line than go to the store.
+
+I was pleased to find these on Amazon. A good, healthy, portable snack for my daughter who is starting finger foods, & way cheaper than Gerber's mini veggies. My 10 month old daughter doesn't have any teeth yet, and she has no problems eating them. They're light, fluffy, and full of flavor. A good sweet snack without all kinds of added sugar!
+
+Shame on you! These are great mixers and the 5-packs are on sale at Target for just under 8 bucks each!
+
+This isn't as hot as some of the hot sauces I have tried. However, this one has the best taste for the scovel units. So this is the best bang for the heat and flavor combined. You will not find anything hotter with this kind of flavor. Great stuff.
+
+I have bought a few of these along the years just from local stores and the flavor has been hit or miss. But these are great. Hold flavor and gives the right amount of heat to your food. I will buy this product again once I run out. Be sure to keep in fridge or freezer to keep oils fresh.
+
+Sliced cucumbers and a packet of Justin's Nut Butter Natural Maple Almond Butter makes a perfect healthy on-the-go snack. I love it and more importantly, my kids love it.
+
+This is a must have!  Spices are just right.  A little on the spicy side, but not too hot for people that doesn't eat hot spicy foods.  Captures the taste of New Orleans!!  I add smoked sausage slices and it everyone loves it!
+
+This is a fantastic soy based product that's not too sweet, is very smoothe, and wonderfully chocolaty. i highly recommend this.
+sauce_condiments topic testing accuracy: 0.75
+
+--------Allocate next topic------------
+Current topic: snack_chips
+
+This is the best salad dressing I've ever had. It really does taste like bruschetta, and since it's oil-based instead of cream, it's way healthier. Five stars!
+
+These snacks are SO fresh and tasty, I have never had any snacks that are fresher than these.  After trying the first bag of Mareblue snacks, they became our favorites for everyone in the family.  They are not very sweet, but just right for our taste.  Thank Goodness for Mareblue!  Now we have a great snack that is healthy and tasty.
+
+I got this for a gift for my father and he loved them.  I will probably get them again but only as a gift due to the cost of sausages.
+
+This new "Packaging" is more expensive than the last plus it's smaller - 23.2 oz vs. the 25 in the old packaging.  Granted it's nice not having to fish around for the scooper, but there's no reason to increase pricing on this.  Target had the 25 oz for $19.99 at one point (maybe try to clear old packaging for new) - now it's at $21.05 still cheaper than what I've seen online - even for amazon- so far...
+
+I split this bag up into a bunch of sandwich bags and bring them to work with me, they are great little snacks!
+
+I just got these in the mail today and can't stop eating them. No fat, no added sugar, just pure crunchy apple slices. They are wonderful!
+
+This is a great tasting healthy drink, but for some reason mine didnt come with straws?
+
+We sent this basket to my mother in law for Mother's Day and she loved it.  I was worried because she will definitely let us know if she doesn't like something and she really raved about this.  I didn't see the basket in person, but she said the items in it were all very nice.  She was most excited about a package of soap petals that was included.  She said they looked just like dried flowers, but you use one petal at a time as soap.  She'll be using those in her guest bathroom.  The food items were all really good quality and there was a really nice picture frame in the box too.  She also raved about the box itself and plans on using it on it's own.  This is the 3rd Art of Appreciation gift basket I've sent as gifts and I always get good responses, so I'd feel confident about sending this as a gift.
+snack_chips topic testing accuracy: 0.375
+
+--------Allocate next topic------------
+Current topic: calories_protein_snack_bar
+
+This huge bag of chocolates contained old (white and cracked) chocolates that were completely melted all over the inside of the bag!  Noone at work would even touch them since they looked so sad and gross... what a waste and disappointment!  Will be wary to ever purchase from this seller again
+
+Like the chocolate, hard to find the other flavor, don't know why but no one carries it.
+
+In my trip through the health area of my local food market I stumbled upon Enjoy Life Boom Choco Boom Dark Chocolate Bar. I just can't resist trying things such as this. Into the cart it went. It's rather good. It says it's dairy, nut and soy free, and I'll take their word. The question is taste. Well, it's a good tasting bar. I have a couple others that I would regard higher. but this one is quite good. It's a bit high in calories (170 per bar) but has no cholesterol or sodium. Not bad. I'll pick it up again.  Gary Peterson
+
+Not worth buying, tastes like alcohol, no chocolate taste at all. Smells faintly of chocolate but not worth using. I wanted to increase the chocolate flavor of my protein shakes without adding carbs. This purchase was useless.
+
+I could not find these in a store so I ordered them through Amazon.  If you want a healthy snack with just enough chocolate to kill the craving this is it.
+
+If you are ordering cookies, beware, the 'cookies' arrived in crumbles, so, if you want a box of stale crumbs order away :)
+
+After trying a number of other chocolate chip cookie mixes, my husband and I were beginning to wonder if any gluten, wheat and dairy free cookies could taste better than sawdust. Pamela's Chocolate Chunk Cookie Mix was a revelation! Tastes as good as regular chocolate chip cookies,,,,delicious!
+
+When we lived in Louisville, we had a Fresh Market close to us. We used to buy Crispy Green dried fruit there. We now live in a state that doesn't have any Fresh Markets anywhere, and haven't been able to find this product in any other store. So, we always order these off of  Amazon. They're very good for toddlers learning how to chew table food. Also a healthy snack for everyone, and those with an allergy to sulfur (such as myself) which is found in other dried fruit, this is a good option.
+calories_protein_snack_bar topic testing accuracy: 0.875
+
+--------Allocate next topic------------
+Current topic: coffee_drinks
+
+I personally don't like strong coffee.  If you like weaker coffee, then this blend is a great choice for you.  Other reviews on here say that its too weak, which is probably true if your used to something strong.  I also use flavored creamer to further enhance the taste. For the price, it can't hurt to give it a try.
+
+Guess for all those desparate Germans living in the states - get it in Germany @ less than one $
+
+The soup is very tasty. I add flavor with dried parsley flakes, celery seed and lots of pepper. This is the second time I've received a shipment of Campbells's Healthy Choice Chicken Noodle soup. I am reluctant to order it again since almost every can was dented in the last batch. That said, I wish Amazon carried the Homestyle chicken noodle soup. I like that better as the noodles are smaller and firmer.
+
+I always like Starbucks VIA Ready Brew Coffee. This is the lowest price I got. I might continue purchasing this product from Amozon.com.
+
+To be fair, I have not tried this in my drip coffee maker, only the Bialetti Moka Express 6-Cup Stovetop Percolator.  The flavor is strong but smooth.  It's not as bitter/acidic as Starbucks (and I like Starbucks alot).  Definitely recommend for the Bialetti.  P.S. The tins are nice too. Great for re-use around the house.
+
+My spouse and I are both using this product and enjoy the slight taste of chocolate it gives the morning coffee.
+
+like all other diet powdered chocolate, it doesn't dissolve well, even in the hottest water.  You have to smash some of it against the side of the cup to get it to dissolve.  I use it in my coffee... mmmmmmmmm yum
+
+Torani Syrup, Sugar-Free Vanilla, 25.4-Ounce Bottles (Pack of 3) Best price anywhere. I use for coffee, cereal and yogurt. Very good!
+coffee_drinks topic testing accuracy: 0.75
+
+--------Allocate next topic------------
+Current topic: grocery
+
+Since I have to watch my sodium I have looked for a very low sodium soup for quite awhile.  Campbell's made one but no longer does.  If you had tried theirs this one is far tastier and better.
+
+The price was great as we saved quite a bit of money compared to retail outlets.  The delivery was prompt and we were lucky to get it under a free shipping promotion.  The product itself is one of the best scone mixes that we have tried.
+
+This Orzo is absolutely great.  This is the first time I have eaten it and it blends beautifully with vegetables.  I love salads and this is the way I used the Orzo.  ORZO SALAD  1/2 CUP ORZO RED AND GREEN PEPPER- amount you want ONION- amount you want CELERY-amount you want YELLOW SQUASH-amount you want BLACK BEANS- DRAINED AND WASHED WHITE SHOEPEG CORN- DRAINED AND WASHED 5 TLBS. RED WINE VINEGAR 3 TLBS. OF OLIVE OIL 1 PACKET OF SPLENDA SALT AND PEPPER TO TASTE  BRING ENOUGH WATER TO BOIL THAT WILL COVER THE ORZO ABOUT 1 AND 1/2 INCH OVER THE TOP.  ADD THE ORZO TO THE BOILING WATER AND SALT TO TASTE.  BOIL FOR 8 TO 10 MINUTES-DO NOT OVERCOOK.  CHOP THE VEGGIES AND ADD THE CORN AND BLACK BEANS.  DRAIN THE ORZO, RUN COLD WATER OVER THE PASTA AND ADD TO THE VEGGIES.  MIX THE VINEGAR, OLIVE OIL AND ONE PACKET OF SPLENDA TOGETHER- SALT AND PEPPER TO TASTE- DRIZZLE OVER THE VEGGIES AND ORZO-MIX WELL.  WILL KEEP WELL 5 TO 6 DAYS IN THE REF.  TIP:  YOU CAN SUBSITUTE ANY VEGETABLE YOU PREFER AS PEAS, CAULIFLOWER, BROCCOLI, CARROT, ETC.
+
+Excellent choice for a high fiber cracker.  These taste great and like other Back to Nature items, don't have all the undesirable ingredients you'd like to avoid if necessary. Whole wheat, safflower oil, salt and Vitamin E -- perfect.
+
+one of the best chips that you can buy...and i've tried all the kettle varieties, and many others.  There's only a slight taste of jalapeno, and they are delicious. Perfect with a sandwich or alone. If you like being addicted, these are the chip for you. ...See you at addicts anonymous...
+
+I made pumpkin bread for the first time a few weeks ago with some fresh pumpkin.  My husband needs to eat gluten-free, so we tried this baking mix instead of wheat flour.  It was DELICIOUS.  We all thought it was so wonderful that we bought 10 more pumpkins just so we can make more!  The only thing that I don't like is that it has a small amount of corn starch (in the baking powder) and my son is on a corn-free diet.
+
+I like Bob's Red Mill products and this four pack is a good price, at least where I live. The potato starch works well in gluten free recipes.
+
+I wish these came in larger quantities, if I could have a cuppa everyday I would. So refreshing and tasty!
+grocery topic testing accuracy: 0.875
+
+--------Allocate next topic------------
+Current topic: crackers_snacks
+
+I purchased this to send to my son who's away at college. It was delivered right to his dorm room with very fast shipping. He loved it so much he called me to thank me, and sadly, he hardly ever calls me anymore! If you want your kids to call home, and have some good snack to get them through midterms then send them this.
+
+It cooks in microwave so fast, and it's really good right after you cook, but unfortunately it has MSG in it. Nonetheless, the fat and sodium content on this is not too bad when compared to regular pork rinds. I uploaded a photo of the nutrition facts so you can see the ingredients too.
+
+I heated these up in the microwave, and they do not microwave evenly. some will be burnt and hard as a rock when others will be just right. since you dont get very many in one bag, and since about 1/3 dont cook right, you barely get any pork rinds and throw the rest away. Maybe I am not cooking them right, but i followed the directions...
+
+I ordered this because I really like this brand and I have never had any issue with them.  My son usually like all the flavors.  I ordered this and the pears were sour/spoiled.  The other flavors my son refused to eat. I am sure there was something wrong with it.  So I am not sure what happened but I will NOT be buying these online anymore.
+
+I lived in Europe when I was and would purchase these from street-side kiosks. These are good however I "age" them to greatness by leaving the cover off for about a week. This gives the belts just the right amount of staleness and brings back the nostalgia of youth.
+
+The chocolate PB2 is just as amazing as the regular PB2 - plus a healthy indulgence. I love to use it as a dip for animal crackers! Also great on apple wedges.
+
+These vegetable flavored crackers are a pleasant surprise for those of us who are gluten sensitive.  They have an almost pizza-like fragrance and taste very nice indeed. As a veteran of sampling rice crackers, cakes, etc., as well as crackers of other grains, I must say this Glutino texture is much preferable to the hard crackle rice flour gives to crackers and, too, the flavor is quite good. I have subscribed to have them delivered as a result.
+
+I bought this one until I saw one exactly like it at a big box store (think red bullseye) for 24.99. This is going back!
+crackers_snacks topic testing accuracy: 0.25
+-------- Average topic accuracy: 0.6160714285714286 --------

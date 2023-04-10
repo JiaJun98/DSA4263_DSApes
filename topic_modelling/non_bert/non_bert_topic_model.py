@@ -126,7 +126,7 @@ class TopicModel(BaseModel):
 
             custom_print("------{} documents trained------".format(str(num_of_doc_per_topic.sum())), logger = logger)
 
-        topic_key_words = self.display_topics(training.components_, vectorizer[0].get_feature_names_out(), num_top_words, train_output_path, training_model)
+        topic_key_words = self.display_topics(training.components_, vectorizer[0].get_feature_names_out(), num_top_words, train_output_path, training_model, vectorizer)
         
         labelled_train_topics = pd.DataFrame({"Text": self.train_dataset.text, "Tokens": self.training_tokens, "Topic no": doc_topic_labels})
 
@@ -271,7 +271,7 @@ class TopicModel(BaseModel):
             elif self.feature_engineer == "tfidf":
                 self.test_dataset.create_tfidf(root_word_option, remove_stop_words, lower_case, word_form, ngrams, max_doc, min_doc)       
 
-    def display_topics(self, trained_topics, feature_names, num_top_words, train_output_path, training_model):
+    def display_topics(self, trained_topics, feature_names, num_top_words, train_output_path, training_model, vectorizer):
         """
         Output the top key words / phrases for text to be allocated to each topics
         If training_model == "LDA", a visualisation of the semantic distance between each topic will be stored in the specified directory.
@@ -289,6 +289,8 @@ class TopicModel(BaseModel):
         training_model: str
             Indicate whether the NMF or LDA model is used to generate the topics.
             valid inputs: "LDA", "NMF"
+        vectorizer: list
+            self.train_dataset.tfidf or self.train_dataset.bow depending on self.feature_engineer
         """
         topic_key_words = []
         
@@ -298,7 +300,7 @@ class TopicModel(BaseModel):
         
         if training_model == "LDA":
             topic_vis_path = os.path.join(train_output_path, "topic_vis_{}.html".format(len(trained_topics)))
-            panel = pyLDAvis.sklearn.prepare(self.model, self.training_vectorizer[2], self.train_dataset.bow[0], mds='tsne')            
+            panel = pyLDAvis.sklearn.prepare(self.model, vectorizer[2], vectorizer[0], mds='tsne')            
             pyLDAvis.save_html(panel, topic_vis_path)
         return topic_key_words
 
@@ -434,8 +436,8 @@ def train_test(train_dataset, feature_engineer, train_output_path, training_mode
         test_labels = trainModel.predict(test_output_path, root_word_option, remove_stop_words)
         trainModel.churn_eval_metrics(test_labels, num_top_documents, test_output_path)    
 
-def test(test_dataset, feature_engineer, pickled_model, pickled_vectorizer, test_output_path, topic_label, replace_stop_words_list, include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
-             word_form, ngrams, max_doc, min_doc):
+def test(test_dataset, feature_engineer, pickled_model, pickled_vectorizer, test_output_path, topic_label, replace_stop_words_list, include_words, 
+         exclude_words, root_word_option, remove_stop_words, lower_case, word_form, ngrams, max_doc, min_doc):
     """
     Predict on the test dataset based on the pickled model and vectorizer.
     """
@@ -492,7 +494,6 @@ if __name__ == "__main__":
 
     data_df = pd.read_csv(os.path.join(home_folder,train_file))
     logger = open(logging_path, 'w')
-    custom_print("Train dataset loaded",logger = logger)
     seed_everything()
     custom_print('---------------------------------\n',logger = logger)
 
