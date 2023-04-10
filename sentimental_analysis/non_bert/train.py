@@ -20,31 +20,24 @@ from model_base_class import BaseModel
 class NonBertClassifier(BaseModel):
     '''
     Non-Bert Model for Sentiment Analysis
-
     Attributes
     -----------
     model_name: str
         Non-Bert Model to train/predict. Choose from LogisticRegression, RandomForest, XGBoost
-
     Methods
     -----------
     ttsplit():
         Returns a 80-20 train and test set for the given dataset. 
-
     predict(model_type, threshold):
         Predicts the given input data using the specified model_type and outputs the predictions (containing 0's or 1's) into a csv file.
-
     train(model_type):
         Trains the chosen model using the respective data given
-
     logreg():
         When 'LogisticRegression' is chosen for parameter model_type in the train function, this function will be called to train a Logistic Regression model
-
     rf():
         When 'RandomForest' is chosen for parameter model_type in the train function, this function will be called to train a Random Forest model
         via a grid search for the range of grid specified in the non_bert_sentiment_config.yml file.
         The available parameters to train are n_estimators and max_depth
-
     xgboost():
         When 'XGBoost' is chosen for parameter model_type in the train function, this function will be called to train a XGBoost model
         via a grid search for the range of grid specified in the non_bert_sentiment_config.yml file.
@@ -66,7 +59,7 @@ class NonBertClassifier(BaseModel):
         df = pre.Dataset(self.data)
         df.create_bow(root_words_option = 2, remove_stop_words = True, lower_case = True, ngrams = (1,2),
                       word_form = ['adverb', 'adjective'], min_doc = 0.05, max_doc = 0.5)
-        bow = pd.DataFrame(df.bow[1].toarray())
+        bow = pd.DataFrame(df.bow[2].toarray())
         bow['Time'] = df.date
         bow['Sentiment'] = df.sentiments
         bow = bow.replace({'positive': 1, 'negative':0})
@@ -85,11 +78,9 @@ class NonBertClassifier(BaseModel):
             if exp < 0.9:
                 exp += i
                 n += 1
-                print(i)
             else:
                 break
         print([n,exp])
-        print(svd.explained_variance_ratio_)
         self.x_train = pd.DataFrame(TruncatedSVD(n_components = n, random_state = 4263).fit_transform(self.x_train))
         self.x_test = pd.DataFrame(TruncatedSVD(n_components = n, random_state = 4263).fit_transform(self.x_test))
 
@@ -106,12 +97,13 @@ class NonBertClassifier(BaseModel):
                 Threshold to decide at what probability the sentiment would be considered positive
         '''
         self.data['Sentiment'] = 0
-        self.data['Time'] = '1/1/1900'
+        self.time = self.data['Time']
+        self.text = self.data['Text']
         df = pre.Dataset(self.data)
         df.create_bow(root_words_option = 2, remove_stop_words = True, lower_case = True, ngrams = (1,2),
                       word_form = ['adverb', 'adjective'], min_doc = 0.05, max_doc = 0.5)
-        self.data = pd.DataFrame(df.bow[1].toarray())
-        self.data = pd.DataFrame(TruncatedSVD(n_components=10).fit_transform(self.data))
+        self.data = pd.DataFrame(df.bow[2].toarray())
+        self.data = pd.DataFrame(TruncatedSVD(n_components=n_svd).fit_transform(self.data))
         if model_type == 'LogisticRegression':
             logreg = pickle.load(open(model_save_loc, 'rb'))
             sentiment_proba = logreg.predict_proba(self.data)[:,1]
@@ -121,8 +113,8 @@ class NonBertClassifier(BaseModel):
                     sentiment.append(1)
                 else:
                     sentiment.append(0)
-            lr_pred = pd.DataFrame({'Sentiment Prediction': sentiment, 'Sentiment Probability': sentiment_proba})
-            lr_pred.to_csv(output_path)
+            lr_pred = pd.DataFrame({'Text': self.text, 'Time': self.time, 'predicted_sentiment': sentiment, 'predicted_sentiment_probability': sentiment_proba})
+            lr_pred.to_csv(output_path, index = False)
         
         if model_type == 'RandomForest':
             rf = pickle.load(open(model_save_loc, 'rb'))
@@ -133,8 +125,8 @@ class NonBertClassifier(BaseModel):
                     sentiment.append(1)
                 else:
                     sentiment.append(0)
-            rf_pred = pd.DataFrame({'Sentiment Prediction': sentiment, 'Sentiment Probability': sentiment_proba})
-            rf_pred.to_csv(output_path)
+            rf_pred = pd.DataFrame({'Text': self.text, 'Time': self.time, 'predicted_sentiment': sentiment, 'predicted_sentiment_probability': sentiment_proba})
+            rf_pred.to_csv(output_path, index = False)
         
         if model_type == 'XGBoost':
             xgb = pickle.load(open(model_save_loc, 'rb'))
@@ -145,8 +137,8 @@ class NonBertClassifier(BaseModel):
                     sentiment.append(1)
                 else:
                     sentiment.append(0)
-            xgb_pred = pd.DataFrame({'Sentiment Prediction': sentiment, 'Sentiment Probability': sentiment_proba})
-            xgb_pred.to_csv(output_path)
+            xgb_pred = pd.DataFrame({'Text': self.text, 'Time': self.time, 'predicted_sentiment': sentiment, 'predicted_sentiment_probability': sentiment_proba})
+            xgb_pred.to_csv(output_path, index = False)
         utility.custom_print(str(model_type) + ' has been succesfully predicted\n', logger = logger)
 
 
@@ -311,6 +303,7 @@ if __name__ == "__main__":
     data_path = config_file['model']['data_path']
     data_file = config_file['model']['data_file']
     threshold = config_file['model']['threshold']
+    n_svd = config_file['model']['n_svd']
     is_train = config_file['model']['is_train']
     save_model = config_file['model']['save_model']
     plot_path = config_file['model']['plot_path']
