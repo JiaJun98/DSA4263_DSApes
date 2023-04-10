@@ -20,10 +20,30 @@ from model_base_class import BaseModel
 class NonBertClassifier(BaseModel):
     '''
     Non-Bert Model for Sentiment Analysis
-    Attributes
+    Parameters
     -----------
     model_name: str
-        Non-Bert Model to train/predict. Choose from LogisticRegression, RandomForest, XGBoost
+        Non-Bert Model to train/predict. Choose from 'LogisticRegression', 'RandomForest', 'XGBoost'
+
+    Attributes
+    -----------
+    model: str
+        The type of model that will be used in training/prediction of the data ('LogisticRegression', 'RandomForest', 'XGBoost')
+    data: pd.DataFrame
+        A data frame with columns 'Time', 'Text' and 'Sentiment' ('Sentiment' only for train)
+    x_train: pd.DataFrame
+        Contains preprocessed bag of words features that will be used in training
+    x_test: pd.DataFrame
+        Contains preprocessed bag of words features that will be used in testing trained model
+    y_train: np.ndarray
+        True value of 'Sentiment' for each 'Text' to be used in training
+    y_test: np.ndarray
+        True value of 'Sentiment' for each 'Text' to be used to obtain evaluation metrics
+    time: np.ndarray, pd.DataFrame
+        Time at which Text was being produced
+    text: np.ndarray, pd.DataFrame
+        Text containing reviews to be preprocessed
+    
     Methods
     -----------
     ttsplit():
@@ -46,6 +66,8 @@ class NonBertClassifier(BaseModel):
     def  __init__(self, data = None, model_name = None):
         self.model = model_name
         self.data = data
+        self.time = None
+        self.text = None
         self.x_train = None
         self.x_test = None
         self.y_train = None

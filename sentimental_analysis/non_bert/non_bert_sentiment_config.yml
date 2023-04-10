@@ -1,7 +1,7 @@
 model:
   model_name: 'Non-Bert Sentiment Analysis'
-  model_type: 'LogisticRegression'
-  model_save_loc: models\rf_model.sav
+  model_type: 'XGBoost'
+  model_save_loc: models\xgb_model.sav
   is_train: True
   save_model: False
   data_path: data
