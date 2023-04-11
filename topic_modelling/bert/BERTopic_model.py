@@ -121,13 +121,17 @@ class BERTopic_model(BaseModel):
         
         Returns
         -------
-        prediction : [str]
-            Topic prediction for each document
+        prediction : ([int], array [str])
+            Topic prediction for each document, the first element is the topic, second element is the probability of being in each topic and the final element is the custom topic name
         '''
         if type(dataset) == str:
-            return self.topic_model.transform(dataset)
+            topics, probs = self.topic_model.transform(dataset)
         else:
-            return self.topic_model.transform(dataset.text)
+            topics, probs = self.topic_model.transform(dataset.text)
+        custom_label = []
+        for i in topics:
+            custom_label.append(self.topic_model.custom_labels_[i+1])
+        return (topics, probs, custom_label)
 
     def load_model(self, path):
         '''
