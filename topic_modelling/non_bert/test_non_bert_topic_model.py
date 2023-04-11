@@ -70,7 +70,7 @@ def test_display_topics(train_dataset):
     trained_model = training.fit_transform(testModel.train_dataset.bow[2])
     dir = os.path.join(os.getcwd(), "pytest_TopicModel")
     topic_key_words = testModel.display_topics(training.components_, testModel.train_dataset.bow[0].get_feature_names_out(), 
-                                               num_top_words = 2, train_output_path = dir, training_model = "NMF")
+                                               num_top_words = 2, train_output_path = dir, training_model = "NMF", vectorizer = testModel.train_dataset.bow)
     assert len(topic_key_words) == 2
     assert len(topic_key_words[0]) == 2
 
@@ -100,12 +100,12 @@ def test_predict(test_dataset):
                            topic_label = topic_label, custom_print = False, feature_engineer = "tfidf")
     testModel.preprocess_dataset(remove_stop_words = False, word_form = ['noun'])
     labelled_test = testModel.predict(test_output_path = pytest_dir, root_word_option = 0, remove_stop_words = False)
-    output_topic_label = labelled_test['Topic label'].unique().tolist()
+    output_topic_label = labelled_test['Topic_label'].unique().tolist()
     output_topic_label.sort()
-    expected_topic_label = pd.read_csv(topic_label)['Topic label'].tolist()
+    expected_topic_label = pd.read_csv(topic_label)['Topic_label'].tolist()
     expected_topic_label.sort()
     assert labelled_test['Text'].tolist() == test_dataset.text.tolist()
-    assert list(labelled_test.columns) == ["Text", "Topic label"]
+    assert list(labelled_test.columns) == ["Text", "Topic_label"]
     assert output_topic_label == expected_topic_label
 
 def test_churn_eval_metrics(test_dataset, monkeypatch):
@@ -125,8 +125,8 @@ def test_churn_eval_metrics(test_dataset, monkeypatch):
 
     churned_output = pd.read_csv(os.path.join(pytest_dir, "test_sample_labels.csv"))
     assert churned_output.shape[0] == 2
-    assert churned_output['Topic label'].value_counts().tolist()[0] == 1
-    assert churned_output['Topic label'].value_counts().tolist()[1] == 1
+    assert churned_output['Topic_label'].value_counts().tolist()[0] == 1
+    assert churned_output['Topic_label'].value_counts().tolist()[1] == 1
 
 
     
