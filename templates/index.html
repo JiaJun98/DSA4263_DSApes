@@ -32,10 +32,10 @@
     </div>
     <div class="container justify-content-center">
       <div style="display: flex; flex-direction: column;">
-        <form action="/predict" method="POST" class="form-inline justify-content-center">
+        <form id="my-form" action="/predict" method="POST" class="form-inline justify-content-center">
           <textarea name = "review"> </textarea>
           <div class="btn-group">
-            <button type="submit" class="btn btn-primary mb-2">Submit your input text</button>
+            <button type="submit" class="btn btn-primary mb-2">Submit your input text<span class="required">*</span></button>
             <button type="reset" class="btn btn-primary mb-2">Clear</button>
           </div>
         </form>
