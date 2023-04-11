@@ -1,0 +1,254 @@
+Device availiable: cuda:0
+Train_val dataset loaded
+Training model
+---------------------------------
+
+Hyperparameters:
+model name: distilbert-base-uncased
+Number of epochs: 1
+number of classes: 2
+max length: 64
+batch size: 32
+learning rate: 1e-05
+
+Loading data.....
+Model initialised!
+
+Test size: 545
+Test data loaded!
+
+ Current folds cross validation: 0
+
+Train size: 4899
+Train data loaded!
+
+Val size: 980
+Val data loaded!
+Start training...
+
+ Epoch  |  Batch  |  Train Loss  |  Val Loss  |  Val Acc  |  Elapsed 
+----------------------------------------------------------------------
+   1    |   20    |   0.605940   |     -      |     -     |   3.82   
+   1    |   40    |   0.532032   |     -      |     -     |   3.13   
+   1    |   60    |   0.489879   |     -      |     -     |   3.14   
+   1    |   80    |   0.423204   |     -      |     -     |   3.15   
+   1    |   100   |   0.362204   |     -      |     -     |   3.15   
+   1    |   120   |   0.342096   |     -      |     -     |   3.17   
+   1    |   122   |   0.378490   |     -      |     -     |   0.25   
+Training metrics
+
+model_accuracy: 0.79
+model_precision: 0.24
+model_auc: 0.80
+model_f1score: 0.37
+sensitivity: 0.81
+specificity: 0.79
+----------------------------------------------------------------------
+Validation metrics
+
+model_accuracy: 0.86
+model_precision: 0.65
+model_auc: 0.83
+model_f1score: 0.70
+sensitivity: 0.76
+specificity: 0.89
+
+ Epoch  |  Batch  | Avg Train Loss |  Val Loss  |  Val Acc  |  Elapsed 
+   1    |    -    |   0.459106   |  0.351792  |   86.11   |   21.43  
+----------------------------------------------------------------------
+
+
+Current training time:
+00:00:021.43
+Training complete!
+
+ Current folds cross validation: 1
+
+Train size: 4899
+Train data loaded!
+
+Val size: 980
+Val data loaded!
+Start training...
+
+ Epoch  |  Batch  |  Train Loss  |  Val Loss  |  Val Acc  |  Elapsed 
+----------------------------------------------------------------------
+   1    |   20    |   0.339515   |     -      |     -     |   3.31   
+   1    |   40    |   0.310037   |     -      |     -     |   3.19   
+   1    |   60    |   0.271769   |     -      |     -     |   3.20   
+   1    |   80    |   0.247369   |     -      |     -     |   3.21   
+   1    |   100   |   0.263134   |     -      |     -     |   3.21   
+   1    |   120   |   0.236738   |     -      |     -     |   3.21   
+   1    |   122   |   0.226097   |     -      |     -     |   0.25   
+Training metrics
+
+model_accuracy: 0.89
+model_precision: 0.76
+model_auc: 0.85
+model_f1score: 0.77
+sensitivity: 0.79
+specificity: 0.92
+----------------------------------------------------------------------
+Validation metrics
+
+model_accuracy: 0.91
+model_precision: 0.81
+model_auc: 0.90
+model_f1score: 0.83
+sensitivity: 0.86
+specificity: 0.93
+
+ Epoch  |  Batch  | Avg Train Loss |  Val Loss  |  Val Acc  |  Elapsed 
+   1    |    -    |   0.277747   |  0.228671  |   91.27   |   21.24  
+----------------------------------------------------------------------
+
+
+Current training time:
+00:00:021.24
+Training complete!
+
+ Current folds cross validation: 2
+
+Train size: 4899
+Train data loaded!
+
+Val size: 980
+Val data loaded!
+Start training...
+
+ Epoch  |  Batch  |  Train Loss  |  Val Loss  |  Val Acc  |  Elapsed 
+----------------------------------------------------------------------
+   1    |   20    |   0.265892   |     -      |     -     |   3.36   
+   1    |   40    |   0.231552   |     -      |     -     |   3.23   
+   1    |   60    |   0.216117   |     -      |     -     |   3.24   
+   1    |   80    |   0.245073   |     -      |     -     |   3.24   
+   1    |   100   |   0.189125   |     -      |     -     |   3.25   
+   1    |   120   |   0.205920   |     -      |     -     |   3.25   
+   1    |   122   |   0.387187   |     -      |     -     |   0.25   
+Training metrics
+
+model_accuracy: 0.91
+model_precision: 0.83
+model_auc: 0.88
+model_f1score: 0.83
+sensitivity: 0.83
+specificity: 0.94
+----------------------------------------------------------------------
+Validation metrics
+
+model_accuracy: 0.94
+model_precision: 0.85
+model_auc: 0.93
+model_f1score: 0.87
+sensitivity: 0.90
+specificity: 0.95
+
+ Epoch  |  Batch  | Avg Train Loss |  Val Loss  |  Val Acc  |  Elapsed 
+   1    |    -    |   0.228568   |  0.160700  |   94.03   |   21.50  
+----------------------------------------------------------------------
+
+
+Current training time:
+00:00:021.50
+Training complete!
+
+ Current folds cross validation: 3
+
+Train size: 4899
+Train data loaded!
+
+Val size: 980
+Val data loaded!
+Start training...
+
+ Epoch  |  Batch  |  Train Loss  |  Val Loss  |  Val Acc  |  Elapsed 
+----------------------------------------------------------------------
+   1    |   20    |   0.190643   |     -      |     -     |   3.41   
+   1    |   40    |   0.197886   |     -      |     -     |   3.28   
+   1    |   60    |   0.162493   |     -      |     -     |   3.29   
+   1    |   80    |   0.216042   |     -      |     -     |   3.30   
+   1    |   100   |   0.183959   |     -      |     -     |   3.31   
+   1    |   120   |   0.206819   |     -      |     -     |   3.31   
+   1    |   122   |   0.074053   |     -      |     -     |   0.26   
+Training metrics
+
+model_accuracy: 0.93
+model_precision: 0.86
+model_auc: 0.90
+model_f1score: 0.86
+sensitivity: 0.86
+specificity: 0.95
+----------------------------------------------------------------------
+Validation metrics
+
+model_accuracy: 0.94
+model_precision: 0.87
+model_auc: 0.92
+model_f1score: 0.88
+sensitivity: 0.88
+specificity: 0.96
+
+ Epoch  |  Batch  | Avg Train Loss |  Val Loss  |  Val Acc  |  Elapsed 
+   1    |    -    |   0.191021   |  0.174305  |   93.75   |   21.85  
+----------------------------------------------------------------------
+
+
+Current training time:
+00:00:021.85
+Training complete!
+
+ Current folds cross validation: 4
+
+Train size: 4899
+Train data loaded!
+
+Val size: 979
+Val data loaded!
+Start training...
+
+ Epoch  |  Batch  |  Train Loss  |  Val Loss  |  Val Acc  |  Elapsed 
+----------------------------------------------------------------------
+   1    |   20    |   0.183710   |     -      |     -     |   3.45   
+   1    |   40    |   0.169565   |     -      |     -     |   3.34   
+   1    |   60    |   0.175189   |     -      |     -     |   3.34   
+   1    |   80    |   0.178050   |     -      |     -     |   3.35   
+   1    |   100   |   0.169211   |     -      |     -     |   3.37   
+   1    |   120   |   0.160686   |     -      |     -     |   3.37   
+   1    |   122   |   0.148870   |     -      |     -     |   0.27   
+Training metrics
+
+model_accuracy: 0.94
+model_precision: 0.87
+model_auc: 0.92
+model_f1score: 0.87
+sensitivity: 0.88
+specificity: 0.95
+----------------------------------------------------------------------
+Validation metrics
+
+model_accuracy: 0.96
+model_precision: 0.91
+model_auc: 0.96
+model_f1score: 0.93
+sensitivity: 0.95
+specificity: 0.97
+
+ Epoch  |  Batch  | Avg Train Loss |  Val Loss  |  Val Acc  |  Elapsed 
+   1    |    -    |   0.172436   |  0.121097  |   96.23   |   22.25  
+----------------------------------------------------------------------
+
+
+Current training time:
+00:00:022.25
+Training complete!
+
+Testing (Holdout) metrics
+model_accuracy: 0.90
+model_precision: 0.79
+model_auc: 0.88
+model_f1score: 0.81
+sensitivity: 0.83
+specificity: 0.92
+Total Training Time:
+00:01:048.26
+Saving model ...
