@@ -25,6 +25,11 @@ body {
     font-family: Georgia;
   }
   
+  #error-message {
+    color: red;
+    font-weight: bold;
+  }
+  
   
   .container {
     display: flex;
