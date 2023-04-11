@@ -6,7 +6,10 @@
     <title class="text-center">VOC App</title>
 
     <link href='static/css/style.css' rel='stylesheet'>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="static/js/script.js"></script>
+    
+    <!--script src="{{ url_for('static', filename='js/script.js') }}"></script-->
     
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -24,6 +27,7 @@
     <div class="container">
       <h1 class="text-center">Voice of Customer Application</h1>
     </div>
+    
     <div class="container" id="sentiment-analysis">
       <div style="display: flex; flex-direction: column;">
         <h2 class="text-centre">Predicting customer sentiment and topics</h2>
@@ -32,19 +36,37 @@
     </div>
     <div class="container justify-content-center">
       <div style="display: flex; flex-direction: column;">
-        <form id="my-form" action="/predict" method="POST" class="form-inline justify-content-center">
-          <textarea name = "review"> </textarea>
+        <form id="my-form" action="/predict" method="POST" class="form-inline justify-content-center" onsubmit="return validateForm()">
+          <textarea id="review-input" name = "review"> </textarea>
+          {% if js_script == "empty_text" %}
+          <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Did you forgot to enter your text(s)?',
+              })
+          </script>
+          {% endif %}
           <div class="btn-group">
-            <button type="submit" class="btn btn-primary mb-2">Submit your input text<span class="required">*</span></button>
+            <button type="submit" class="btn btn-primary mb-2">Submit your input text</button>
             <button type="reset" class="btn btn-primary mb-2">Clear</button>
           </div>
+          
         </form>
         <div class="btn-group">
           <form action="/upload" method="POST"  enctype="multipart/form-data">
             <input type="file" name="file" id="file" class="inputfile">
+            {% if js_script == "wrong_file_type" %}
+            <script>
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'Only csv files are allowed!',
+                })
+            </script>
+            {% endif %}
             <label for="file">Upload csv file</label>
             <button type="submit" class="btn btn-primary mb-2">Submit csv file</button>
-            <div id="error_msg"></div>
           </form>
         </div>
       </div>

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-from flask import Flask, url_for, render_template, request
+from flask import Flask, url_for, render_template, request, flash
 from werkzeug.utils import secure_filename
 import pandas as pd
 import torch
@@ -78,6 +78,7 @@ def visualise(Sentiment, Time, Text, Topic_label):
 
 
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 config_path = os.path.join(os.getcwd(), 'flask_app_config.yml')
@@ -135,6 +136,9 @@ def index():
 def predict(): #Send data from front-end to backend then to front end
     if request.method == "POST":
         text = request.form["review"]
+        textNoSpace = text.strip()
+        if not text or not textNoSpace:
+            return render_template("index.html", js_script = "empty_text")
         test_dataloader = data_loader(model_name, max_len, text, 1)
         pred,prob = MODEL.predict(test_dataloader, THRESHOLD)
         one_line_df = pd.DataFrame({"Text": [text]})
@@ -146,6 +150,7 @@ def predict(): #Send data from front-end to backend then to front end
                 word_form, ngrams, max_doc, min_doc, logger, num_of_topics)
         topic = list(labelled_test_df["Topic label"].apply(lambda x: " ".join(list(map(lambda y: y.capitalize(),x.split("_"))))))[0]
         logger.close()
+        plot_html = None
         return render_template("index.html", 
                                 texts = [], 
                                 preds = [], 
@@ -163,9 +168,8 @@ def upload():
     filename = secure_filename(file.filename)
     tweets = []
     preds = []
-    #topics = [] Uncomment when done
-    if not filename.endswith('.csv'): #Place holder. Havent set the thing yet
-        print("ONLY CSV is allowed!")
+    if not filename.endswith('.csv'): 
+        return render_template("index.html", js_script = "wrong_file_type")
     df = pd.read_csv(file)
     test_dataset = Dataset(df)
     logger = open(logging_path, 'w')
@@ -173,7 +177,6 @@ def upload():
         topic_label, num_top_documents, replace_stop_words_list, 
         include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
                 word_form, ngrams, max_doc, min_doc, logger, num_of_topics)
-    
     texts =  df['Text'].tolist()
     time =  df['Time'].tolist()
     print(labelled_test_df)
