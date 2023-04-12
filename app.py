@@ -78,7 +78,6 @@ def visualise(Sentiment, Time, Text, Topic_label):
 
 
 app = Flask(__name__)
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 config_path = os.path.join(os.getcwd(), 'flask_app_config.yml')
@@ -122,7 +121,7 @@ min_doc = topic_modelling_config_file['model'][model_choice]['min_doc']
 
 # Setting up csv for initial historic trend plot
 historic_data_path = config_file['flask']['historic_trend']['data_path']
-#df = pd.read_csv(historic_data_path)
+df = pd.read_csv(historic_data_path)
 #df['Time'] = pd.to_datetime(df['Time'],dayfirst=True)
 #plot_html = visualise(df['Sentiment'], df['Time'],df['Text'],df['Topic_label'])
 
@@ -171,6 +170,9 @@ def upload():
     if not filename.endswith('.csv'): 
         return render_template("index.html", js_script = "wrong_file_type")
     df = pd.read_csv(file)
+    datetimeCol = df['Time'].apply(lambda x: x.split("/")[1])
+    unique_months = list(set(list(datetimeCol)))
+    no_unique_months = len(unique_months)
     test_dataset = Dataset(df)
     logger = open(logging_path, 'w')
     labelled_test_df = test(test_dataset, pickled_model, pickled_bow, test_output_path, 
@@ -191,6 +193,9 @@ def upload():
     # Columns needed: Sentiment, Time, Text, Topic Label
     plot_html = visualise(preds, time, texts, topic_labels)
     logger.close()
+    print(f'Current unique month: {no_unique_months}')
+    if no_unique_months == 1:
+        render_template("index.html", texts = texts, preds = preds, topics = topics, probs = probs, plot_html = plot_html, js_script = "Only_one_month")
     return render_template("index.html", texts = texts, preds = preds, topics = topics, probs = probs, plot_html = plot_html)
 
 if __name__ == '__main__':

@@ -65,6 +65,14 @@
                 })
             </script>
             {% endif %}
+            {% if js_script == "Only_one_month" %}
+            <script>
+              Swal.fire(
+                'Warning',
+                'Csv file only has one month; Historic trend might not be accurate'
+              )
+            </script>
+            {% endif %}
             <label for="file">Upload csv file</label>
             <button type="submit" class="btn btn-primary mb-2">Submit csv file</button>
           </form>
