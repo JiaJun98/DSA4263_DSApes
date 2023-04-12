@@ -122,14 +122,14 @@ min_doc = topic_modelling_config_file['model'][model_choice]['min_doc']
 # Setting up csv for initial historic trend plot
 historic_data_path = config_file['flask']['historic_trend']['data_path']
 df = pd.read_csv(historic_data_path)
-#df['Time'] = pd.to_datetime(df['Time'],dayfirst=True)
-#plot_html = visualise(df['Sentiment'], df['Time'],df['Text'],df['Topic_label'])
+df['Time'] = pd.to_datetime(df['Time'],dayfirst=True)
+plot_html = visualise(df['Sentiment'], df['Time'],df['Text'],df['Topic_label'])
 
 
 #Routes - Creating a simple route
 @app.route('/')
 def index():
-    return render_template("index.html", plot_html = None)
+    return render_template("index.html", plot_html = plot_html)
 
 @app.route('/predict', methods = ['GET', 'POST'])
 def predict(): #Send data from front-end to backend then to front end
@@ -195,7 +195,7 @@ def upload():
     logger.close()
     print(f'Current unique month: {no_unique_months}')
     if no_unique_months == 1:
-        render_template("index.html", texts = texts, preds = preds, topics = topics, probs = probs, plot_html = plot_html, js_script = "Only_one_month")
+        return render_template("index.html", texts = texts, preds = preds, topics = topics, probs = probs, plot_html = plot_html, js_script = "only_one_month")
     return render_template("index.html", texts = texts, preds = preds, topics = topics, probs = probs, plot_html = plot_html)
 
 if __name__ == '__main__':

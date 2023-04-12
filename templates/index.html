@@ -65,7 +65,9 @@
                 })
             </script>
             {% endif %}
-            {% if js_script == "Only_one_month" %}
+            <label for="file">Upload csv file</label>
+            <button type="submit" class="btn btn-primary mb-2">Submit csv file</button>
+            {% if js_script == "only_one_month" %}
             <script>
               Swal.fire(
                 'Warning',
@@ -73,8 +75,6 @@
               )
             </script>
             {% endif %}
-            <label for="file">Upload csv file</label>
-            <button type="submit" class="btn btn-primary mb-2">Submit csv file</button>
           </form>
         </div>
       </div>
