@@ -16,7 +16,8 @@ Topic 7: 30
 Topic 8: 3
 Topic 9: 101
 ------5444 documents trained------
------- Generating key words and sample documents for each topic ------------
+------ End of training for 10 topics --------
+------ Generating key words and sample documents for each topic ------
 
 
 Topic 0
@@ -108,4 +109,3 @@ dont, know, believe, tea, helpful, losing, weight, taste, great, wonderful, alte
 orange, tangerine, juice, mainly, apple, grape, juice, flavored, orange, tangerine, really, care, vitamin, c, content, vitamin, c, easy, care, definitely, worst-tasting, soda, type, tried, pour, drain, fast
 
 nearly, concentrated, mio, water, flavor, squirt, glass, bottle, water, lot, oz, fluid, oz, squirt, daily, requirement, vitamin, c, calorie, fruit, punch, taste, good, like, water, weakly, flavored, probably, squirt, giving, daily, requirement, vitamin, mainly, advertised, source, vitamin, c, thing, vitamin, c, vitamin, c, vitamin, vitamin, vitamin, vitamin, zinc, chromium, plastic, bottle, good, shape, hand, grab, easily, squeeze, good, way, needed, vitamin, c, having, eat, lot, citrus, swallowing, vitamin, c, pill, like, water, flavored, particular, like, flavor, good, way, control
--------- End of training for 10 topics ----------
