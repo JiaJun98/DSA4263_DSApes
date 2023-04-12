@@ -2,7 +2,7 @@
 from re import sub
 import pandas as pd
 import nltk
-from nltk.tokenize import word_tokenize, sent_tokenize
+from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer, PorterStemmer
 from nltk.tag import pos_tag
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
@@ -22,34 +22,24 @@ class Dataset:
     This dataset class includes all the necessary preprocessing and feature extraction 
     to be experimented for the different non-Bert models to predict sentiment analysis 
     and topic modelling.
-    Step 1 (if necessary): modify stop_words_list
+    Step 1 (if necessary): modify_stop_words_list
     Step 2: Run preprocess method (convert get_input_text to preprocessing_text)
     Step 3: Call create_* functions on their desired feature engineering.
     """
-    def __init__(self, dataset):
+    def __init__(self, data):
         """
         Input dataset should minimally consist of columns named "Text" and "Date",
         optionally include column named "Sentiment"
         """
-        self.sentiments = dataset['Sentiment'] if 'Sentiment' in dataset.columns else pd.DataFrame()
-        self.date = pd.to_datetime(dataset['Time'])
-        self.text = dataset['Text'].apply(lambda x: sub("<[^>]+>", " ", x).strip())
-        self.root_words_options = [None, "stem", "lemmatize"] #remove this?
-        self.tokenized_words = None
-        self.tokenized_no_stop_words = None
-        self.tokenized_sentence = None
-        self.stem = None
-        self.lemmatize = None
+        self.data = data
+        self.root_words_options = [None, "stem", "lemmatize"]
         self.stop_words_list = list(ENGLISH_STOP_WORDS.copy())
-        self.bow = None #overwritten if want to include bigrams or trigrams
-        self.tfidf = None
         self.doc2vec = None
         self.word2vec = None
-        self.preprocessed_text = None #assign preprocessed text from all methods in this attribute
-        self.feature_engineer = None #assign output of any feature engineer to this attribute
+        self.preprocessed_text = None
+        self.feature_engineer = None
 
-    def create_bow(self, root_words_option = 0, remove_stop_words = True, lower_case = True,
-                   word_form = None, ngrams = (1,1), max_doc = 1, min_doc = 1):
+    def create_bow(self, lower_case = True, ngrams = (1,1), max_doc = 1, min_doc = 1):
         """
         Update self.bow with [vectorizer, fitted vectorizer, bow_matrix]. vectorizer is the
         model to generate the bow output while bow_matrix is the resultant of
@@ -57,15 +47,8 @@ class Dataset:
 
         Parameters
         ----------
-        root_words_option: int
-            0 - None, 1 - stem, 2 - lemmatize (based on self.root_words_options)
-        remove_stop_words:  bool
-            True if stop words should not be included, False otherwise
         lower_case: bool
             True if should apply lower case to all words before creating BOW, False otherwise
-        word_form:  list of str
-            Specific parts of sentence to be included for topic model training and prediction.
-            valid word forms: "verb", "noun", "adjective", "preposition", "adverb"
         ngrams: tuple of int
             Specify if the user wants unigram, bigram, trigrams or even mixture.
             (1,1) means only unigram, (1,2) means unigram and bigram
@@ -88,16 +71,13 @@ class Dataset:
         Code to create DataFrame with Tokens as columns and Documents as rows:
         pd.DataFrame(data=self.bow[2].toarray(), columns = self.bow[0].get_feature_names_out())
         """
-        final_text = self.input_text(root_words_option, remove_stop_words, lower_case, word_form)
-
         vectorizer = CountVectorizer(lowercase=lower_case, ngram_range = ngrams,
-                                     max_df = max_doc, min_df = min_doc) 
-        fitted_vectorizer = vectorizer.fit(final_text.apply(" ".join))
-        bow_matrix = fitted_vectorizer.fit_transform(final_text.apply(" ".join))
-        self.bow = [vectorizer, fitted_vectorizer, bow_matrix]
+                                     max_df = max_doc, min_df = min_doc)
+        fitted_vectorizer = vectorizer.fit(self.preprocessed_text.apply(" ".join))
+        bow_matrix = fitted_vectorizer.fit_transform(self.preprocessed_text.apply(" ".join))
+        self.feature_engineer = [vectorizer, fitted_vectorizer, bow_matrix]
 
-    def create_tfidf(self, root_words_option = 0, remove_stop_words = True, lower_case = True,
-                     word_form = None, ngrams = (1,1), max_doc = 1, min_doc = 1):
+    def create_tfidf(self, lower_case = True, ngrams = (1,1), max_doc = 1, min_doc = 1):
         """
         Update self.tfidf with [vectorizer, fitted_vectorizer, tfidf_matrix].
         vectorizer is the model to generate the tfidf output 
@@ -105,15 +85,8 @@ class Dataset:
 
         Parameters
         ----------
-        root_words_option: int
-            0 - None, 1 - stem, 2 - lemmatize (based on self.root_words_options)
-        remove_stop_words:  bool
-            True if stop words should not be included, False otherwise
         lower_case: bool
-            True if should apply lower case to all words before creating BOW, False otherwise
-        word_form:  list of str
-            Specific parts of sentence to be included for topic model training and prediction.
-            valid word forms: "verb", "noun", "adjective", "preposition", "adverb"
+            True if should apply lower case to all words before creating TFIDF, False otherwise
         ngrams: tuple of int
             Specify if the user wants unigram, bigram, trigrams or even mixture.
             (1,1) means only unigram, (1,2) means unigram and bigram
@@ -136,35 +109,18 @@ class Dataset:
         Code to create DataFrame with Tokens as columns and Documents as rows:
         pd.DataFrame(data=self.tfidf[1].toarray(), columns = self.tfidf[0].get_feature_names_out())
         """
-        final_text = self.input_text(root_words_option, remove_stop_words, lower_case, word_form)
-
-        vectorizer = TfidfVectorizer(lowercase=False, ngram_range = ngrams,
+        vectorizer = TfidfVectorizer(lowercase=lower_case, ngram_range = ngrams,
                                      max_df = max_doc, min_df = min_doc)
-        fitted_vectorizer = vectorizer.fit(final_text.apply(" ".join))
-        tfidf_output = fitted_vectorizer.transform(final_text.apply(" ".join))
-        self.tfidf = [vectorizer, fitted_vectorizer, tfidf_output]
+        fitted_vectorizer = vectorizer.fit(self.preprocessed_text.apply(" ".join))
+        tfidf_output = fitted_vectorizer.transform(self.preprocessed_text.apply(" ".join))
+        self.feature_engineer = [vectorizer, fitted_vectorizer, tfidf_output]
 
-    def create_doc2vec(self, root_words_option = 0, remove_stop_words = True,
-                       lower_case = True, word_form = None):
+    def create_doc2vec(self):
         """
         Update self.doc2vec to store vector representation of each text.
         Can use machine learning to see how to group the texts under the same topic
-
-        Parameters
-        ----------
-        root_words_option: int
-            0 - None, 1 - stem, 2 - lemmatize (based on self.root_words_options)
-        remove_stop_words:  bool
-            True if stop words should not be included, False otherwise
-        lower_case: bool
-            True if should apply lower case to all words before creating BOW, False otherwise
-        word_form:  list of str
-            Specific parts of sentence to be included for topic model training and prediction.
-            valid word forms: "verb", "noun", "adjective", "preposition", "adverb"
         """
-        final_text = self.input_text(root_words_option, remove_stop_words, lower_case, word_form)
-
-        tagged_docs = [TaggedDocument(doc, [i]) for i, doc in enumerate(final_text)]
+        tagged_docs = [TaggedDocument(doc, [i]) for i, doc in enumerate(self.preprocessed_text)]
         model = Doc2Vec(vector_size=100, window=5, workers=4, min_count=1, epochs=100)
         model.build_vocab(tagged_docs)
         model.train(tagged_docs, total_examples=model.corpus_count, epochs=model.epochs)
@@ -176,23 +132,15 @@ class Dataset:
             doc_vectors.append(doc_vector)
         self.doc2vec = doc_vectors
 
-    def create_word2vec(self, root_words_option = 0, remove_stop_words = True, lower_case = True,
-                        word_form = None, ngrams = (1,1), max_doc = 1, min_doc = 1):
+    def create_word2vec(self, lower_case = True, ngrams = (1,1), max_doc = 1, min_doc = 1):
         """
         Update self.word2vec with a dictionary, with key as the word token and value
         as the corresponding number to the word
 
         Parameters
         ----------
-        root_words_option: int
-            0 - None, 1 - stem, 2 - lemmatize (based on self.root_words_options)
-        remove_stop_words:  bool
-            True if stop words should not be included, False otherwise
         lower_case: bool
             True if should apply lower case to all words before creating BOW, False otherwise
-        word_form:  list of str
-            Specific parts of sentence to be included for topic model training and prediction.
-            valid word forms: "verb", "noun", "adjective", "preposition", "adverb"
         ngrams: tuple of int
             Specify if the user wants unigram, bigram, trigrams or even mixture.
             (1,1) means only unigram, (1,2) means unigram and bigram
@@ -206,15 +154,11 @@ class Dataset:
                                 the word is not considered in the bag of words
             for any integer n >= 1: the token must appear in at least n documents
         """
-
-        final_text = self.input_text(root_words_option, remove_stop_words, lower_case, word_form)
-
-        model = Word2Vec(final_text, vector_size=100, window=5, min_count=1,
+        model = Word2Vec(self.preprocessed_text, vector_size=100, window=5, min_count=1,
                          workers=4, sg=0, epochs=100)
 
-        self.create_bow(root_words_option, remove_stop_words, lower_case, word_form,
-                        ngrams, max_doc, min_doc)
-        tokenized_words = self.bow[0].get_feature_names_out()
+        self.create_bow(lower_case, ngrams, max_doc, min_doc)
+        tokenized_words = self.feature_engineer[0].get_feature_names_out()
 
         word2vec_mapping = {}
         for word in tokenized_words:
@@ -223,11 +167,10 @@ class Dataset:
 
         self.word2vec = word2vec_mapping
 
-    def input_text(self, root_word_option = 0, remove_stop_words = True,
+    def preprocessing_text(self, root_word_option = 0, remove_stop_words = True,
                    lower_case = True, word_form = None):
         """
-        Helper function to generate the required tokenised words
-        to input for feature extraction / preprocessing
+        Consolidated method to preprocess the text to fit into feature engineering vectorizer
 
         Parameters
         ----------
@@ -241,25 +184,17 @@ class Dataset:
             Specific parts of sentence to be included for topic model training and prediction.
             valid word forms: "verb", "noun", "adjective", "preposition", "adverb"
         """
-        if not isinstance(root_word_option, int) or root_word_option > 2 or root_word_option < 0:
-            raise Exception("invalid root word option")
 
-        if self.root_words_options[root_word_option] is None:
-            if remove_stop_words:
-                self.removing_stop_words(lower_case, word_form)
-                return self.tokenized_no_stop_words
+        self.word_tokenizer(lower_case = lower_case, word_form = word_form)
 
-            else:
-                self.word_tokenizer(lower_case, word_form)
-                return self.tokenized_words
+        if remove_stop_words:
+            self.removing_stop_words()
 
-        elif self.root_words_options[root_word_option] == "stem":
-            self.stemming(remove_stop_words, lower_case, word_form)
-            return self.stem
+        if root_word_option == 1:
+            self.stemming(lower_case = lower_case)
 
-        elif self.root_words_options[root_word_option] == "lemmatize":
-            self.lemmatization(remove_stop_words, lower_case, word_form)
-            return self.lemmatize
+        if root_word_option == 2:
+            self.lemmatization()
 
     def modify_stop_words_list(self, replace_stop_words_list = None,
                                include_words = None,
@@ -294,7 +229,7 @@ class Dataset:
                     self.stop_words_list.remove(word)
 
         if include_words is not None:
-            self.stop_words_list.extend(include_words)
+            self.stop_words_list.extend(list(include_words))
 
     def word_tokenizer(self, lower_case = True, word_form = None):
         """
@@ -342,94 +277,53 @@ class Dataset:
 
             for tag in word_form:
                 if tag not in word_forms_tag:
-                    raise Exception(
-                        "Specified word form is not found in the word_forms tagging list!")
+                    raise NameError(
+                        f"{tag} is not found in the word_forms tagging list!")
                 tagged_word_form.append(word_forms_tag[tag.lower()])
 
             return temp_df.loc[temp_df[1].str.startswith(tuple(tagged_word_form)), 0].tolist()
 
-        self.tokenized_words = self.text.apply(lambda x: extract_relevant_tokens(x,lower_case))
+        text = self.data['Text'].apply(lambda x: sub("<[^>]+>", " ", x).strip())
+        self.preprocessed_text = text.apply(lambda x: extract_relevant_tokens(x,lower_case))
 
         if word_form is not None:
-            self.tokenized_words = self.tokenized_words.apply(
+            self.preprocessed_text = self.preprocessed_text.apply(
                 lambda x:extract_relevant_word_forms(x, word_form))
 
-    def sentence_tokenizer(self):
-        """
-        Update self.tokenized_sentence after splitting each text into individual sentence
-        """
-        self.tokenized_sentence =  self.text.apply(sent_tokenize)
-
-    def removing_stop_words(self, lower_case = True, word_form = None):
+    def removing_stop_words(self):
         """
         Update self.tokenized_no_stop_words to remove any tokens in
         self.tokenized_words that exist in the list of stop words
-        
-        Parameters
-        ----------
-        lower_case: bool
-            True if should apply lower case to all words before creating BOW, False otherwise
-        word_form:  list of str
-            Specific parts of sentence to be included for topic model training and prediction.
-            valid word forms: "verb", "noun", "adjective", "preposition", "adverb"
         """
-        self.word_tokenizer(lower_case, word_form)
-
-        self.tokenized_no_stop_words = self.tokenized_words.apply(
+        self.preprocessed_text = self.preprocessed_text.apply(
             lambda x: [word for word in x if word.lower() not in self.stop_words_list])
 
 
-    def stemming(self, remove_stop_words = True, lower_case = True, word_form = None):
+    def stemming(self, lower_case = True):
         """
-        Update self.stem after stemming all the tokens as specified
-        
-        Paremeters
-        ----------
-        remove_stop_words: bool
-            True if stop words should be removed before feature engineering.
-            False if all words are kept for feature engineering.
-        lower_case: bool
-            True if all the words should be lowercased, False otherwise.
-        word_form: list of str
-            Specific parts of sentence to be included for topic model training and prediction.
-            valid word forms: "verb", "noun", "adjective", "preposition", "adverb"
+        Apply stemming to each tokens of the texts.
         """
-        words_to_stem = self.input_text(0, remove_stop_words, lower_case, word_form)
+        p_s = PorterStemmer()
+        self.preprocessed_text = self.preprocessed_text.apply(
+            lambda x: [p_s.stem(word, to_lowercase = lower_case) for word in x])
 
-        ps = PorterStemmer()
-        self.stem = words_to_stem.apply(
-            lambda x: [ps.stem(word, to_lowercase = lower_case) for word in x])
-
-    def lemmatization(self, remove_stop_words = True, lower_case = True, word_form = None):
+    def lemmatization(self):
         """
-        Update self.lemmatize after lemmatizing all the tokens as specified
-       
-        Parameters
-        ----------
-        remove_stop_words: bool
-            True if stop words should be removed before feature engineering.
-            False if all words are kept for feature engineering.
-        lower_case: bool
-            True if all the words should be lowercased, False otherwise.
-        word_form: list of str
-            Specific parts of sentence to be included for topic model training and prediction.
-            valid word forms: "verb", "noun", "adjective", "preposition", "adverb"
+        Apply lemmatization to each tokens of the texts.
         """
-        words_to_lemmatize = self.input_text(0, remove_stop_words, lower_case, word_form)
-
         wordnet_lemmatizer = WordNetLemmatizer()
-        self.lemmatize = words_to_lemmatize.apply(
+        self.preprocessed_text = self.preprocessed_text.apply(
             lambda x: [wordnet_lemmatizer.lemmatize(word) for word in x])
 
 def create_datasets(full_data_set):
     """
     Create standardised training and testing dataset
-    after splitting the raw dataset based on Sentiment proportion
+    after splitting the raw dataset based on Sentiment proportion for training purpose only
     
     Parameter
     ---------
     df: pandas DataFrame
-        Consist of columns named "Text" and "Date", optionally include column named "Sentiment" 
+        Consist of columns named "Text", "Date" and "Sentiment" 
     
     Return
     ------
