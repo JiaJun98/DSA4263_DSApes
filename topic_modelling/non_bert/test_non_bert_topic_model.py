@@ -127,13 +127,3 @@ def test_churn_eval_metrics(test_dataset, monkeypatch):
     assert churned_output.shape[0] == 2
     assert churned_output['Topic_label'].value_counts().tolist()[0] == 1
     assert churned_output['Topic_label'].value_counts().tolist()[1] == 1
-
-
-    
-
-
-
-
-
-
-
