@@ -149,7 +149,6 @@ def predict(): #Send data from front-end to backend then to front end
                 word_form, ngrams, max_doc, min_doc, logger, num_of_topics)
         topic = list(labelled_test_df["Topic label"].apply(lambda x: " ".join(list(map(lambda y: y.capitalize(),x.split("_"))))))[0]
         logger.close()
-        plot_html = None
         return render_template("index.html", 
                                 texts = [], 
                                 preds = [], 
