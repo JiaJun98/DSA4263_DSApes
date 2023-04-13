@@ -2,6 +2,8 @@
 import pytest
 import numpy as np
 import pandas as pd
+import sys
+sys.path.append(".")
 from preprocess_class import Dataset, create_datasets
 
 pytestmark = pytest.mark.filterwarnings("ignore")
