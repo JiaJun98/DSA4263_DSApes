@@ -1,0 +1,46 @@
+Training model
+---------------------------------
+
+model name: bert-base-uncased-key-unigram
+Coherence score: -0.295115775035504
+    Topic  Count                                              Name
+0      -1   3121         -1_decaffeinated_pistachios_moldy_ketchup
+1       0    224    0_marshmellows_receommend_toothpicks_dandelion
+2       1    165  1_veterinarian_constipated_pancreatitis_sorbitol
+3       2    156              2_sauteing_souffles_pickle_precooked
+4       3    114     3_accommodating_walgreens_tantalizing_courmet
+5       4    107                   4_twizzler_oaty_squishy_nuffins
+6       5     79       5_netgrocer_grocercy_vitamuffins_superfresh
+7       6     75            6_disappionted_tweaked_raccoons_mmmmmm
+8       7     73          7_cholocates_komboloi_unsealed_raincoast
+9       8     70    8_bioflavonoids_refreshment_concoction_splends
+10      9     50             9_unreasonble_slush_suggessted_kahula
+11     10     46             10_kerig_complait_pistachio_unpacking
+12     11     41                11_erythritol_tweak_kalua_odorless
+13     12     34            12_buchkwheat_namaste_strudel_limeades
+Words and score of topic 0:
+ [('marshmellows', 0.5117914406030221), ('receommend', 0.5110196910238717), ('toothpicks', 0.5020811184166248), ('dandelion', 0.49983806961543154), ('macchiato', 0.4910141222614522), ('puroast', 0.4909957406593225), ('oolongs', 0.49093297806510316), ('puerh', 0.4890958719786614), ('sufferrers', 0.4879325533610693), ('prickly', 0.47550178848743285)]
+Words and score of topic 1:
+ [('veterinarian', 0.5213324319710012), ('constipated', 0.5064735804943876), ('pancreatitis', 0.4975405646478032), ('sorbitol', 0.4928150144074905), ('infrequent', 0.47836182718783093), ('misinformation', 0.47117554602932166), ('grunting', 0.4575103547124624), ('glycerine', 0.4510681089617723), ('weaned', 0.431496773924722), ('feces', 0.4222302393672801)]
+Words and score of topic 2:
+ [('sauteing', 0.637429344595258), ('souffles', 0.5881214487262307), ('pickle', 0.5530004534517144), ('precooked', 0.5195646756756876), ('peppadews', 0.5103552721539384), ('stews', 0.5074621634241968), ('unwelcome', 0.49438065707400725), ('scallops', 0.48677662903237545), ('puddings', 0.485453308828596), ('unusuable', 0.4803896770170197)]
+Words and score of topic 3:
+ [('accommodating', 0.5281972225660201), ('walgreens', 0.5202002767371037), ('tantalizing', 0.4682706614705751), ('courmet', 0.45890650397572796), ('amozon', 0.451026285106907), ('gumbo', 0.4323948863702333), ('resonable', 0.41306073469821153), ('formaggio', 0.4022294639331815), ('carrys', 0.39424427953506225), ('allsorts', 0.3918778814275661)]
+Words and score of topic 4:
+ [('twizzler', 0.5376236941887474), ('oaty', 0.5134072177563372), ('squishy', 0.5091024372003649), ('nuffins', 0.5077014599018008), ('pomegranates', 0.492274829620028), ('anecdote', 0.4839085148894289), ('poopy', 0.47953099371007146), ('cremes', 0.4752806692861347), ('overindulging', 0.4747442518727981), ('mozzarella', 0.4735892317545629)]
+Words and score of topic 5:
+ [('netgrocer', 0.5642641199534302), ('grocercy', 0.5429812191926413), ('vitamuffins', 0.5421553910146684), ('superfresh', 0.5114784917728722), ('woudl', 0.4995560461249365), ('locition', 0.49738334554225627), ('12pk', 0.4925101123082723), ('fluctuates', 0.47774810682989516), ('walgreen', 0.4770184281529101), ('marshmallows', 0.4656021371798746)]
+Words and score of topic 6:
+ [('disappionted', 0.5393639310691043), ('tweaked', 0.5150555376986113), ('raccoons', 0.4698091135216512), ('mmmmmm', 0.46796757829737035), ('b00008dfpy', 0.45993865401805334), ('reassess', 0.4599129293088485), ('cupcake', 0.4591198607590427), ('skunky', 0.4557762691374889), ('tolerable', 0.4447316287662167), ('rewrap', 0.43842050694649276)]
+Words and score of topic 7:
+ [('cholocates', 0.46243819840646794), ('komboloi', 0.45217677276995394), ('unsealed', 0.4483963935065635), ('raincoast', 0.4444931546580702), ('saddens', 0.43190902905559864), ('disposakups', 0.4307911087598315), ('previosly', 0.4181175481766087), ('permanant', 0.4133625644844793), ('tumric', 0.41152562116890157), ('vials', 0.40880644914026726)]
+Words and score of topic 8:
+ [('bioflavonoids', 0.5942969577998125), ('refreshment', 0.4942995323787849), ('concoction', 0.4808987944056368), ('splends', 0.4641523996702484), ('acerola', 0.46373029956050155), ('orangish', 0.4598051317322147), ('chlorinated', 0.45828546987635116), ('orangy', 0.4489739604509118), ('muddied', 0.4486249013384053), ('neurotoxin', 0.4379590007430156)]
+Words and score of topic 9:
+ [('unreasonble', 0.5413905513062551), ('slush', 0.5381604370681852), ('suggessted', 0.5034831688146905), ('kahula', 0.500135191600921), ('yummmy', 0.4994723500445794), ('cons______small', 0.4835734403446877), ('capuccino', 0.48071085258473545), ('ghiradelli', 0.4739219290316865), ('pros_______this', 0.4712944415853126), ('eyeballing', 0.47092266272038735)]
+Words and score of topic 10:
+ [('kerig', 0.45629167337166243), ('complait', 0.45321572252114156), ('pistachio', 0.4526093511860316), ('unpacking', 0.449799585219672), ('kadayif', 0.44501851257213415), ('alergies', 0.43228281982660993), ('wihout', 0.42341618514849444), ('deffinitely', 0.4202964038774648), ('quaity', 0.41623549241317764), ('bigs', 0.41001456879087517)]
+Words and score of topic 11:
+ [('erythritol', 0.5420899401984426), ('tweak', 0.5187850671751417), ('kalua', 0.4984343393797446), ('odorless', 0.4774559140280174), ('effervescent', 0.46362691332783745), ('expencive', 0.45948211432985064), ('rccjr', 0.45547584575870487), ('occational', 0.4490856611085423), ('mouthfeel', 0.44508060241904485), ('convinence', 0.4371247734027924)]
+Words and score of topic 12:
+ [('buchkwheat', 0.569215618166065), ('namaste', 0.4256934194180052), ('strudel', 0.4187248847349039), ('limeades', 0.41655576768856384), ('', 0.3033458093717468), ('', 0.3033458093717468), ('', 0.3033458093717468), ('', 0.3033458093717468), ('', 0.3033458093717468), ('', 0.3033458093717468)]

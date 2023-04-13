@@ -1,0 +1,33 @@
+Training dataset has been loaded successfully
+
+---------------------------------
+LogisticRegression model succesfully trained
+
+---------------------------------
+
+model_accuracy: 0.58
+model_precision: 0.91
+model_auc: 0.67
+model_f1score: 0.63
+sensitivity: 0.48
+specificity: 0.87
+
+---------------------------------
+
+Threshold parameter tuning
+
+Prediction using best threshold for accuracy
+-------------------------
+
+model_accuracy: 0.74
+model_precision: 0.74
+model_auc: 0.51
+model_f1score: 0.85
+sensitivity: 1.00
+specificity: 0.02
+Best threshold for accuracy: 0.1630963804803894
+Accuracy score at best threshold: 0.7410468319559229
+Warning: LogisticRegression model has NOT been saved
+
+---------------------------------
+

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title class="text-center">VOC App</title>
+
+    <link href='static/css/style.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="static/js/script.js"></script>
+    
+    <!--script src="{{ url_for('static', filename='js/script.js') }}"></script-->
+    
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+  <nav>
+    <ul>
+      <li><a href="{{ url_for('index') }}">Home</a></li>
+      <li><a href="#sentiment-analysis">Sentiments and Topics</a></li>
+      <li><a href="#historic-trends">Historic and Future Trends</a></li>
+    </ul>
+  </nav>
+  </head>
+
+  <body> 
+    
+    <div class="container">
+      <h1 class="text-center">Voice of Customer Application</h1>
+    </div>
+    
+    <div class="container" id="sentiment-analysis">
+      <div style="display: flex; flex-direction: column;">
+        <h2 class="text-centre">Predicting customer sentiment and topics</h2>
+        <h2 class="text-centre">Enter review or submit your csv file</h2>
+      </div>
+    </div>
+    <div class="container justify-content-center">
+      <div style="display: flex; flex-direction: column;">
+        <form id="my-form" action="/predict" method="POST" class="form-inline justify-content-center" onsubmit="return validateForm()">
+          <textarea id="review-input" name = "review"> </textarea>
+          {% if js_script == "empty_text" %}
+          <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Did you forgot to enter your text(s)?',
+              })
+          </script>
+          {% endif %}
+          <div class="btn-group">
+            <button type="submit" class="btn btn-primary mb-2">Submit your input text</button>
+            <button type="reset" class="btn btn-primary mb-2">Clear</button>
+          </div>
+          
+        </form>
+        <div class="btn-group">
+          <form action="/upload" method="POST"  enctype="multipart/form-data">
+            <input type="file" name="file" id="file" class="inputfile">
+            {% if js_script == "wrong_file_type" %}
+            <script>
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'Only csv files are allowed!',
+                })
+            </script>
+            {% endif %}
+            <label for="file">Upload csv file</label>
+            <button type="submit" class="btn btn-primary mb-2">Submit csv file</button>
+            {% if js_script == "only_one_month" %}
+            <script>
+              Swal.fire(
+                'Warning',
+                'Csv file only has one month; Historic trend might not be accurate'
+              )
+            </script>
+            {% endif %}
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <div class = "row" style="margin:5%;height:100%;">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Text</th>
+          <th>Predicted Customer Sentiment</th>
+          <th>Predicted Probabilities</th>
+          <th>Predicted Topic</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if texts|length > 1 %}
+          {% for i in range(texts|length) %}
+            <tr>
+              <td>{{ texts[i] }}</td>
+              <td>{{ preds[i] }}</td>
+              <td>{{ probs[i] }}</td>
+              <!--Place holder for topic-->
+              <td>{{ topics[i] }}</td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td>{{ text }}</td>
+            <td>{{ pred }}</td>
+            <td>{{ prob }}</td>
+            <!--Place holder for topic-->
+            <td>{{ topic }}</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+    </div>
+
+    <div class="container" id="historic-trends" style="margin:5%;height:100%;">
+      <div style="display: flex; flex-direction: column;">
+        <h2 class="text-centre">Historic and Future Trends of Sentimental and Key Topics</h2>
+        <div id="historic-plot">
+          {{ plot_html | safe }}
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>

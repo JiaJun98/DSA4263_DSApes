@@ -1,0 +1,19 @@
+Training model
+---------------------------------
+
+model name: bert-base-uncased-unigram
+Coherence score: -0.3318652748469048
+   Topic  Count                               Name
+0     -1   2759           -1_ghee_salsa_5g_jamaica
+1      0    763      0_stool_felidae_similac_greta
+2      1    720         1_ese_acerola_quench_fizzy
+3      2     59         2_wing_allways_kadayif_mae
+4      3     54  3_ghiradelli_alley_vitamix_yummmy
+Words and score of topic 0:
+ [('stool', 0.41099029999098236), ('felidae', 0.41099029999098236), ('similac', 0.38193035524015506), ('greta', 0.3526350179576612), ('colon', 0.34411369146751764), ('mic', 0.3349748821894381), ('formulas', 0.31441844917888473), ('record', 0.31441844917888473), ('indoor', 0.3027058996375848), ('adopted', 0.289754737485198)]
+Words and score of topic 1:
+ [('ese', 0.46187194275408516), ('acerola', 0.43874509149254326), ('quench', 0.4123836647524746), ('fizzy', 0.4123836647524746), ('relaxing', 0.3815961923256147), ('stews', 0.3815961923256147), ('riviera', 0.3815961923256147), ('concentrates', 0.3815961923256147), ('mio', 0.3815961923256147), ('mahogany', 0.3815961923256147)]
+Words and score of topic 2:
+ [('wing', 1.2932172169424785), ('allways', 1.2932172169424785), ('kadayif', 1.2932172169424785), ('mae', 1.2932172169424785), ('ohio', 0.9852814320821887), ('carbo', 0.9852814320821887), ('bout', 0.9852814320821887), ('highley', 0.9852814320821887), ('6in1', 0.9852814320821887), ('wihout', 0.9852814320821887)]
+Words and score of topic 3:
+ [('ghiradelli', 1.2351955598432218), ('alley', 0.941075663206255), ('vitamix', 0.941075663206255), ('yummmy', 0.941075663206255), ('yu', 0.941075663206255), ('metaphors', 0.941075663206255), ('patience', 0.941075663206255), ('peanutty', 0.941075663206255), ('porkt', 0.941075663206255), ('pros_______this', 0.941075663206255)]

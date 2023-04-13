@@ -1,0 +1,224 @@
+body {
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(-45deg, #35577D, #141E30);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(-45deg, #35577D, #141E30);
+    margin: 0;
+    padding: 0;
+  }
+  
+  h1 {
+    color: #FFF !important;
+    font-size: 2em;
+    padding-top: 10px;
+    width: 100%;
+    font-family: Georgia;
+    text-align: center;
+  }
+  
+  h2 {
+    color: rgb(255, 255, 255); 
+    font-weight: 100;
+    font-size: 22px;
+    text-align: center;
+    width: 100%;
+    font-family: Georgia;
+  }
+  
+  .error-message {
+    color: red;
+    font-size: 20px;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    height: 20vh;
+    margin-bottom: 10px;
+    
+  }
+
+  .row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 150px;
+    margin-bottom: 200px;
+    height: 40vh;
+  }
+
+  p {
+    color: aliceblue;
+    line-height: 1.3em;
+    text-align: center;
+    width: 100%;
+    font-family: Georgia;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+
+  .row p {
+    margin: 0;
+  }
+
+.table {
+    justify-content: center;
+    margin-top: 20px;
+    border-collapse: collapse;
+    box-shadow: 20px 20px 20px 5px #062144;
+    align-items: center;
+    background-color: rgb(255, 255, 255);
+    width: 80%;
+    text-align: center;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.table th {
+  background-color: #d0def2;
+  padding: 0.75rem 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  font-size: 0.7rem;
+  font-weight: 900;
+  width: 40%;
+}
+
+th:first-child {
+  width: 40%;
+}
+
+.table td {
+  padding: 1rem 1rem;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+tr:nth-child(even) {
+    background-color: #f3f8fe;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f1f1f1;
+    border-radius: 10px;
+    box-shadow: 20px 20px 20px 5px #062144;
+    height: 110px;
+    width: 400px;
+  }
+
+  .btn-group form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    float: left; 
+    padding: 20px;
+    background-color: #f1f1f1;
+    border-radius: 10px;
+    box-shadow: 20px 20px 20px 5px #062144;
+    height: 20px;
+    width: 400px;
+  }
+  
+  .btn-group button, .btn-group input, .btn-group label{
+    background-color: #35577D; 
+    border: 1px solid rgb(0, 0, 0); 
+    color: white;
+    padding: 7px 10px; 
+    cursor: pointer; 
+    float: left; 
+  }
+
+  .inputfile {
+    display: none;
+  }
+  
+  .btn-group button:not(:last-child), .btn-group label:not(:last-child)  {
+    border-right: none; /* Prevent double borders */
+  }
+  
+  .btn-group:after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+  
+  .btn-group button:hover .btn-group input:hover {
+    background-color: #2d2f68;
+  }
+
+  
+  textarea {
+    resize: block;
+    min-height: 20px;
+    width: 100%;
+    height: 50px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    resize: none;
+    font-size: 16px;
+  }
+  
+  form button {
+    display: inline-block;
+    margin-left: 10px;
+  }
+
+  button {
+    padding: 10px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #0062cc;
+  }
+
+  .content {
+    padding: 40px;
+  }
+  
+  nav {
+    background-color: #3a5689;
+    overflow: hidden;
+  }
+  
+  nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  nav li {
+    float: left;
+  }
+  
+  nav li a {
+    display: block;
+    color: rgb(0, 0, 0);
+    text-align: center;
+    padding: 14px 16px;
+    font-family: Georgia;
+    text-decoration: none;
+  }
+  
+  nav li a:hover {
+    background-color: #6fc5f0;
+  }
+  
