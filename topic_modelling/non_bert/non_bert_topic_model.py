@@ -352,9 +352,9 @@ class TopicModel(BaseModel):
         for index, key_words in enumerate(topic_key_words):
             curr_topic_key_words = ", ".join(key_words)
 
-            curr_topic_doc = labelled_train_topics.loc[
-                labelled_train_topics['Topic no'] == index, :]
-            topic_samples = curr_topic_doc.sample(n = num_top_documents, random_state=4263)
+            topic_samples = labelled_train_topics.loc[
+                labelled_train_topics['Topic no'] == index, :].sample(n = num_top_documents,
+                                                                      random_state=4263)
 
             if self.custom_print:
                 custom_print(f"\nTopic {index}", logger = logger)
@@ -483,6 +483,22 @@ class TopicModel(BaseModel):
             custom_print(f"-------- Average topic accuracy: {str(average_topic_accuracy)} --------",
                          logger = logger)
 
+def test(test_dataset_in, feature_engineer_type_in, replace_stop_words_list_in, include_words_in,
+         exclude_words_in, root_word_option_in, remove_stop_words_in, lower_case_in, word_form_in,
+         ngrams_in, max_doc_in, min_doc_in, test_output_path_in, pickled_model_in,
+         pickled_vectorizer_in, topic_label_in):
+    testModel = TopicModel(test_dataset=test_dataset_in,
+                        feature_engineer_type=feature_engineer_type_in)
+    testModel.modify_dataset_stop_words_list(replace_stop_words_list_in, include_words_in,
+                                                exclude_words_in)
+    testModel.preprocess_dataset(root_word_option_in, remove_stop_words_in,
+                                    lower_case_in, word_form_in)
+    testModel.generate_feature_engineer(lower_case_in, ngrams_in, max_doc_in, min_doc_in)
+
+    topic_label_in = pd.read_csv(topic_label_in).iloc[:,0].tolist()
+    testModel.predict(test_output_path_in, pickled_model_in, pickled_vectorizer_in,
+                        topic_label_in)
+
 if __name__ == "__main__":
     curr_dir = os.getcwd()
     config_path = os.path.join(curr_dir, 'non_bert_topic_modelling_config.yml')
@@ -565,16 +581,6 @@ if __name__ == "__main__":
     elif isTester:
         test_dataset_in = Dataset(data_df)
         custom_print("------Preprocessing text data--------", logger = logger)
-        testModel = TopicModel(test_dataset=test_dataset_in,
-                               feature_engineer_type=feature_engineer_type_in)
-        testModel.modify_dataset_stop_words_list(replace_stop_words_list_in, include_words_in,
-                                                 exclude_words_in)
-        testModel.preprocess_dataset(root_word_option_in, remove_stop_words_in,
-                                     lower_case_in, word_form_in)
-        testModel.generate_feature_engineer(lower_case_in, ngrams_in, max_doc_in, min_doc_in)
 
-        topic_label_in = pd.read_csv(topic_label_in).iloc[:,0].tolist()
-        testModel.predict(test_output_path_in, pickled_model_in, pickled_vectorizer_in,
-                          topic_label_in)
         custom_print('Testing complete!',logger = logger)
     logger.close()

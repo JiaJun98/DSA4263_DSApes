@@ -1,9 +1,8 @@
 """Ensure non bert topic modelling functions are working"""
 import os
-print(os.getcwd())
-from non_bert_topic_model import TopicModel
 import sys
 sys.path.extend([".", "../.."])
+from non_bert_topic_model import TopicModel
 from preprocess_class import Dataset
 import pandas as pd
 from io import StringIO
@@ -54,49 +53,67 @@ def test_set_topic_labels(train_dataset, monkeypatch):
     test_model.set_topic_labels(0)
     assert test_model.topic_label == ['testTopic']
 
-def test_preprocess_dataset(train_dataset):
+def test_modify_dataset_stop_words_list(train_dataset, test_dataset):
     """
-    Ensures that the vectorizer is generated based on the specified input.
+    Ensures that the stop words list is replaced in both train and test dataset.
+    """
+    test_model = TopicModel(train_dataset = train_dataset, test_dataset = test_dataset,
+                            custom_print_in = False)
+    expected = ['i', 'am', 'happy']
+    test_model.modify_dataset_stop_words_list(replace_stop_words_list = expected)
+
+    assert test_model.train_dataset.stop_words_list == expected
+    assert test_model.test_dataset.stop_words_list == expected
+
+def test_preprocess_dataset(test_dataset):
+    """
+    Ensures that text of the dataset in the model class is preprocessed.
+    """
+    test_model = TopicModel(test_dataset = test_dataset, custom_print_in = False)
+    test_model.preprocess_dataset(remove_stop_words = False)
+    expected_output_0 = ["i", "fell", "in", "love", "with", "this", "keurig", "coffee",
+                         "amazing", "standards"]
+    assert test_model.test_dataset.preprocessed_text[0] == expected_output_0
+    assert len(test_model.test_dataset.preprocessed_text) == 5
+
+def test_generate_feature_engineer(train_dataset):
+    """
+    Ensures that the feature engineer of the dataset in the model
     """
     test_model = TopicModel(train_dataset = train_dataset, custom_print_in = False)
     test_model.preprocess_dataset(remove_stop_words = False)
-    expected_output_0 = ["i", "fell", "in", "love", "with", "this", "keurig", "coffee" "amazing" "standards"]
-    assert test_model.train_dataset.preprocessed_text[0] == expected_output_0
-    assert len(test_model.train_dataset.preprocessed_text) == 5
+    test_model.generate_feature_engineer()
+
+    assert test_model.train_dataset.feature_engineer is not None
+
+def test_train(train_dataset):
+    """
+    Ensures the model is trained on the dataset, output 2 files with the
+    second file as text labelled to each topic number
+    """
+    test_model = TopicModel(train_dataset = train_dataset, feature_engineer_type = "tfidf",
+                            custom_print_in = False)
+    test_model.preprocess_dataset(remove_stop_words = False)
+    test_model.generate_feature_engineer()
+    output = test_model.train("NMF", 2, pytest_dir)
+
+    assert len(output) == 2
+    assert output[1].shape[0] == 5
+    assert output[1].shape[1] == 3
 
 def test_display_topics(train_dataset):
     """
     Ensures that the right number of topics and its corresponding topic key words are generated.
     """
     test_model = TopicModel(train_dataset = train_dataset, custom_print_in = False)
-    test_model.preprocess_dataset(remove_stop_words = False, include_words = [], exclude_words = [])
-    training = NMF(n_components = 2, init = 'nndsvd', random_state = 4263, solver = 'cd')
-    trained_model = training.fit_transform(test_model.train_dataset.bow[2])
-    output_path = os.path.join(os.getcwd(), "pytest_TopicModel")
-    tokens = test_model.train_dataset.bow[0].get_feature_names_out()
-    topic_key_words = test_model.display_topics(training.components_,
-                                                tokens,
-                                                num_top_words = 2, train_output_path = output_path,
-                                                training_model = "NMF",
-                                                vectorizer = test_model.train_dataset.bow)
+    test_model.preprocess_dataset(remove_stop_words = False)
+    test_model.generate_feature_engineer()
+    component, labelled_no_topics = test_model.train("NMF", 2, pytest_dir)
+    topic_key_words = test_model.display_topics(training_model = "NMF",
+                                                trained_topics = component, num_top_words = 2,
+                                                train_output_path = pytest_dir)
     assert len(topic_key_words) == 2
     assert len(topic_key_words[0]) == 2
-
-def test_train(train_dataset, monkeypatch):
-    """
-    Ensures that the correct preprocessing is applied on train_dataset,
-    model is trained and the topic_label attribute is updated correctly
-    """
-    test_model = TopicModel(train_dataset = train_dataset,
-                            custom_print_in = False, feature_engineer = "tfidf")
-    test_model.preprocess_dataset(remove_stop_words = False, word_form = ['noun'])
-    inputs = iter(['Virtual topic 1', 'Virtual topic 2'])
-    monkeypatch.setattr('builtins.input', lambda _: next(inputs))
-    test_model.train("NMF", num_of_topics = 2, num_top_words = 1, 
-                     num_top_documents = 1, train_output_path = pytest_dir)
-    assert test_model.train_dataset.tfidf is not None
-    assert test_model.model is not None
-    assert test_model.topic_label == ['Virtual topic 1', 'Virtual topic 2']
 
 def test_predict(test_dataset):
     """
