@@ -1,0 +1,111 @@
+---------------------------------
+
+------Preprocessing text data--------
+------ Training model --------
+
+------ Distribution for number of documents in each topic --------
+
+Topic 0: 1337
+Topic 1: 165
+Topic 2: 734
+Topic 3: 58
+Topic 4: 1725
+Topic 5: 7
+Topic 6: 1284
+Topic 7: 30
+Topic 8: 3
+Topic 9: 101
+------5444 documents trained------
+------ End of training for 10 topics --------
+------ Generating key words and sample documents for each topic ------
+
+
+Topic 0
+chip, snack, sugar, sweet, flavor, good, healthy, like, tasty, great, calorie, eat, cooky, taste, fruit, just, love, cereal, oil, bit
+
+low, gluten, product, stuff, good, hold, liquid, doe, mushy, like, bit, dried, fruit, add, stevia, sweetness
+
+all-time, favorite, candy, lay, used, slogan, bet, ca, eat, just, doubt, case, biggest, ca, leave, waistline, suggesting
+
+bar, tasty, snack, taste, like, dry, carrot, cake, little, chewy, nice, texture, nut, raisin, surprisingly, high, calorie, bar
+
+Topic 1
+free, gluten, gluten free, mix, cracker, rice, pancake, pasta, flour, baking, family, gf, texture, waffle, great, graham, wheat, dairy, maple, bread
+
+fantastic, better, regular, pretzel, expecting, hard, grainy, like, gf, potato, corn, starch, instead, rice, flour, seriously, really, good
+
+gluten-free, little, year, struggled, finding, tasty, affordable, alternative, favorite, food, great, thing, mix, really, easy, make, affordable, pancake, tasty, child, object, eating, saving, time, making, batch, pancake, did, eating, think, kid, notice, eating, gluten-free, pancake
+
+chocolate, chip, taste, great, creamy, texture, meltling, consistancy, creamy, yummy, use, baking, gluten, free, cooky, bread
+
+Topic 2
+treat, product, item, sauce, chicken, dog, package, bag, good, easy, received, company, amazon, time, came, hard, china, use, cheese, packaging
+
+juniper, plant, received, died, month, planting, did, research, doe, best, outside, home, eve, garden, failed, mention, product, instruction, gave, star, shipped, fun, lasted, getting, manufacturer
+
+breadstick, wonderful, hummus, spinach, dip, wonderfully, light, crisp, just, hint, herb, add, addicting, rated, star, shipping, careless, half, box, contained, broken, breadstick, really, wanted, serve, upright, hopefully, amazon, note, ship, padding, time
+
+dog, prone, ear, infection, did, lot, paw, chewing, vet, recommended, changing, diet, symptom, food, allergy, specifically, recommended, salmon, rice, formula, unfortunately, dog, hated, salmon, rice, smelt, extremely, fishy, tried, lamb, rice, formula, like, better, heard, numerous, good, thing, wellness, dog, trainer, pet, owner, pet, store, employee, dog, adjusting, new, food, tell, doe, consider, tasty, choices-, probably, doe, artificial, flavoring, eat, healthier, sacrifice, little, taste
+
+Topic 3
+butter, peanut, cake, peanut butter, bread, quick, quick easy, almond butter, rum, just like, easy, rice cake, cake mix, wal, bake, mart, pan, wal mart, soup, allergic
+
+manuka, honey, say, taste, nice, toast, slice, bread, arnold, ancient, grain, spread, honey, spread, peanut, butter, enjoy
+
+fantasicakes, sent, cake, fast, sent, moist, hard, wrong, chocolate, cake, really, fantastic, icing, come, warm, drizzle, leisure, really, liked, normally, like, lot, icing, love
+
+make, bread, time, look, variety, bread, tasty, delicious, loaf, bread, machine, husband, kid, favorite
+
+Topic 4
+price, product, store, food, love, amazon, great, bought, buy, taste, best, time, good, quality, chocolate, did, local, better, brand, hot
+
+bought, hazelnut, paste, nocciola, spread, local, shop, palm, cost, florida, taste, excellent, healthier, nutella
+
+product, kick, usually, hot, mustard, brand, pay, attention, jar, small
+
+run, food, cat, love, time, love, price
+
+Topic 5
+rind, pork, pork rind, microwave, microwave pork, good, product worth, draw, spicy, make product, bagged, bacon, thats, cook, paper, depending, great, hot spicy, par, melt mouth
+
+really, dissappointed, product, salty, poor, flavor, convenience, make, product, worth, purchasing, like, pork, rind
+
+tasty, spicy, good, quite, conversation, piece, work, heard, microwave, pork, rind, tasted, love, draw, depending, type, microwave, cook
+
+lowrey, changed, microwave, pork, rind, used, love, order, received, generic, paper, container, really, flimsy, cellophane, wrapping, writing, paper, sack, whatsoever, taste, sub, par, rind, said, used, love, product, buy, lowrey, microwave, pork, rind
+
+Topic 6
+coffee, tea, taste, flavor, like, cup, great, water, drink, good, really, nice, just, strong, recommend, taste great, doe, tried, green, make
+
+love, tea, wife, usually, big, tea, drinker, house, trying, keurig, say, love, did, purchase, amazon, got, box, recommend
+
+roasted, excellent, brewed, french, press, aromatic, brewing, smooth, flavor, fruity, tone, try, green, coffee, folk, definitely, purchase
+
+used, coffee, syrup, love, starbucks, close, wonderful, taste, used, torani, hazelnut, syrup, just, small, different, flavor, coffee, sweet, need, added, sugar, good, price, shipping, high, buy, try, different, flavor
+
+Topic 7
+bar, protein, snack, truffle, tasty, great snack, hemp, great, banana, candy bar, filling, nutty, granola bar, high protein, protein bar, fresh tasty, tasty snack, meal, arrived, bar taste
+
+little, lesson, truffle, truffle, graded, extra, larger, second, highest, truffle, quality, best, used, conclusion, cooking, process, release, aroma, perfume, chef, suggest, slice, shave, thinly, pasta, risotto, omelet, truffles-, marked, brushed, mean, cleaned, soil, dirt, preserved, brine, truffle, juice, discarded, use, flavor, sauced, broth, ready, use, preserved, truffle, nice, budget-friendly, way, add, visual, truffle, appeal, dish, looking, add, pungent, aroma, taste, truffle, dish, chef, recommend, explore, fresh, truffle, selection, jarred, canned, truffle, sold, vendor, mere, shadow, fresh, truffle, self, deliver, aroma, flavor, fresh, truffle, great, use, truffle, oil, oil, add, flavor, preserved, truffle, truffle, look, preserved, truffle, used, garnish, dish, conjunction, truffle, butter, oil, time, fresh, truffle, season, budget, doe, allow, real, thing, note, preserved, truffle, jar, flavor, odor, looking, true, flavor, fresh, truffle, seek, fresh, truffle, page, online, purchase, fresh, truffle, looking, add, truffle, look, dish, product, better, buy, real, truffle, oil, experiment, example, jr, mushroom, specialty, amazon, good, start, dollar, low, commitment, line, superior, bottle, extra, virgin, olive, oil, evoo
+
+recently, tried, quaker, banana, nut, bread, cereal, bar, pleasantly, surprised, bite, felt, like, really, eating, banana, nut, bread, simply, delicious
+
+purchased, bar, meal, replacement, job, lunch, texture, bit, hard, moat, protein, bar, hard, special, k, protein, bar, taste, great, gram, protein, bar, better, alternative, snack, protein, bar, use, meal, replacement, workout, job, special, k, bar, taste, best, buying
+
+Topic 8
+licorice, black licorice, licorice flavor, flavor hard, great, like licorice, absolutely best, like, hard eat, seal, taste, love, flavor, dop, product, best, hard, soft, certified, tasty
+
+licorice, lover, life, black, licorice, lace, favorite, type, licorice, product, impossible, live, searched, store, store, supply, black, licorice, lace, finding, amazon, ordered, immediately, dissatisfied, taste, gustaf, licorice, didnt, taste, like, real, black, licorice, artificial, substitute, way, soft, did, twizzlers, just, real, licorice, flavor, order, gustaf, licorice
+
+bought, rj, soft, licorice, log, today, absolutely, best, black, licorice, tasted
+
+licorice, flavor, hard, eat, seal, bag, hard, soft, like, licorice
+
+Topic 9
+juice, soda, orange, drink, cherry, tangerine, switch, carbonated, carbonation, grape, vitamin, beverage, orange tangerine, natural, flavor, artificial, pop, orange soda, refreshing, orange juice
+
+dont, know, believe, tea, helpful, losing, weight, taste, great, wonderful, alternative, soda, reason, bought
+
+orange, tangerine, juice, mainly, apple, grape, juice, flavored, orange, tangerine, really, care, vitamin, c, content, vitamin, c, easy, care, definitely, worst-tasting, soda, type, tried, pour, drain, fast
+
+nearly, concentrated, mio, water, flavor, squirt, glass, bottle, water, lot, oz, fluid, oz, squirt, daily, requirement, vitamin, c, calorie, fruit, punch, taste, good, like, water, weakly, flavored, probably, squirt, giving, daily, requirement, vitamin, mainly, advertised, source, vitamin, c, thing, vitamin, c, vitamin, c, vitamin, vitamin, vitamin, vitamin, zinc, chromium, plastic, bottle, good, shape, hand, grab, easily, squeeze, good, way, needed, vitamin, c, having, eat, lot, citrus, swallowing, vitamin, c, pill, like, water, flavored, particular, like, flavor, good, way, control
