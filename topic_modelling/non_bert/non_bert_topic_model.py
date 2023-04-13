@@ -488,7 +488,7 @@ def test(test_dataset_in, feature_engineer_type_in, replace_stop_words_list_in, 
          ngrams_in, max_doc_in, min_doc_in, test_output_path_in, pickled_model_in,
          pickled_vectorizer_in, topic_label_in):
     testModel = TopicModel(test_dataset=test_dataset_in,
-                        feature_engineer_type=feature_engineer_type_in)
+                        feature_engineer_type=feature_engineer_type_in, custom_print_in = False)
     testModel.modify_dataset_stop_words_list(replace_stop_words_list_in, include_words_in,
                                                 exclude_words_in)
     testModel.preprocess_dataset(root_word_option_in, remove_stop_words_in,
@@ -496,8 +496,9 @@ def test(test_dataset_in, feature_engineer_type_in, replace_stop_words_list_in, 
     testModel.generate_feature_engineer(lower_case_in, ngrams_in, max_doc_in, min_doc_in)
 
     topic_label_in = pd.read_csv(topic_label_in).iloc[:,0].tolist()
-    testModel.predict(test_output_path_in, pickled_model_in, pickled_vectorizer_in,
+    predictions = testModel.predict(test_output_path_in, pickled_model_in, pickled_vectorizer_in,
                         topic_label_in)
+    return predictions
 
 if __name__ == "__main__":
     curr_dir = os.getcwd()
