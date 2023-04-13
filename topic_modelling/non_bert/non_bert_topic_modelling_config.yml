@@ -1,18 +1,17 @@
 model:
   model_1:
-    type_of_model: "NMF"
-    num_of_topics: 10
+    type_of_model: NMF
+    feature_engineer: bow
+    num_of_topics: 14
     num_top_words: 20
     num_top_documents: 8
-    export_topics: True
-    coherence_measure: 'c_v'
     replace_stop_words_list: 
     include_words: ['quality', 'taste', 'tasty', 'nice', 'good', 'great', 'amazon', 'year', 'month', 'day', 'order', 'product']
     exclude_words: []
     root_word_option: 2
     remove_stop_words: True
     lower_case: True
-    word_form: ['noun']
+    word_form: ['noun', 'adjective']
     ngrams_start: 1
     ngrams_end: 2
     max_doc: 0.95
@@ -24,15 +23,15 @@ model:
     train: True
     test: True
     pickled_model: 
+    pickled_vectorizer:
     topic_label: 
 
   model_2:
-    type_of_model: "LDA"
+    type_of_model: LDA
+    feature_engineer: bow
     num_of_topics: 10
     num_top_words: 20
     num_top_documents: 8
-    export_topics: True
-    coherence_measure: 'c_v'
     replace_stop_words_list: 
     include_words: ['quality', 'taste', 'tasty', 'nice', 'good', 'great', 'amazon', 'year', 'month', 'day', 'order', 'product']
     exclude_words: []
@@ -51,15 +50,15 @@ model:
     train: True
     test: True
     pickled_model: 
+    pickled_vectorizer:
     topic_label: 
   
-  test_1:
-    type_of_model:
-    num_of_topics: 10
+  model_3:
+    type_of_model: LDA
+    feature_engineer: tfidf
+    num_of_topics: 14
     num_top_words: 20
     num_top_documents: 8
-    export_topics: True
-    coherence_measure: 'c_v'
     replace_stop_words_list: 
     include_words: ['quality', 'taste', 'tasty', 'nice', 'good', 'great', 'amazon', 'year', 'month', 'day', 'order', 'product']
     exclude_words: []
@@ -72,22 +71,75 @@ model:
     max_doc: 0.95
     min_doc: 5
     data_folder: data/reviews.csv 
+    train_output_path: train_output/model_3
+    test_output_path: test_output/model_3
+    log_path: logs/model_3.log
+    train: True
+    test: True
+    pickled_model: 
+    pickled_vectorizer:
+    topic_label: 
+
+  model_4:
+    type_of_model: NMF
+    feature_engineer: tfidf
+    num_of_topics: 10
+    num_top_words: 20
+    num_top_documents: 8
+    replace_stop_words_list: 
+    include_words: ['price', 'flavor', 'quality', 'taste', 'tasty', 'nice', 'good', 'great', 'amazon', 'year', 'month', 'day', 'order', 'product']
+    exclude_words: []
+    root_word_option: 2
+    remove_stop_words: True
+    lower_case: True
+    word_form: ['noun']
+    ngrams_start: 1
+    ngrams_end: 2
+    max_doc: 0.95
+    min_doc: 5
+    data_folder: data/reviews.csv 
+    train_output_path: train_output/model_4
+    test_output_path: test_output/model_4
+    log_path: logs/model_4.log
+    train: True
+    test: True
+    pickled_model: 
+    pickled_vectorizer:
+    topic_label: 
+  
+  test_1:
+    type_of_model:
+    feature_engineer: bow
+    num_of_topics: 10
+    num_top_words: 20
+    num_top_documents: 8
+    replace_stop_words_list: 
+    include_words: ['quality', 'taste', 'tasty', 'nice', 'good', 'great', 'amazon', 'year', 'month', 'day', 'order', 'product']
+    exclude_words: []
+    root_word_option: 2
+    remove_stop_words: True
+    lower_case: True
+    word_form: ['noun']
+    ngrams_start: 1
+    ngrams_end: 2
+    max_doc: 1
+    min_doc: 1
+    data_folder: data/topics_samples.csv 
     train_output_path: 
     test_output_path: test_output/test_1
     log_path: logs/test_1.log
     train: False
     test: True
-    pickled_model: train_output/model_1/NMF_model_10.pk
-    pickled_bow: train_output/model_1/training_bow_10.pk
+    pickled_model: train_output/model_1/training_NMF_model_14.pk
+    pickled_vectorizer: train_output/model_1/training_bow_14.pk
     topic_label: train_output/model_1/topic_key_words.csv
 
   test_2:
     type_of_model:
+    feature_engineer: bow
     num_of_topics: 10
     num_top_words: 20
     num_top_documents: 8
-    export_topics: True
-    coherence_measure: 'c_v'
     replace_stop_words_list: 
     include_words: ['quality', 'taste', 'tasty', 'nice', 'good', 'great', 'amazon', 'year', 'month', 'day', 'order', 'product']
     exclude_words: []
@@ -105,7 +157,89 @@ model:
     log_path: logs/test_2.log
     train: False
     test: True
-    pickled_model: train_output/model_2/LDA_model_10.pk
-    pickled_bow: train_output/model_1/training_bow_10.pk
-    topic_label: train_output/model_1/topic_key_words.csv
-model_choice: test_2
+    pickled_model: train_output/model_2/training_LDA_model_10.pk
+    pickled_vectorizer: train_output/model_2/training_bow_10.pk
+    topic_label: train_output/model_2/topic_key_words.csv
+  
+  test_3:
+    type_of_model: 
+    feature_engineer: tfidf
+    num_of_topics: 14
+    num_top_words: 20
+    num_top_documents: 8
+    replace_stop_words_list: 
+    include_words: ['quality', 'taste', 'tasty', 'nice', 'good', 'great', 'amazon', 'year', 'month', 'day', 'order', 'product']
+    exclude_words: []
+    root_word_option: 2
+    remove_stop_words: True
+    lower_case: True
+    word_form: ['noun']
+    ngrams_start: 1
+    ngrams_end: 2
+    max_doc: 1
+    min_doc: 1
+    data_folder: data/topics_samples.csv
+    train_output_path: 
+    test_output_path: test_output/test_3
+    log_path: logs/test_3.log
+    train: False
+    test: True
+    pickled_model: train_output/model_3/training_LDA_model_14.pk
+    pickled_vectorizer: train_output/model_3/training_tfidf_vectorizer_14.pk
+    topic_label: train_output/model_3/topic_key_words.csv
+
+  test_4:
+    type_of_model: 
+    feature_engineer: tfidf
+    num_of_topics: 10
+    num_top_words: 20
+    num_top_documents: 8
+    replace_stop_words_list: 
+    include_words: ['price', 'flavor', 'quality', 'taste', 'tasty', 'nice', 'good', 'great', 'amazon', 'year', 'month', 'day', 'order', 'product']
+    exclude_words: []
+    root_word_option: 2
+    remove_stop_words: True
+    lower_case: True
+    word_form: ['noun']
+    ngrams_start: 1
+    ngrams_end: 2
+    max_doc: 1
+    min_doc: 1
+    data_folder: data/topics_samples.csv
+    train_output_path: 
+    test_output_path: test_output/test_4
+    log_path: logs/test_4.log
+    train: False
+    test: True
+    pickled_model: train_output/model_4/training_NMF_model_10.pk
+    pickled_vectorizer: train_output/model_4/training_tfidf_vectorizer_10.pk
+    topic_label: train_output/model_4/topic_key_words.csv
+
+  test_5: #negative eg of not using only noun
+    type_of_model: LDA
+    feature_engineer: tfidf
+    num_of_topics: 10
+    num_top_words: 20
+    num_top_documents: 3
+    replace_stop_words_list: 
+    include_words: []
+    exclude_words: []
+    root_word_option: 2
+    remove_stop_words: True
+    lower_case: True
+    word_form: 
+    ngrams_start: 1
+    ngrams_end: 2
+    max_doc: 0.95
+    min_doc: 5
+    data_folder: data/reviews.csv
+    train_output_path: train_output/test_5 
+    test_output_path: 
+    log_path: logs/test_5.log
+    train: True
+    test: False
+    pickled_model: 
+    pickled_vectorizer: 
+    topic_label: 
+  
+model_choice: test_4
