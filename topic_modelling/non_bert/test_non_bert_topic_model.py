@@ -1,12 +1,14 @@
 """Ensure non bert topic modelling functions are working"""
-import sys
-from io import StringIO
 import os
+print(os.getcwd())
+from non_bert_topic_model import TopicModel
+import sys
+sys.path.extend([".", "../.."])
+from preprocess_class import Dataset
+import pandas as pd
+from io import StringIO
 import pytest
 from sklearn.decomposition import NMF
-sys.path.extend([".", "../.."])
-# from preprocess_class import Dataset
-from non_bert_topic_model import *
 pytestmark = pytest.mark.filterwarnings("ignore")
 
 curr_dir = os.getcwd()
@@ -46,35 +48,27 @@ def test_set_topic_labels(train_dataset, monkeypatch):
     """
     Ensures that topic_label attribute is updated upon running this method.
     """
-    test_model = TopicModel(train_dataset = train_dataset, custom_print = False)
+    test_model = TopicModel(train_dataset = train_dataset, custom_print_in = False)
     sample_input = StringIO('testTopic')
     monkeypatch.setattr('sys.stdin', sample_input)
     test_model.set_topic_labels(0)
     assert test_model.topic_label == ['testTopic']
 
-def test_get_input_text(train_dataset):
-    """
-    Ensures that the right set of tokens is outputted by the method.
-    """
-    test_model = TopicModel(train_dataset = train_dataset, custom_print = False)
-    train_dataset.word_tokenizer(lower_case = False)
-    expected_output = train_dataset.tokenized_words.tolist()
-    assert test_model.get_input_text(test_model.train_dataset,
-                                     0, remove_stop_words = False).tolist() == expected_output
-
 def test_preprocess_dataset(train_dataset):
     """
     Ensures that the vectorizer is generated based on the specified input.
     """
-    test_model = TopicModel(train_dataset = train_dataset, custom_print = False)
-    test_model.preprocess_dataset(remove_stop_words = False, include_words = [], exclude_words = [])
-    assert test_model.train_dataset.bow is not None
+    test_model = TopicModel(train_dataset = train_dataset, custom_print_in = False)
+    test_model.preprocess_dataset(remove_stop_words = False)
+    expected_output_0 = ["i", "fell", "in", "love", "with", "this", "keurig", "coffee" "amazing" "standards"]
+    assert test_model.train_dataset.preprocessed_text[0] == expected_output_0
+    assert len(test_model.train_dataset.preprocessed_text) == 5
 
 def test_display_topics(train_dataset):
     """
     Ensures that the right number of topics and its corresponding topic key words are generated.
     """
-    test_model = TopicModel(train_dataset = train_dataset, custom_print = False)
+    test_model = TopicModel(train_dataset = train_dataset, custom_print_in = False)
     test_model.preprocess_dataset(remove_stop_words = False, include_words = [], exclude_words = [])
     training = NMF(n_components = 2, init = 'nndsvd', random_state = 4263, solver = 'cd')
     trained_model = training.fit_transform(test_model.train_dataset.bow[2])
@@ -94,7 +88,7 @@ def test_train(train_dataset, monkeypatch):
     model is trained and the topic_label attribute is updated correctly
     """
     test_model = TopicModel(train_dataset = train_dataset,
-                            custom_print = False, feature_engineer = "tfidf")
+                            custom_print_in = False, feature_engineer = "tfidf")
     test_model.preprocess_dataset(remove_stop_words = False, word_form = ['noun'])
     inputs = iter(['Virtual topic 1', 'Virtual topic 2'])
     monkeypatch.setattr('builtins.input', lambda _: next(inputs))
@@ -115,7 +109,7 @@ def test_predict(test_dataset):
     topic_label = os.path.join(pytest_dir, "topic_key_words.csv")
     test_model = TopicModel(test_dataset = test_dataset, pickled_vectorizer = pickled_vectorizer,
                             pickled_model = pickled_model, topic_label = topic_label,
-                            custom_print = False, feature_engineer = "tfidf")
+                            custom_print_in = False, feature_engineer = "tfidf")
     test_model.preprocess_dataset(remove_stop_words = False, word_form = ['noun'])
     labelled_test = test_model.predict(test_output_path = pytest_dir, root_word_option = 0,
                                        remove_stop_words = False)
@@ -137,7 +131,7 @@ def test_churn_eval_metrics(test_dataset, monkeypatch):
     topic_label = os.path.join(pytest_dir, "topic_key_words.csv")
     test_model = TopicModel(test_dataset = test_dataset, pickled_vectorizer = pickled_vectorizer,
                             pickled_model = pickled_model,
-                           topic_label = topic_label, custom_print = False,
+                           topic_label = topic_label, custom_print_in = False,
                            feature_engineer = "tfidf")
     test_model.preprocess_dataset(remove_stop_words = False, word_form = ['noun'])
     labelled_test = test_model.predict(test_output_path = pytest_dir, root_word_option = 0,

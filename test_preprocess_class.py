@@ -1,10 +1,8 @@
 """Test Dataset class from preprocess_class.py"""
-import sys
 import pytest
 import numpy as np
 import pandas as pd
 from preprocess_class import Dataset, create_datasets
-sys.path.append(".")
 
 pytestmark = pytest.mark.filterwarnings("ignore")
 
