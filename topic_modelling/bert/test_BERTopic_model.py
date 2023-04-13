@@ -30,13 +30,13 @@ def model(train_dataset):
     # df = pd.read_csv('../../data/reviews.csv')
     # train_dataset, _ = create_datasets(df)
     model = BERTopic_model()
-    model.train(train_dataset)
+    model.train(train_dataset.data['Text'])
     return model
 
 def test_predict(model, test_dataset):
-    topics = model.predict(test_dataset)
-    assert len(topics[0]) == len(test_dataset.text)
+    topics = model.predict(test_dataset.data['Text'])
+    assert len(topics[0]) == len(test_dataset.data['Text'])
 
 def test_evaluate(model, train_dataset):
-    score = model.evaluate(train_dataset)
+    score = model.evaluate(train_dataset.data['Text'])
     assert (score > -1) and (score < 1)
