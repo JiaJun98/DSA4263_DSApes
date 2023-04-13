@@ -17,13 +17,15 @@
 
   <nav>
     <ul>
+      <li><a href="{{ url_for('index') }}">Home</a></li>
       <li><a href="#sentiment-analysis">Sentiments and Topics</a></li>
       <li><a href="#historic-trends">Historic and Future Trends</a></li>
     </ul>
   </nav>
   </head>
 
-  <body>
+  <body> 
+    
     <div class="container">
       <h1 class="text-center">Voice of Customer Application</h1>
     </div>
@@ -67,6 +69,14 @@
             {% endif %}
             <label for="file">Upload csv file</label>
             <button type="submit" class="btn btn-primary mb-2">Submit csv file</button>
+            {% if js_script == "only_one_month" %}
+            <script>
+              Swal.fire(
+                'Warning',
+                'Csv file only has one month; Historic trend might not be accurate'
+              )
+            </script>
+            {% endif %}
           </form>
         </div>
       </div>
