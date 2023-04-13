@@ -8,8 +8,19 @@ Afterwards, using our trained machine learning model, we visualise the change in
 # About the Repository
 The repository contains 2 main subfolders, sentiment analysis and topic modelling. And within both folders, there is a BERT and non-BERT related model solution. The main page contains files related to our preprocessing, docker and flask solutions.
 
+## Installation
+
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the requirements
+
+```bash
+pip install -r requirments.txt
+```
+
 # User Guide
-* INSERT INSTRUCTION ON HOW TO RUN IT
+
+
+
+
 # Credits
 Chan Zhen Hao, Benny
 
