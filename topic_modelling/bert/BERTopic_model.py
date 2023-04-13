@@ -1,19 +1,17 @@
+import syspend
 from bertopic import BERTopic
 import pandas as pd
 from gensim.models.coherencemodel import CoherenceModel
 import gensim.corpora as corpora
-# import sys
-import syspend
-from preprocess_class import create_datasets
 from model_base_class import BaseModel
 
-
-# sys.path.append("../..")
 class BERTopic_model(BaseModel):
     """
-    BERTopic model for topic modelling. BERTopic is modular and the final topic model is dependent on the submodels chosen for each part of the task
-    The parts of the model that an be modified is as follows: 
-    1. Document embedding, 2. Dimensionality Reduction, 3. Clustering, 4. Tokenizer, 5. Weighting scheme 6. Representation Tuning (optional)
+    BERTopic model for topic modelling. BERTopic is modular and the final topic model is dependent 
+    on the submodels chosen for each part of the task
+    The parts of the model that an be modified is as follows:
+    1. Document embedding, 2. Dimensionality Reduction, 3. Clustering, 4. Tokenizer,
+    5. Weighting scheme 6. Representation Tuning (optional)
     
     ...
 
@@ -35,7 +33,7 @@ class BERTopic_model(BaseModel):
         optional model to use to finetune the representations calculated using ctfidf
     """
     def __init__(self, embedding_model = None, dim_reduction_model=None,
-                 clustering_model = None, vectorizer_model=None, 
+                 clustering_model = None, vectorizer_model=None,
                  ctfidf_model=None,  representation_model=None,
                  min_topic_size = 10):
         """
@@ -75,32 +73,34 @@ class BERTopic_model(BaseModel):
 
         Parameters
         ----------
-        dataset : Dataset
-            Dataset for the model to be fit and transform on
+        dataset : [str]
+            List of documents for the model to be fit and transform on
 
         Returns
         -------
         None                
         """
-        self.topic_model = BERTopic(embedding_model=self.embedding_model, ctfidf_model=self.ctfidf_model,
-                        vectorizer_model=self.vectorizer_model, 
-                        min_topic_size= self.min_topic_size, 
-                        representation_model=self.representation_model, 
-                        umap_model = self.dim_reduction_model, 
-                        hdbscan_model = self.clustering_model, 
+        self.topic_model = BERTopic(embedding_model=self.embedding_model,
+                                    ctfidf_model=self.ctfidf_model,
+                        vectorizer_model=self.vectorizer_model,
+                        min_topic_size= self.min_topic_size,
+                        representation_model=self.representation_model,
+                        umap_model = self.dim_reduction_model,
+                        hdbscan_model = self.clustering_model,
                         nr_topics= nr_topics,
                         calculate_probabilities=probability, verbose=True)
-        self.topic_model.fit_transform(dataset.text)
+        self.topic_model.fit_transform(dataset)
 
     def evaluate(self,dataset):
         """
-        Evaluate performance of model using coherence_score. (Using normalise pointwise mutual information, range between -1 and 1, higher score is better)
+        Evaluate performance of model using coherence_score. 
+        (Using normalise pointwise mutual information, range between -1 and 1, higher score is better)
         prints out coherence score and topic freqenucy
 
         Parameters
         ----------
-        dataset : Dataset
-            Dataset to evaluate performance
+        dataset : [str]
+            Documents to evaluate performance
 
         Returns
         -------
@@ -116,18 +116,16 @@ class BERTopic_model(BaseModel):
 
         Parameters
         ----------
-        dataset : Union[str,[Dataset]]
+        dataset : Union[str,[str]]
             New dataset to predict
         
         Returns
         -------
         prediction : ([int], array [str])
-            Topic prediction for each document, the first element is the topic, second element is the probability of being in each topic and the final element is the custom topic name
+            Topic prediction for each document, the first element is the topic, 
+            second element is the probability of being in each topic and the final element is the custom topic name
         '''
-        if type(dataset) == str:
-            topics, probs = self.topic_model.transform(dataset)
-        else:
-            topics, probs = self.topic_model.transform(dataset.text)
+        topics, probs = self.topic_model.transform(dataset)
         custom_label = []
         for i in topics:
             custom_label.append(self.topic_model.custom_labels_[i+1])
@@ -144,7 +142,7 @@ class BERTopic_model(BaseModel):
         
         Returns
         -------
-        None  
+        None
         '''
         self.topic_model = BERTopic.load(path)
         
@@ -154,19 +152,19 @@ class BERTopic_model(BaseModel):
 
         Parameters
         ----------
-        dataset : Dataset
-            Training dataset
+        dataset : [str]
+            Training document
             
         Returns
         -------
         c_score : float
             coherence score
         """
-        documents = pd.DataFrame({"Document": dataset.text,
-                                "ID": range(len(dataset.text)),
+        documents = pd.DataFrame({"Document": dataset,
+                                "ID": range(len(dataset)),
                                 "Topic": self.topic_model.topics_})
-        documents_per_topic = documents.groupby(['Topic'], as_index=False).agg({'Document': ' '.join})
-        cleaned_docs = self.topic_model._preprocess_text(documents_per_topic.Document.values)
+        doc_per_topic = documents.groupby(['Topic'], as_index=False).agg({'Document': ' '.join})
+        cleaned_docs = self.topic_model._preprocess_text(doc_per_topic.Document.values)
 
         # Extract vectorizer and analyzer from BERTopic
         vectorizer = self.topic_model.vectorizer_model
@@ -180,10 +178,10 @@ class BERTopic_model(BaseModel):
                     for topic in range(len(set(self.topic_model.topics_))-1)]
 
         # Evaluate
-        cm = CoherenceModel(topics=topic_words, 
-                                        texts=tokens, 
+        cm = CoherenceModel(topics=topic_words,
+                                        texts=tokens,
                                         corpus=corpus,
-                                        dictionary=dictionary, 
+                                        dictionary=dictionary,
                                         coherence='c_npmi', #'u_mass', 'c_v', 'c_uci', 'c_npmi'
                                         topn=5)
         return cm.get_coherence()
