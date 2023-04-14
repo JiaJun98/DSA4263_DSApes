@@ -17,9 +17,13 @@ pip install -r requirments.txt
 ```
 
 # User Guide
+With the root directory as the working directory:
 
-
-
+```bash
+docker build -t <image_name> . 
+docker run -d -p 5000:5000 <image_name>
+```
+The website can be accessed by localhost:5000.
 
 # Credits
 Chan Zhen Hao, Benny
