@@ -225,7 +225,7 @@ def upload():
         data_df = pd.DataFrame({"Text" : texts, "Time" : time,
                                 "predicted_sentiment_probability" : probs,
                                 "predicted_sentiment" : preds})
-        response = make_response(data_df.to_csv())
+        response = make_response(data_df.to_csv(index = False))
         response.headers['Content-Disposition'] = 'attachment; filename=result.csv'
         response.headers['Content-type'] = 'text/csv'
         print('Finished making response')
