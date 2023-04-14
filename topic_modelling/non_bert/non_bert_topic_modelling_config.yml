@@ -241,5 +241,5 @@ model:
     pickled_model: 
     pickled_vectorizer: 
     topic_label: 
-  
+
 model_choice: test_4
