@@ -198,9 +198,9 @@ def upload():
     if not filename.endswith('.csv'):
         return render_template("index.html", js_script = "wrong_file_type")
     df = pd.read_csv(file)
-    date_time_col = df['Time'].apply(lambda x: x.split("/")[1])
-    unique_months = list(set(list(date_time_col)))
-    no_unique_months = len(unique_months)
+    df['Time'] = pd.to_datetime(df['Time'], dayfirst=True)
+    df['month_year'] = df['Time'].dt.strftime('%Y-%m')
+    no_unique_months = len(df['month_year'].unique())
     test_dataset = Dataset(df)
     logger = open(logging_path, 'w', encoding='utf-8')
     labelled_test_df =test(test_dataset, feature_engineer, replace_stop_words_list, include_words,
