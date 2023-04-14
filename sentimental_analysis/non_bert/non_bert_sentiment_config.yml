@@ -1,7 +1,7 @@
 model:
   model_name: 'Non-Bert Sentiment Analysis'
-  model_type: 'XGBoost'
-  model_save_loc: models\xgb_model.sav
+  model_type: 'RandomForest'
+  model_save_loc: models\rf_model.sav
   is_train: True
   save_model: False
   data_path: data
@@ -10,8 +10,8 @@ model:
   log_path: logs\non_bert_sentiment.log
   plot_path: plots\
   n_svd: 10
-  rf_n_est: [400, 1001, 100]
-  rf_max_d: [4, 7, 1]
+  rf_n_est: [800, 1001, 100]
+  rf_max_d: [6, 9, 1]
   xgb_eta: [0.08, 0.21, 0.03]
   xgb_max_d: [4, 6, 1]
   xgb_min_weight: [10, 21, 3]
