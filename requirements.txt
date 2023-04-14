@@ -9,9 +9,11 @@ joblib==1.2.0
 jupyter
 nltk==3.7
 numpy
-pickle5
+# pickle5
+plotly
 pickleshare==0.7.5
 pillow==9.2.0
+pyLDAvis
 pytest
 regex==2022.9.13
 scikit-learn

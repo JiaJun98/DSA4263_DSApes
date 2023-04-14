@@ -102,9 +102,10 @@ topic_modelling_config_file = parse_config(topic_modelling_config_path)
 model_choice = topic_modelling_config_file['model_choice']
 num_of_topics = topic_modelling_config_file['model'][model_choice]['num_of_topics']
 topic_modelling_dir = config_file['flask']['topic_modelling']['topic_modelling_dir']
+feature_engineer = os.path.join(curr_dir,topic_modelling_dir,topic_modelling_config_file['model'][model_choice]['feature_engineer'])
 logging_path = os.path.join(curr_dir,topic_modelling_dir,topic_modelling_config_file['model'][model_choice]['log_path'])
 pickled_model = os.path.join(curr_dir,topic_modelling_dir,topic_modelling_config_file['model'][model_choice]['pickled_model'])
-pickled_bow = os.path.join(curr_dir, topic_modelling_dir, topic_modelling_config_file['model'][model_choice]['pickled_bow'])
+pickled_vectorizer = os.path.join(curr_dir, topic_modelling_dir, topic_modelling_config_file['model'][model_choice]['pickled_vectorizer'])
 test_output_path = os.path.join(curr_dir,topic_modelling_dir,topic_modelling_config_file['model'][model_choice]['test_output_path'])
 num_top_documents = topic_modelling_config_file['model'][model_choice]['num_top_documents']
 topic_label = os.path.join(curr_dir,topic_modelling_dir,topic_modelling_config_file['model'][model_choice]['topic_label'])
@@ -143,11 +144,11 @@ def predict(): #Send data from front-end to backend then to front end
         one_line_df = pd.DataFrame({"Text": [text]})
         one_text_dataset = Dataset(one_line_df)
         logger = open(logging_path, 'w')
-        labelled_test_df = test(one_text_dataset, pickled_model, pickled_bow, test_output_path, 
-        topic_label, num_top_documents, replace_stop_words_list, 
-        include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
-                word_form, ngrams, max_doc, min_doc, logger, num_of_topics)
-        topic = list(labelled_test_df["Topic label"].apply(lambda x: " ".join(list(map(lambda y: y.capitalize(),x.split("_"))))))[0]
+        labelled_test_df =test(one_text_dataset, feature_engineer, replace_stop_words_list, include_words,
+         exclude_words, root_word_option, remove_stop_words, lower_case, word_form,
+         ngrams, max_doc, min_doc, test_output_path, pickled_model,
+         pickled_vectorizer, topic_label)
+        topic = list(labelled_test_df["Topic_label"].apply(lambda x: " ".join(list(map(lambda y: y.capitalize(),x.split("_"))))))[0]
         logger.close()
         return render_template("index.html", 
                                 texts = [], 
@@ -174,14 +175,14 @@ def upload():
     no_unique_months = len(unique_months)
     test_dataset = Dataset(df)
     logger = open(logging_path, 'w')
-    labelled_test_df = test(test_dataset, pickled_model, pickled_bow, test_output_path, 
-        topic_label, num_top_documents, replace_stop_words_list, 
-        include_words, exclude_words, root_word_option, remove_stop_words, lower_case,
-                word_form, ngrams, max_doc, min_doc, logger, num_of_topics)
+    labelled_test_df =test(test_dataset, feature_engineer, replace_stop_words_list, include_words,
+         exclude_words, root_word_option, remove_stop_words, lower_case, word_form,
+         ngrams, max_doc, min_doc, test_output_path, pickled_model,
+         pickled_vectorizer, topic_label)
     texts =  df['Text'].tolist()
     time =  df['Time'].tolist()
     print(labelled_test_df)
-    topic_labels = list(labelled_test_df["Topic label"].apply(lambda x: " ".join(list(map(lambda y: y.capitalize(),x.split("_"))))))
+    topic_labels = list(labelled_test_df["Topic_label"].apply(lambda x: " ".join(list(map(lambda y: y.capitalize(),x.split("_"))))))
     topics = [ele for ele in topic_labels]
     X_preprocessed = np.array([text for text in texts])
     test_dataloader = data_loader(model_name, max_len, X_preprocessed, len(texts))

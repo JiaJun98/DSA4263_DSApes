@@ -54,15 +54,14 @@ if __name__ =="__main__":
                             min_topic_size = min_topic_size)
         if nr_topics == 'None':
             nr_topics = None
-        model.train(train, probability=False, nr_topics=nr_topics)
-        custom_print(f'Coherence score: {model.evaluate(train)}', logger=logger)
+        model.train(train.data['Text'], probability=False, nr_topics=nr_topics)
+        custom_print(f"Coherence score: {model.evaluate(train.data['Text'])}", logger=logger)
         custom_print(f'{model.topic_model.get_topic_info()}', logger=logger)
 
         for i in range(len(model.topic_model.topic_labels_)-1):
             custom_print(f'Words and score of topic {i}:\n {model.topic_model.get_topic(i)}',
                             logger=logger)
-        fig = model.topic_model.visualize_documents(train.text)
+        fig = model.topic_model.visualize_documents(train.data['Text'])
         fig.write_html(f"{image_path}{model_name}_doc_viz.html")
-        model.topic_model.save(f"{model_name}")	
-
+        model.topic_model.save(f"{model_name}")
     logger.close()

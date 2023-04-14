@@ -500,9 +500,8 @@ def test(test_dataset_in, feature_engineer_type_in, replace_stop_words_list_in, 
     test_model.generate_feature_engineer(lower_case_in, ngrams_in, max_doc_in, min_doc_in)
 
     topic_label_in = pd.read_csv(topic_label_in).iloc[:,0].tolist()
-    predictions = test_model.predict(test_output_path_in, pickled_model_in, pickled_vectorizer_in,
-                        topic_label_in)
-
+    predictions = test_model.predict(test_output_path_in, pickled_model_in, pickled_vectorizer_in, 
+                               topic_label_in)
     return predictions
 
 if __name__ == "__main__":
