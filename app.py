@@ -17,6 +17,19 @@ from sentimental_analysis.bert.dataset import data_loader
 import plotly.express as px
 from plotly.subplots import make_subplots
 
+
+app = Flask(__name__)
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+#Reading flask_app config file
+config_path = os.path.join(os.getcwd(), 'flask_app_config.yml')
+config_file = parse_config(config_path)
+model_name = config_file['flask']['sentimental_analysis']['model_name']
+n_classes = int(config_file['flask']['sentimental_analysis']['num_classes'])
+max_len = int(config_file['flask']['sentimental_analysis']['max_len'])
+sentimental_model_path = config_file['flask']['sentimental_analysis']['model_path']
+THRESHOLD = float(config_file['flask']['sentimental_analysis']['THRESHOLD'])
+
 def visualise(Sentiment, Time, Text, Topic_label):
     """
     Plot the recent topic trends and general trends
@@ -77,24 +90,13 @@ def visualise(Sentiment, Time, Text, Topic_label):
     return fig.to_html(full_html = False)
 
 
-app = Flask(__name__)
-
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-config_path = os.path.join(os.getcwd(), 'flask_app_config.yml')
-config_file = parse_config(config_path)
-model_name = config_file['flask']['sentimental_analysis']['model_name']
-n_classes = int(config_file['flask']['sentimental_analysis']['num_classes'])
-max_len = int(config_file['flask']['sentimental_analysis']['max_len'])
-sentimental_model_path = config_file['flask']['sentimental_analysis']['model_path']
-THRESHOLD = float(config_file['flask']['sentimental_analysis']['THRESHOLD'])
-
 #Setting up BERTClassifier for sentimental analysis
 MODEL =  BertClassifier(model_name, n_classes)
 checkpoint = torch.load(sentimental_model_path, map_location=device)
 MODEL.model.load_state_dict(checkpoint['model_state_dict'])
 MODEL.model.to(device)
 
-#Setting up non-bert Topic for Topic modelling
+#Setting up non-bert topic modelling
 curr_dir = os.getcwd()
 topic_modelling_config_path = config_file['flask']['topic_modelling']['config_path']
 topic_modelling_config_path = os.path.join(os.getcwd(), topic_modelling_config_path)
@@ -127,13 +129,23 @@ df['Time'] = pd.to_datetime(df['Time'],dayfirst=True)
 plot_html = visualise(df['Sentiment'], df['Time'],df['Text'],df['Topic_label'])
 
 
-#Routes - Creating a simple route
+#Setting up simple route for homepage
 @app.route('/')
 def index():
+    """
+    Returns
+    -------
+    Returns a HTML home webpage from flask
+    """
     return render_template("index.html", plot_html = plot_html)
 
-@app.route('/predict', methods = ['GET', 'POST'])
-def predict(): #Send data from front-end to backend then to front end
+@app.route('/predict', methods = ['POST'])
+def predict():
+    """
+    Returns
+    -------
+    Returns a HTML /predict webpage predicting sentiments, probabilities, topics of a single text
+    """
     if request.method == "POST":
         text = request.form["review"]
         textNoSpace = text.strip()
@@ -163,6 +175,11 @@ def predict(): #Send data from front-end to backend then to front end
 
 @app.route('/upload', methods=['POST'])
 def upload():
+    """
+    Returns
+    -------
+    Returns a HTML /predict webpage predicting sentiments, probabilities, topics of each text in a csv file
+    """
     file = request.files['file']
     filename = secure_filename(file.filename)
     tweets = []
@@ -187,13 +204,8 @@ def upload():
     X_preprocessed = np.array([text for text in texts])
     test_dataloader = data_loader(model_name, max_len, X_preprocessed, len(texts))
     preds, probs = MODEL.predict(test_dataloader, THRESHOLD)
-    print(f"Current predictions: {preds}")
-    print(f"Current predictions: {probs}")
-
-    # Columns needed: Sentiment, Time, Text, Topic Label
     plot_html = visualise(preds, time, texts, topic_labels)
     logger.close()
-    print(f'Current unique month: {no_unique_months}')
     if no_unique_months == 1:
         return render_template("index.html", texts = texts, preds = preds, topics = topics, probs = probs, plot_html = plot_html, js_script = "only_one_month")
     return render_template("index.html", texts = texts, preds = preds, topics = topics, probs = probs, plot_html = plot_html)
