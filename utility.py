@@ -1,3 +1,4 @@
+"""General functions to be applied on all training models"""
 #!/usr/bin/env python
 # coding: utf-8
 
@@ -83,11 +84,8 @@ def custom_print(*msg, logger):
             print(msg[i], ' ', end='')
             logger.write(str(msg[i]))
 
-
-
-
 def churn_eval_metrics(Y_pred, Y_test, logger):
-    """ Logges the accuracy, precision, AUC, F1-Score, Sensitivity, Specificity between predicted and test
+    """ Logs the accuracy, precision, AUC, F1-Score, Sensitivity, Specificity between predicted and test
     
     Parameters
     ------
@@ -102,7 +100,7 @@ def churn_eval_metrics(Y_pred, Y_test, logger):
     ------
         None
     """
-    
+
     model_acc = accuracy_score(Y_test, Y_pred)
     model_prec = precision_score(Y_test, Y_pred)
     fpr, tpr, thresholds = roc_curve(Y_test, Y_pred, pos_label = 1)
@@ -137,7 +135,7 @@ def plot_roc_curve(Y_pred, Y_test,plotting_dir):
     ------
         None
     """
-    
+
     fpr, tpr, thresholds = roc_curve(Y_test, Y_pred, pos_label = 1)
     f1_scores = [f1_score(Y_test, Y_pred >= t) for t in thresholds]
     accuracy_scores = [accuracy_score(Y_test, Y_pred >= t) for t in thresholds]
@@ -152,9 +150,12 @@ def plot_roc_curve(Y_pred, Y_test,plotting_dir):
     plt.plot(fpr, tpr)
 
     # Label the points for the best F1, best accuracy, and best precision
-    plt.plot(fpr[np.argmax(f1_scores)], tpr[np.argmax(f1_scores)], 'o', label=f'Best F1 ({best_f1_threshold:.2f})')
-    plt.plot(fpr[np.argmax(accuracy_scores)], tpr[np.argmax(accuracy_scores)], 'o', label=f'Best Accuracy ({best_acc_threshold:.2f})')
-    plt.plot(fpr[np.argmax(precision_scores)], tpr[np.argmax(precision_scores)], 'o', label=f'Best Precision ({best_precision_threshold:.2f})')
+    plt.plot(fpr[np.argmax(f1_scores)], tpr[np.argmax(f1_scores)], 'o',
+             label=f'Best F1 ({best_f1_threshold:.2f})')
+    plt.plot(fpr[np.argmax(accuracy_scores)], tpr[np.argmax(accuracy_scores)], 'o',
+             label=f'Best Accuracy ({best_acc_threshold:.2f})')
+    plt.plot(fpr[np.argmax(precision_scores)], tpr[np.argmax(precision_scores)], 'o',
+             label=f'Best Precision ({best_precision_threshold:.2f})')
 
     # Add labels and legend
     plt.xlabel('False Positive Rate')
@@ -180,7 +181,7 @@ def plot_pr_curve(Y_pred, Y_test, plotting_dir):
     ------
         None
     """
-    
+
     precision, recall, thresholds = precision_recall_curve(Y_test, Y_pred)
     accuracy_scores = [accuracy_score(Y_test, Y_pred >= t) for t in thresholds]
     f1_scores = [f1_score(Y_test, Y_pred >= t) for t in thresholds]
@@ -193,8 +194,10 @@ def plot_pr_curve(Y_pred, Y_test, plotting_dir):
     plt.plot(precision, recall)
 
     # Label the points for the best F1, accuracy
-    plt.plot(precision[np.argmax(accuracy_scores)], recall[np.argmax(accuracy_scores)], 'o', label=f'Best Accuracy ({best_acc_threshold:.4f})')
-    plt.plot(precision[np.argmax(f1_scores)], recall[np.argmax(f1_scores)], 'o', label=f'Best F1 ({best_f1_threshold:.4f})')
+    plt.plot(precision[np.argmax(accuracy_scores)], recall[np.argmax(accuracy_scores)], 'o',
+             label=f'Best Accuracy ({best_acc_threshold:.4f})')
+    plt.plot(precision[np.argmax(f1_scores)], recall[np.argmax(f1_scores)], 'o',
+             label=f'Best F1 ({best_f1_threshold:.4f})')
 
 
     # Add labels and legend
@@ -204,6 +207,6 @@ def plot_pr_curve(Y_pred, Y_test, plotting_dir):
     plt.legend()
     plt.savefig(plotting_dir + '_pr_curve')
     plt.close()
-    
+
     # Returns best threshold for f1, accuracy
     return best_acc_threshold, max(accuracy_scores)

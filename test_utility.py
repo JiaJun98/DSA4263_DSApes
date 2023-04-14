@@ -1,3 +1,4 @@
+"""Test functions in utility.py"""
 import pytest
 import syspend
 from utility import *
@@ -16,7 +17,8 @@ def example_yml_file():
         # test code that uses the `example_yml_file` fixture
     ```
     """
-    return [("non_bert.yml", "yml"), ("model.yml", "yml"), ("bert_config.yml", "yml"), ("topic_modelling.yml", "yml")]
+    return [("non_bert.yml", "yml"), ("model.yml", "yml"), ("bert_config.yml", "yml"),
+            ("topic_modelling.yml", "yml")]
 
 def test_parse_config(example_yml_file):
     """Testing string to read into yml parser"""
@@ -34,8 +36,3 @@ def test_churn_eval_metrics():
     custom_print("Testing churn_eval_metrics", logger = logger)
     churn_eval_metrics(Y_pred, Y_test, logger)
     logger.close()
-    
-
-
-
-    
