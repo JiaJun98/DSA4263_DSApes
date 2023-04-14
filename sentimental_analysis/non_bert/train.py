@@ -28,7 +28,8 @@ class NonBertClassifier(BaseModel):
     Attributes
     -----------
     model: str
-        The type of model that will be used in training/prediction of the data ('LogisticRegression', 'RandomForest', 'XGBoost')
+        The type of model that will be used in training/prediction of the data
+        ('LogisticRegression', 'RandomForest', 'XGBoost')
     data: pd.DataFrame
         A data frame with columns 'Time', 'Text' and 'Sentiment' ('Sentiment' only for train)
     x_train: pd.DataFrame
@@ -49,19 +50,24 @@ class NonBertClassifier(BaseModel):
     ttsplit():
         Returns a 80-20 train and test set for the given dataset. 
     predict(model_type, threshold):
-        Predicts the given input data using the specified model_type and outputs the predictions (containing 0's or 1's) into a csv file.
+        Predicts the given input data using the specified model_type and
+        outputs the predictions (containing 0's or 1's) into a csv file.
     train(model_type):
         Trains the chosen model using the respective data given
     logreg():
-        When 'LogisticRegression' is chosen for parameter model_type in the train function, this function will be called to train a Logistic Regression model
+        When 'LogisticRegression' is chosen for parameter model_type in the train function,
+        this function will be called to train a Logistic Regression model
     rf():
-        When 'RandomForest' is chosen for parameter model_type in the train function, this function will be called to train a Random Forest model
+        When 'RandomForest' is chosen for parameter model_type in the train function,
+        this function will be called to train a Random Forest model
         via a grid search for the range of grid specified in the non_bert_sentiment_config.yml file.
         The available parameters to train are n_estimators and max_depth
     xgboost():
-        When 'XGBoost' is chosen for parameter model_type in the train function, this function will be called to train a XGBoost model
+        When 'XGBoost' is chosen for parameter model_type in the train function,
+        this function will be called to train a XGBoost model
         via a grid search for the range of grid specified in the non_bert_sentiment_config.yml file.
-        The available parameters to train are eta, max_depth, min_child_weight, n_estimators and colsample_bytree
+        The available parameters to train are eta, max_depth, min_child_weight,
+        n_estimators and colsample_bytree
     '''
     def  __init__(self, data = None, model_name = None):
         self.model = model_name
@@ -79,12 +85,14 @@ class NonBertClassifier(BaseModel):
         Returns a 80-20 train and test set for the given dataset. 
         '''
         df = pre.Dataset(self.data)
-        df.preprocessing_text(root_word_option = 2, remove_stop_words = True, lower_case = True, word_form = ['adverb', 'adjective'])
+        df.preprocessing_text(root_word_option = 2, remove_stop_words = True,
+                              lower_case = True, word_form = ['adverb', 'adjective'])
         df.create_bow(ngrams = (1,2), min_doc = 0.05, max_doc = 0.5)
         bow = pd.DataFrame(df.feature_engineer[2].toarray())
         bow['Sentiment'] = self.data['Sentiment']
         bow = bow.replace({'positive': 1, 'negative':0})
-        train, test = train_test_split(bow, test_size = 0.2, random_state = 4263, stratify = bow.Sentiment)
+        train, test = train_test_split(bow, test_size = 0.2, random_state = 4263,
+                                       stratify = bow.Sentiment)
         self.x_train = train.drop(['Sentiment'], axis = 1)
         self.y_train = train['Sentiment'].to_numpy()
         self.x_test = test.drop(['Sentiment'], axis = 1)
@@ -103,18 +111,22 @@ class NonBertClassifier(BaseModel):
                 break
         print([n,exp])
         utility.custom_print('N Components for SVD: ' + str(n) + '\n', logger = logger)
-        self.x_train = pd.DataFrame(TruncatedSVD(n_components = n, random_state = 4263).fit_transform(self.x_train))
-        self.x_test = pd.DataFrame(TruncatedSVD(n_components = n, random_state = 4263).fit_transform(self.x_test))
+        self.x_train = pd.DataFrame(TruncatedSVD(n_components = n, random_state = 4263)\
+                                    .fit_transform(self.x_train))
+        self.x_test = pd.DataFrame(TruncatedSVD(n_components = n, random_state = 4263)\
+                                   .fit_transform(self.x_test))
 
 
     def predict(self, model_type, threshold):
         '''
-        Predicts the given input data using the specified model_type and outputs the predictions (containing 0's or 1's) into a csv file.
+        Predicts the given input data using the specified model_type
+        and outputs the predictions (containing 0's or 1's) into a csv file.
         
         Parameters
         -----------
             model_type: str
-                A choice of 3 models are available. 'LogisticRegression', 'RandomForest' and 'XGBoost'
+                A choice of 3 models are available. 'LogisticRegression',
+                'RandomForest' and 'XGBoost'
             threshold: float
                 Threshold to decide at what probability the sentiment would be considered positive
         '''
@@ -122,7 +134,8 @@ class NonBertClassifier(BaseModel):
         self.time = self.data['Time']
         self.text = self.data['Text']
         df = pre.Dataset(self.data)
-        df.preprocessing_text(root_word_option = 2, remove_stop_words = True, lower_case = True, word_form = ['adverb', 'adjective'])
+        df.preprocessing_text(root_word_option = 2, remove_stop_words = True, lower_case = True,
+                              word_form = ['adverb', 'adjective'])
         df.create_bow(ngrams = (1,2), min_doc = 0.05, max_doc = 0.5)
         self.data = pd.DataFrame(df.feature_engineer[2].toarray())
         self.data = pd.DataFrame(TruncatedSVD(n_components=n_svd).fit_transform(self.data))
@@ -135,9 +148,11 @@ class NonBertClassifier(BaseModel):
                     sentiment.append(1)
                 else:
                     sentiment.append(0)
-            lr_pred = pd.DataFrame({'Text': self.text, 'Time': self.time, 'predicted_sentiment': sentiment, 'predicted_sentiment_probability': sentiment_proba})
+            lr_pred = pd.DataFrame({'Text': self.text, 'Time': self.time,
+                                    'predicted_sentiment': sentiment,
+                                    'predicted_sentiment_probability': sentiment_proba})
             lr_pred.to_csv(output_path, index = False)
-        
+
         if model_type == 'RandomForest':
             rf = pickle.load(open(model_save_loc, 'rb'))
             sentiment_proba = rf.predict_proba(self.data)[:,1]
@@ -147,9 +162,11 @@ class NonBertClassifier(BaseModel):
                     sentiment.append(1)
                 else:
                     sentiment.append(0)
-            rf_pred = pd.DataFrame({'Text': self.text, 'Time': self.time, 'predicted_sentiment': sentiment, 'predicted_sentiment_probability': sentiment_proba})
+            rf_pred = pd.DataFrame({'Text': self.text, 'Time': self.time,
+                                    'predicted_sentiment': sentiment,
+                                    'predicted_sentiment_probability': sentiment_proba})
             rf_pred.to_csv(output_path, index = False)
-        
+
         if model_type == 'XGBoost':
             xgb = pickle.load(open(model_save_loc, 'rb'))
             sentiment_proba = xgb.predict_proba(self.data)[:,1]
@@ -159,7 +176,9 @@ class NonBertClassifier(BaseModel):
                     sentiment.append(1)
                 else:
                     sentiment.append(0)
-            xgb_pred = pd.DataFrame({'Text': self.text, 'Time': self.time, 'predicted_sentiment': sentiment, 'predicted_sentiment_probability': sentiment_proba})
+            xgb_pred = pd.DataFrame({'Text': self.text, 'Time': self.time,
+                                     'predicted_sentiment': sentiment,
+                                     'predicted_sentiment_probability': sentiment_proba})
             xgb_pred.to_csv(output_path, index = False)
         utility.custom_print(str(model_type) + ' has been succesfully predicted\n', logger = logger)
 
@@ -171,23 +190,26 @@ class NonBertClassifier(BaseModel):
         Parameters
         -----------
             model_type : str
-                A choice of 3 models are available. 'LogisticRegression', 'RandomForest' and 'XGBoost'
+                A choice of 3 models are available. 'LogisticRegression',
+                'RandomForest' and 'XGBoost'
         '''
         if model_type == 'LogisticRegression':
             self.logreg()
-        
+
         if model_type == 'RandomForest':
             self.rf()
-        
+
         if model_type == 'XGBoost':
             self.xgboost()
 
 
     def logreg(self):
         '''
-        When 'LogisticRegression' is chosen for parameter model_type in the train function, this function will be called to train a Logistic Regression model
+        When 'LogisticRegression' is chosen for parameter model_type in the train function,
+        this function will be called to train a Logistic Regression model
         '''
-        logreg = LogisticRegression(random_state = 4263, multi_class = 'multinomial', solver = 'saga', max_iter = 2000)
+        logreg = LogisticRegression(random_state = 4263, multi_class = 'multinomial',
+                                    solver = 'saga', max_iter = 2000)
         logreg.fit(self.x_train, self.y_train)
         lr_pred = logreg.predict(self.x_test)
         lr_proba = logreg.predict_proba(self.x_test)[:,1]
@@ -203,20 +225,23 @@ class NonBertClassifier(BaseModel):
                 lr_pred_best.append(1)
             else:
                 lr_pred_best.append(0)
-        utility.custom_print('Prediction using best threshold for accuracy\n-------------------------\n', logger = logger)                
+        utility.custom_print('Prediction using best threshold for accuracy\n-------------------------\n',
+                             logger = logger)
         utility.churn_eval_metrics(lr_pred_best, self.y_test, logger)
         utility.custom_print('Best threshold for accuracy: ' + str(threshold), logger = logger)
         utility.custom_print('Accuracy score at best threshold: ' + str(accuracy), logger = logger)
         if save_model:
-            pickle.dump(logreg, open(model_save_loc, 'wb')) 
+            pickle.dump(logreg, open(model_save_loc, 'wb'))
             utility.custom_print('LogisticRegression model succesfully saved', logger = logger)
         else:
-            utility.custom_print('Warning: LogisticRegression model has NOT been saved', logger = logger)
+            utility.custom_print('Warning: LogisticRegression model has NOT been saved',
+                                 logger = logger)
 
 
     def rf(self):
         '''
-        When 'RandomForest' is chosen for parameter model_type in the train function, this function will be called to train a Random Forest model
+        When 'RandomForest' is chosen for parameter model_type in the train function,
+        this function will be called to train a Random Forest model
         via a grid search for the range of grid specified in the non_bert_sentiment_config.yml file.
         The available parameters to train are n_estimators and max_depth
         '''
@@ -231,7 +256,9 @@ class NonBertClassifier(BaseModel):
         rf_gscv = GridSearchCV(rf, rf_grid, return_train_score = True)
         rf_gscv.fit(self.x_train, self.y_train)
         rf_para = rf_gscv.best_params_
-        rf = RandomForestClassifier(n_estimators = rf_para.get('n_estimators'), max_depth = rf_para.get('max_depth'), criterion = 'entropy', random_state = 4263)
+        rf = RandomForestClassifier(n_estimators = rf_para.get('n_estimators'),
+                                    max_depth = rf_para.get('max_depth'),
+                                    criterion = 'entropy', random_state = 4263)
         rf.fit(self.x_train, self.y_train)
         rf_pred = rf.predict(self.x_test)
         rf_proba = rf.predict_proba(self.x_test)[:,1]
@@ -248,7 +275,8 @@ class NonBertClassifier(BaseModel):
                 rf_pred_best.append(1)
             else:
                 rf_pred_best.append(0)
-        utility.custom_print('Prediction using best threshold for accuracy\n-------------------------\n', logger = logger)                
+        utility.custom_print('Prediction using best threshold for accuracy\n-------------------------\n',
+                             logger = logger)                
         utility.churn_eval_metrics(rf_pred_best, self.y_test, logger)
         utility.custom_print('Best threshold for accuracy: ' + str(threshold), logger = logger)
         utility.custom_print('Accuracy score at best threshold: ' + str(accuracy), logger = logger)
@@ -262,9 +290,11 @@ class NonBertClassifier(BaseModel):
 
     def xgboost(self):
         '''
-        When 'XGBoost' is chosen for parameter model_type in the train function, this function will be called to train a XGBoost model
+        When 'XGBoost' is chosen for parameter model_type in the train function,
+        this function will be called to train a XGBoost model
         via a grid search for the range of grid specified in the non_bert_sentiment_config.yml file.
-        The available parameters to train are eta, max_depth, min_child_weight, n_estimators and colsample_bytree
+        The available parameters to train are eta, max_depth, min_child_weight,
+        n_estimators and colsample_bytree
         '''
         #Loading training parameter range
         eta_range = config_file['model']['xgb_eta']
@@ -277,14 +307,18 @@ class NonBertClassifier(BaseModel):
         n_est = np.arange(n_est_range[0], n_est_range[1], n_est_range[2])
         sample_range = config_file['model']['xgb_sample']
         sample = np.arange(sample_range[0], sample_range[1], sample_range[2])
-        xgb_grid = {'eta':eta, 'max_depth':max_d, 'min_child_weight':min_weight, 'colsample_bytree':sample, 'n_estimators':n_est}
+        xgb_grid = {'eta':eta, 'max_depth':max_d, 'min_child_weight':min_weight,
+                    'colsample_bytree':sample, 'n_estimators':n_est}
         #Execute grid search and fit model
         xgb = XGBClassifier(random_state = 4263, eval_metric = roc_auc_score)
         xgb_gscv = GridSearchCV(xgb, xgb_grid, return_train_score = True)
         xgb_gscv.fit(self.x_train, self.y_train)
         xgb_para = xgb_gscv.best_params_
-        xgb = XGBClassifier(eta = xgb_para.get('eta'), max_depth = xgb_para.get('max_depth'), min_child_weight = xgb_para.get('min_child_weight'),
-                        colsample_bytree = xgb_para.get('colsample_bytree'), n_estimators = xgb_para.get('n_estimators'), random_state = 4263, eval_metric = roc_auc_score)
+        xgb = XGBClassifier(eta = xgb_para.get('eta'), max_depth = xgb_para.get('max_depth'),
+                            min_child_weight = xgb_para.get('min_child_weight'),
+                            colsample_bytree = xgb_para.get('colsample_bytree'),
+                            n_estimators = xgb_para.get('n_estimators'), random_state = 4263,
+                            eval_metric = roc_auc_score)
         xgb.fit(self.x_train, self.y_train)
         xgb_pred = xgb.predict(self.x_test)
         xgb_proba = xgb.predict_proba(self.x_test)[:,1]
@@ -301,7 +335,8 @@ class NonBertClassifier(BaseModel):
                 xgb_pred_best.append(1)
             else:
                 xgb_pred_best.append(0)
-        utility.custom_print('Prediction using best threshold for accuracy\n-------------------------\n', logger = logger)                
+        utility.custom_print('Prediction using best threshold for accuracy\n-------------------------\n',
+                             logger = logger)
         utility.churn_eval_metrics(xgb_pred_best, self.y_test, logger)
         utility.custom_print('Best threshold for accuracy: ' + str(threshold), logger = logger)
         utility.custom_print('Accuracy score at best threshold: ' + str(accuracy), logger = logger)
