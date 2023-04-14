@@ -83,7 +83,6 @@ class BertClassifier(BaseModel):
 
         outputs = self.model(input_ids=input_ids,
                             attention_mask=attention_mask)
-        #TODO: Change SequenceClassifierOutput to Tensor; Some issues for forward
         return outputs
 
 
