@@ -1,5 +1,6 @@
 pandas
 matplotlib
+bertopic
 datasets
 flask
 gensim
