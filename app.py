@@ -209,20 +209,16 @@ def upload():
          pickled_vectorizer, topic_label)
     texts =  df['Text'].tolist()
     time =  df['Time'].tolist()
-    print(labelled_test_df)
     topic_labels = list(labelled_test_df["Topic_label"].apply(
         lambda x: " ".join(list(map(lambda y: y.capitalize(),x.split("_"))))))
     topics = [ele for ele in topic_labels]
     x_preprocessed = np.array([text for text in texts])
     test_dataloader = data_loader(model_name, max_len, x_preprocessed, len(texts))
     preds, probs = MODEL.predict(test_dataloader, THRESHOLD)
-    print(f"Current predictions: {preds}")
-    print(f"Current predictions: {probs}")
 
     # Columns needed: Sentiment, Time, Text, Topic Label
     plot_html = visualise(preds, time, texts, topic_labels)
     logger.close()
-    print(f'Current unique month: {no_unique_months}')
     if no_unique_months == 1:
         return render_template("index.html", texts = texts, preds = preds, topics = topics,
                                probs = probs, plot_html = plot_html, js_script = "only_one_month")
