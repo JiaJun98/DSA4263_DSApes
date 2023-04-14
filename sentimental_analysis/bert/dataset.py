@@ -1,7 +1,6 @@
+"""Create dataset class to load reveiws.csv into Bert model"""
 #!/usr/bin/env python
 # coding: utf-8
-
-# In[1]:
 
 import torch
 import numpy as np
@@ -29,9 +28,10 @@ def preprocessing_for_bert(data,tokenizer_name,max_len):
             Torch Tensor list representing the token IDs of the sentence. 
 
         attention_masks: torch.tensor(List)
-            A list of Torch tensor of size (max_len,) containing 1s and 0s indicating which tokens should be attended to (1) and which ones should be ignored (0).
+            A list of Torch tensor of size (max_len,) containing 1s and 0s indicating which tokens
+            should be attended to (1) and which ones should be ignored (0).
     """
-    
+
     tokenizer = AutoTokenizer.from_pretrained(tokenizer_name, do_lower_case=True)
     input_ids = []
     attention_masks = []
@@ -53,7 +53,7 @@ def preprocessing_for_bert(data,tokenizer_name,max_len):
             return_attention_mask=True,     # Return attention mask
             truncation=True
             )
-        
+
         # Add the outputs to the lists
         input_ids.append(encoded_sent.get('input_ids'))
         attention_masks.append(encoded_sent.get('attention_mask'))
@@ -64,10 +64,8 @@ def preprocessing_for_bert(data,tokenizer_name,max_len):
 
     return input_ids, attention_masks
 
-
-# In[4]:
 def data_loader(tokenizer_name,max_len, sentences, num_setences):
-     """Facilitate loading of single data into Transformer model
+    """Facilitate loading of single data into Transformer model
     Parameters
     ----------
         tokenizer_name: str
@@ -83,10 +81,10 @@ def data_loader(tokenizer_name,max_len, sentences, num_setences):
         torch.utils.data.DataLoader
             generates data for input into model
     """
-     inputs, masks = preprocessing_for_bert(sentences,tokenizer_name,max_len)
-     data = TensorDataset(inputs, masks)
-     sampler = SequentialSampler(data)
-     return DataLoader(data, sampler=sampler, batch_size = num_setences)
+    inputs, masks = preprocessing_for_bert(sentences,tokenizer_name,max_len)
+    data = TensorDataset(inputs, masks)
+    sampler = SequentialSampler(data)
+    return DataLoader(data, sampler=sampler, batch_size = num_setences)
 
 
 
@@ -156,5 +154,3 @@ def full_create_data_loader(tokenizer_name, batch_size,max_len,train_df):
     full_train_data = torch.utils.data.ConcatDataset([train_data, val_data])
     full_train_sampler = RandomSampler(full_train_data)
     return DataLoader(full_train_data, sampler=full_train_sampler, batch_size=batch_size)
-
-
