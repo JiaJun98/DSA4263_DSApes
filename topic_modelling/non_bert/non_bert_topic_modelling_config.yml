@@ -242,4 +242,4 @@ model:
     pickled_vectorizer: 
     topic_label: 
   
-model_choice: test_5
+model_choice: test_4
