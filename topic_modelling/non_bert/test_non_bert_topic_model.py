@@ -115,26 +115,51 @@ def test_display_topics(train_dataset):
     assert len(topic_key_words) == 2
     assert len(topic_key_words[0]) == 2
 
+def test_assign_topic_labels(train_dataset, monkeypatch):
+    """
+    Ensures that csv for topics labels for each text and keys words are produced
+    """
+    test_model = TopicModel(train_dataset = train_dataset, custom_print_in = False)
+    test_model.preprocess_dataset(remove_stop_words = False)
+    test_model.generate_feature_engineer()
+    component, labelled_no_topics = test_model.train("NMF", 2, pytest_dir)
+    topic_key_words = test_model.display_topics(training_model = "NMF",
+                                                trained_topics = component, num_top_words = 2,
+                                                train_output_path = pytest_dir)
+
+    inputs = iter(["Virtual topic 1", "Virtual topic 2"])
+    monkeypatch.setattr('builtins.input', lambda _: next(inputs))
+    test_model.assign_topic_labels(labelled_no_topics, topic_key_words, 1, pytest_dir)
+
+    full_training_doc = pd.read_csv(os.path.join(pytest_dir, "full_training_doc.csv"))
+    sample_training_doc = pd.read_csv(os.path.join(pytest_dir, "sample_training_doc.csv"))
+    topic_key_words_doc = pd.read_csv(os.path.join(pytest_dir, "topic_key_words.csv"))
+
+    assert list(full_training_doc.shape) == [5,2]
+    assert list(sample_training_doc.shape) == [2,2]
+    assert full_training_doc['Topic_label'].unique().tolist().sort() == test_model.topic_label.sort()
+    assert topic_key_words_doc['Topic_label'].unique().tolist() == test_model.topic_label
+
 def test_predict(test_dataset):
     """
     Ensures that the correct text is being predicted on, correct number of columns
     and column names are outputted 
-    and the text are labelled based on the input topic labels
+    Also ensures the text are labelled based on the input topic labels
     """
     pickled_vectorizer = os.path.join(pytest_dir, "training_tfidf_vectorizer_2.pk")
     pickled_model = os.path.join(pytest_dir, "training_NMF_model_2.pk")
     topic_label = os.path.join(pytest_dir, "topic_key_words.csv")
-    test_model = TopicModel(test_dataset = test_dataset, pickled_vectorizer = pickled_vectorizer,
-                            pickled_model = pickled_model, topic_label = topic_label,
-                            custom_print_in = False, feature_engineer = "tfidf")
-    test_model.preprocess_dataset(remove_stop_words = False, word_form = ['noun'])
-    labelled_test = test_model.predict(test_output_path = pytest_dir, root_word_option = 0,
-                                       remove_stop_words = False)
+    topic_label = pd.read_csv(topic_label).iloc[:,0]
+    test_model = TopicModel(test_dataset = test_dataset,
+                            custom_print_in = False, feature_engineer_type = "tfidf")
+    test_model.preprocess_dataset(remove_stop_words = False)
+    labelled_test = test_model.predict(pytest_dir, pickled_model, pickled_vectorizer,
+                                       topic_label)
     output_topic_label = labelled_test['Topic_label'].unique().tolist()
     output_topic_label.sort()
-    expected_topic_label = pd.read_csv(topic_label)['Topic_label'].tolist()
+    expected_topic_label = topic_label.tolist()
     expected_topic_label.sort()
-    assert labelled_test['Text'].tolist() == test_dataset.text.tolist()
+    assert labelled_test['Text'].tolist() == test_dataset.data['Text'].tolist()
     assert list(labelled_test.columns) == ["Text", "Topic_label"]
     assert output_topic_label == expected_topic_label
 
@@ -146,13 +171,12 @@ def test_churn_eval_metrics(test_dataset, monkeypatch):
     pickled_vectorizer = os.path.join(pytest_dir, "training_tfidf_vectorizer_2.pk")
     pickled_model = os.path.join(pytest_dir, "training_NMF_model_2.pk")
     topic_label = os.path.join(pytest_dir, "topic_key_words.csv")
-    test_model = TopicModel(test_dataset = test_dataset, pickled_vectorizer = pickled_vectorizer,
-                            pickled_model = pickled_model,
-                           topic_label = topic_label, custom_print_in = False,
-                           feature_engineer = "tfidf")
-    test_model.preprocess_dataset(remove_stop_words = False, word_form = ['noun'])
-    labelled_test = test_model.predict(test_output_path = pytest_dir, root_word_option = 0,
-                                       remove_stop_words = False)
+    topic_label = pd.read_csv(topic_label).iloc[:, 0].tolist()
+    test_model = TopicModel(test_dataset = test_dataset, custom_print_in = False,
+                           feature_engineer_type = "tfidf")
+    test_model.preprocess_dataset(remove_stop_words = False)
+    labelled_test = test_model.predict(pytest_dir, pickled_model, pickled_vectorizer,
+                                       topic_label)
     inputs = iter(["1", "0"])
     monkeypatch.setattr('builtins.input', lambda _: next(inputs))
     test_model.churn_eval_metrics(labelled_test, 1, pytest_dir)

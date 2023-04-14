@@ -486,18 +486,22 @@ class TopicModel(BaseModel):
 def test(test_dataset_in, feature_engineer_type_in, replace_stop_words_list_in, include_words_in,
          exclude_words_in, root_word_option_in, remove_stop_words_in, lower_case_in, word_form_in,
          ngrams_in, max_doc_in, min_doc_in, test_output_path_in, pickled_model_in,
-         pickled_vectorizer_in, topic_label_in):
-    testModel = TopicModel(test_dataset=test_dataset_in,
-                        feature_engineer_type=feature_engineer_type_in, custom_print_in = False)
-    testModel.modify_dataset_stop_words_list(replace_stop_words_list_in, include_words_in,
+         pickled_vectorizer_in, topic_label_in, custom_print_in = False):
+    """
+    Test function for app.py to deploy the prediction
+    """
+    test_model = TopicModel(test_dataset=test_dataset_in,
+                        feature_engineer_type=feature_engineer_type_in,
+                        custom_print_in= custom_print_in)
+    test_model.modify_dataset_stop_words_list(replace_stop_words_list_in, include_words_in,
                                                 exclude_words_in)
-    testModel.preprocess_dataset(root_word_option_in, remove_stop_words_in,
+    test_model.preprocess_dataset(root_word_option_in, remove_stop_words_in,
                                     lower_case_in, word_form_in)
-    testModel.generate_feature_engineer(lower_case_in, ngrams_in, max_doc_in, min_doc_in)
+    test_model.generate_feature_engineer(lower_case_in, ngrams_in, max_doc_in, min_doc_in)
 
     topic_label_in = pd.read_csv(topic_label_in).iloc[:,0].tolist()
-    predictions = testModel.predict(test_output_path_in, pickled_model_in, pickled_vectorizer_in,
-                        topic_label_in)
+    predictions = test_model.predict(test_output_path_in, pickled_model_in, pickled_vectorizer_in, 
+                               topic_label_in)
     return predictions
 
 if __name__ == "__main__":
@@ -580,8 +584,12 @@ if __name__ == "__main__":
             trainModel.churn_eval_metrics(test_labels, num_top_documents_in, test_output_path_in)
 
     elif isTester:
-        test_dataset_in = Dataset(data_df)
+        test_dataset_in = Dataset(data_df)   
         custom_print("------Preprocessing text data--------", logger = logger)
+        output = test(test_dataset_in, feature_engineer_type_in, replace_stop_words_list_in,
+             include_words_in, exclude_words_in, root_word_option_in, remove_stop_words_in,
+             lower_case_in, word_form_in, ngrams_in, max_doc_in, min_doc_in, test_output_path_in,
+             pickled_model_in, pickled_vectorizer_in, topic_label_in, True)
 
         custom_print('Testing complete!',logger = logger)
     logger.close()
