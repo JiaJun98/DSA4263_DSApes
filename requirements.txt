@@ -1,6 +1,5 @@
 pandas
 matplotlib
-bertopic
 datasets
 flask
 gensim
@@ -9,7 +8,6 @@ joblib==1.2.0
 jupyter
 nltk==3.7
 numpy
-# pickle5
 plotly
 pickleshare==0.7.5
 pillow==9.2.0
