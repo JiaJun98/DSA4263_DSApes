@@ -10,8 +10,8 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.decomposition import TruncatedSVD
-from xgboost import XGBClassifier
 from sklearn.metrics import roc_auc_score
+from xgboost import XGBClassifier
 from imblearn.over_sampling import SMOTE
 from model_base_class import BaseModel
 
@@ -79,16 +79,15 @@ class NonBertClassifier(BaseModel):
         Returns a 80-20 train and test set for the given dataset. 
         '''
         df = pre.Dataset(self.data)
-        df.create_bow(root_words_option = 2, remove_stop_words = True, lower_case = True, ngrams = (1,2),
-                      word_form = ['adverb', 'adjective'], min_doc = 0.05, max_doc = 0.5)
-        bow = pd.DataFrame(df.bow[2].toarray())
-        bow['Time'] = df.date
-        bow['Sentiment'] = df.sentiments
+        df.preprocessing_text(root_word_option = 2, remove_stop_words = True, lower_case = True, word_form = ['adverb', 'adjective'])
+        df.create_bow(ngrams = (1,2), min_doc = 0.05, max_doc = 0.5)
+        bow = pd.DataFrame(df.feature_engineer[2].toarray())
+        bow['Sentiment'] = self.data['Sentiment']
         bow = bow.replace({'positive': 1, 'negative':0})
         train, test = train_test_split(bow, test_size = 0.2, random_state = 4263, stratify = bow.Sentiment)
-        self.x_train = train.drop(['Time', 'Sentiment'], axis = 1)
+        self.x_train = train.drop(['Sentiment'], axis = 1)
         self.y_train = train['Sentiment'].to_numpy()
-        self.x_test = test.drop(['Time', 'Sentiment'], axis = 1)
+        self.x_test = test.drop(['Sentiment'], axis = 1)
         self.y_test = test['Sentiment'].to_numpy()
         oversample = SMOTE()
         self.x_train, self.y_train = oversample.fit_resample(self.x_train, self.y_train)
@@ -103,6 +102,7 @@ class NonBertClassifier(BaseModel):
             else:
                 break
         print([n,exp])
+        utility.custom_print('N Components for SVD: ' + str(n) + '\n', logger = logger)
         self.x_train = pd.DataFrame(TruncatedSVD(n_components = n, random_state = 4263).fit_transform(self.x_train))
         self.x_test = pd.DataFrame(TruncatedSVD(n_components = n, random_state = 4263).fit_transform(self.x_test))
 
@@ -122,9 +122,9 @@ class NonBertClassifier(BaseModel):
         self.time = self.data['Time']
         self.text = self.data['Text']
         df = pre.Dataset(self.data)
-        df.create_bow(root_words_option = 2, remove_stop_words = True, lower_case = True, ngrams = (1,2),
-                      word_form = ['adverb', 'adjective'], min_doc = 0.05, max_doc = 0.5)
-        self.data = pd.DataFrame(df.bow[2].toarray())
+        df.preprocessing_text(root_word_option = 2, remove_stop_words = True, lower_case = True, word_form = ['adverb', 'adjective'])
+        df.create_bow(ngrams = (1,2), min_doc = 0.05, max_doc = 0.5)
+        self.data = pd.DataFrame(df.feature_engineer[2].toarray())
         self.data = pd.DataFrame(TruncatedSVD(n_components=n_svd).fit_transform(self.data))
         if model_type == 'LogisticRegression':
             logreg = pickle.load(open(model_save_loc, 'rb'))
