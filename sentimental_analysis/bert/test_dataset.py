@@ -42,10 +42,12 @@ def mutiple_sentence():
         # test code that uses the `single_sentence` fixture
     ```
     """
-    return [["bert-base-uncased", 6, 2] ,  ["I like this product", "I hate this product really much"]]
+    return [["bert-base-uncased", 6, 2], ["I like this product", "I hate this product really much"]]
 
 def test_data_loader_single_sentence(single_sentence):
-    """Testing data_loader function to ensure it returns the correct length for one sentence and does not exceed maximum length
+    """
+    Testing data_loader function to ensure it returns the correct length for one sentence
+    and does not exceed maximum length
     """
     parameters , sentences = single_sentence
     model_name, max_len, num_sentences = parameters
@@ -59,7 +61,8 @@ def test_data_loader_single_sentence(single_sentence):
         assert len(sentence) <= 512
 
 def test_data_loader_mutiple_sentence(mutiple_sentence):
-    """Testing data_loader function to ensure it returns the correct length for mutiple sentences and does not exceed maximum length
+    """Testing data_loader function to ensure it returns the correct length for mutiple sentences
+    and does not exceed maximum length
     """
     parameters , sentences = mutiple_sentence
     model_name, max_len, num_sentences = parameters
@@ -73,7 +76,8 @@ def test_data_loader_mutiple_sentence(mutiple_sentence):
         assert len(sentence) <= 512
 
 def test_create_data_loader(example_data,parameters):
-    """Testing if "Sentiment column in pandas dataframe and only contains string "positive" and "negative"
+    """Testing if "Sentiment column in pandas dataframe and only contains string
+    "positive" and "negative"
     """
     assert 'Sentiment' in example_data.columns
     sentiment_unique = list(set(list(example_data['Sentiment'])))
@@ -82,13 +86,11 @@ def test_create_data_loader(example_data,parameters):
     create_data_loader(tokenizer_name, batch_size,max_len,example_data)
 
 def test_full_data_loader(example_data,parameters):
-    """Testing if "Sentiment column in pandas dataframe and only contains string "positive" and "negative"
+    """Testing if "Sentiment column in pandas dataframe and only contains string
+    "positive" and "negative"
     """
     assert 'Sentiment' in example_data.columns
     sentiment_unique = list(set(list(example_data['Sentiment'])))
     assert all(elem in {'positive', 'negative'} for elem in sentiment_unique)
     tokenizer_name, batch_size,max_len = parameters
     full_create_data_loader(tokenizer_name, batch_size,max_len,example_data)
- 
-
-    
