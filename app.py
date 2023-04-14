@@ -3,7 +3,7 @@
 # coding: utf-8
 
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, make_response
 from werkzeug.utils import secure_filename
 import pandas as pd
 import torch
@@ -219,6 +219,18 @@ def upload():
     # Columns needed: Sentiment, Time, Text, Topic Label
     plot_html = visualise(preds, time, texts, topic_labels)
     logger.close()
+
+    # Checking if request is sent outside of the website
+    if 'local' in request.files:
+        data_df = pd.DataFrame({"Text" : texts, "Time" : time,
+                                "predicted_sentiment_probability" : probs,
+                                "predicted_sentiment" : preds})
+        response = make_response(data_df.to_csv())
+        response.headers['Content-Disposition'] = 'attachment; filename=result.csv'
+        response.headers['Content-type'] = 'text/csv'
+        print('Finished making response')
+        return response
+    
     if no_unique_months == 1:
         return render_template("index.html", texts = texts, preds = preds, topics = topics,
                                probs = probs, plot_html = plot_html, js_script = "only_one_month")
