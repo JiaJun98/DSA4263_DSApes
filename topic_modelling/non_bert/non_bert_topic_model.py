@@ -138,7 +138,8 @@ class TopicModel(BaseModel):
 
         return training.components_, labelled_train_topics
 
-    def predict(self, test_output_path, pickled_model, pickled_vectorizer, topic_labels):
+    def predict(self, test_output_path, pickled_model = None, pickled_vectorizer = None,
+                topic_labels = None):
         """
         Generate test labels based on the trained model. Test labels are stored as a csv
         file with 2 columns "Text" and "Topic_label".
@@ -159,12 +160,13 @@ class TopicModel(BaseModel):
         ------
         labelled_test: pandas dataframe with columns Text and Topic_label
         """
-        with open(pickled_model, 'rb') as p_model:
-            self.model = pickle.load(p_model)
+        if self.model is None:
+            with open(pickled_model, 'rb') as p_model:
+                self.model = pickle.load(p_model)
 
-        with open(pickled_vectorizer, 'rb') as p_vectorizer:
-            self.training_vectorizer = pickle.load(p_vectorizer)
-        self.topic_label = topic_labels
+            with open(pickled_vectorizer, 'rb') as p_vectorizer:
+                self.training_vectorizer = pickle.load(p_vectorizer)
+            self.topic_label = topic_labels
 
         test_data_fitted = self.training_vectorizer.transform(
             self.test_dataset.preprocessed_text.apply(" ".join))
@@ -578,9 +580,7 @@ if __name__ == "__main__":
                                        train_output_path_in)
 
         if test_dataset_in is not None:
-            topic_label_in = topic_key_words_in.iloc[:, 0].tolist()
-            test_labels = trainModel.predict(test_output_path_in, pickled_model_in,
-                                             pickled_vectorizer_in, topic_label_in)
+            test_labels = trainModel.predict(test_output_path_in)
             trainModel.churn_eval_metrics(test_labels, num_top_documents_in, test_output_path_in)
 
     elif isTester:
