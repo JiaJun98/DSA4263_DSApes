@@ -20,7 +20,7 @@ from plotly.subplots import make_subplots
 
 def visualise(sentiment, time, text, topic_label):
     """
-    Plot the recent topic trends and general trendss
+    Plot the recent topic trends and general trends
 
     Parameters
     ----------
